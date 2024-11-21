@@ -1,0 +1,44 @@
+author: matejkoo
+description: Utilis plugin
+main: main.java.org.matejko.plugin.Utilis
+name: Utilis
+version: 2
+commands:
+  vanish:
+    description: Toggles vanish mode for the player.
+    usage: /<command>
+    aliases: [v]
+  list:
+    description: List connected players
+  nickname:
+    description: Set or change your nickname.
+    #usage: /nickname <nickname>
+  rename:
+    description: Rename another player (admin command).
+    #usage: /rename <player> <nickname>
+  color:
+    description: Change your nickname color.
+    #usage: /color <color>
+  realname:
+    description: Returns the real name of a player based on their nickname.
+    #usage: /realname <nickname>
+  nickreset:
+    description: Reset your nickname to the original name
+    #usage: /nickreset
+  suck:
+    description: Teleports all items to you.
+  as:
+    description: Any player sleeping skips the night!
+    usage: |
+           /<command> - display Sleeping status.
+           /<command> toggle/t - toggle Sleeping.
+  utilisdebug:
+    description: Runs a debug check for the plugin and outputs the status of critical components.
+    usage: /<command>
+    permission: utilis.debug
+    permission-message: "You do not have permission to run this command."
+
+permissions:
+  utilis.debug:
+    description: Allows access to the /utilisdebug command
+    default: op

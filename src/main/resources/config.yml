@@ -1,0 +1,14 @@
+commands:
+    list: true
+    vanish: true
+    nickname: true
+    nickreset: true
+    color: true
+    realname: true
+    rename: true
+features:
+    motd: true
+    qol: true
+    sleeping: true
+    chat-formatting: true
+Version: 1.2
