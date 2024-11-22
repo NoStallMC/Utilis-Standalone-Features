@@ -8,7 +8,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import main.java.org.matejko.plugin.Commands.VanishCommand;
 import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.Managers.*;
@@ -38,7 +37,7 @@ public class Utilis extends JavaPlugin implements Listener {
 	private Essentials essentials;
     private UtilisPluginUpdater pluginupdater;
     @SuppressWarnings({ "static-access" })
-	@Override
+    @Override
     public void onEnable() {
         this.logger = Logger.getLogger("Utilis");
         getLogger().info("[Utilis] is now active!");
@@ -49,110 +48,77 @@ public class Utilis extends JavaPlugin implements Listener {
             getLogger().warning("Config was not loaded properly!");
             return;  // Stop execution if config is not loaded properly
         }
-        this.essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials"); // Get Essentials plugin instance
 
+        // Essentials plugin
+        this.essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
         if (essentials == null) {
             getLogger().warning("Essentials plugin not found!");
         } else {
             getLogger().info("Essentials found!");
         }
+
         // Initialize the plugin updater
         pluginupdater = new UtilisPluginUpdater(this);
-        
-        // Check if update checking is enabled in the config and start the update process
         if (config.isUpdateEnabled()) {
             pluginupdater.checkForUpdates();  // Trigger the update check
         } else {
             getLogger().info("[Utilis] Update check is disabled in the config.");
         }
-        
-        // Initialize the config updater on startup
+
+        // Initialize the config updater
         UtilisConfigUpdater configupdater = new UtilisConfigUpdater(this);
         configupdater.checkAndUpdateConfig();
-        
+
         // Initialize the ChatFormattingManager
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(this);
         chatFormattingManager.loadConfiguration();  // Load initial configuration for chat formatting
         Bukkit.getPluginManager().registerEvents(chatFormattingManager, this);  // Register as event listener
-        
+
         // Initialize SleepingWorldConfig to manage the worlds' sleeping settings
-        sleepingWorldConfig = new SleepingWorldConfig();  // Initialize SleepingWorldConfig
+        sleepingWorldConfig = new SleepingWorldConfig();
 
-        // Initialize SleepingManager only if sleeping is enabled
+        // SleepingManager (if enabled)
         if (config.isSleepingEnabled()) {
-            this.sleepingManager = new SleepingManager(this);  // Initialize SleepingManager with plugin instance
+            this.sleepingManager = new SleepingManager(this);
             sleepingManager.loadConfiguration();
-
-            // Register the SleepingManager as an event listener
             getServer().getPluginManager().registerEvents(sleepingManager, this);
 
-            // Conditionally register the /as command for Sleeping
-            SleepingCommand sleepingCommand = new SleepingCommand(this);  // Pass the plugin instance to SleepingCommand constructor
-            getCommand("as").setExecutor(sleepingCommand);  // Register the /as command executor
+            // Register the /as command for Sleeping
+            SleepingCommand sleepingCommand = new SleepingCommand(this);
+            getCommand("as").setExecutor(sleepingCommand);
         } else {
             getLogger().info("Sleeping is disabled in the config. Sleeping features will be inactive.");
         }
 
         // Initialize vanished players set and managers
+        Bukkit.getPluginManager().registerEvents(new NickManager(this), this);
         vanishedPlayers = new HashSet<>();
+        vanishedPlayersManager = new VanishedPlayersManager(this);
+        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
 
-        // Check and copy the default messages.yml from JAR if it doesn't exist
+        // NickManager initialization
+        this.nickManager = new NickManager(this);
+        Messages messages = new Messages(this);  // Load messages from messages.yml
+        this.cooldownManager = new CooldownManager(this, 60);  // Set 60 seconds cooldown
+
+        // Move command registration to the UtilisCommands class
+        UtilisCommands utilisCommands = new UtilisCommands(this, config, nickManager, cooldownManager, messages);
+        utilisCommands.registerCommands();
+
+        // Enable QoL feature (if enabled)
+        if (config.isQoLEnabled()) {
+            Bukkit.getPluginManager().registerEvents(new QoLManager(), this);
+        }
+
+        // Enable MOTD feature (if enabled)
+        if (config.isMOTDEnabled()) {
+            motdManager = new MOTDManager(this);
+        }
+
+        // Check and copy default messages.yml if it doesn't exist
         File messagesFile = new File(getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
             copyResourceToFile("messages.yml", messagesFile);
-        }
-        Bukkit.getPluginManager().registerEvents(new NickManager(this), this);   // Initialize NickManager here
-        this.nickManager = new NickManager(this);  // Initialize NickManager here
-        Messages messages = new Messages(this);  // Initialize the Messages object (to load messages from messages.yml)
-        this.cooldownManager = new CooldownManager(this, 60);  // Set 60 seconds cooldown
-
-        // Conditionally register the Nickname-related commands based on config setting
-        if (config.isNickEnabled()) {
-            getCommand("nickname").setExecutor(new NicknameCommand(nickManager, cooldownManager, messages));  // Pass Messages object
-        }
-        if (config.isRenameEnabled()) {
-            getCommand("rename").setExecutor(new RenameCommand(nickManager));
-        }
-        if (config.isColorEnabled()) {
-            getCommand("color").setExecutor(new ColorCommand(nickManager, cooldownManager, messages));
-        }
-        if (config.isNickResetEnabled()) {
-            getCommand("nickreset").setExecutor(new NickResetCommand(nickManager, cooldownManager));
-        }
-        if (config.isRealNameEnabled()) {
-            getCommand("realname").setExecutor(new RealNameCommand(nickManager));
-        }
-
-        // Conditionally register the /list command based on config setting
-        if (config.isListEnabled()) {
-            ListCommand listCommand = new ListCommand(this);  // Pass 'this' to the ListCommand constructor
-            this.getCommand("list").setExecutor(listCommand);  // Register the /list command
-        }
-
-        // Conditionally enable the QoL feature
-        if (config.isQoLEnabled()) {
-            // Register the QoL event listener
-            Bukkit.getPluginManager().registerEvents(new QoLManager(), this);  // Register QoL events for block breaks
-        }
-        // Register the /utilisdebug command
-        getCommand("utilisdebug").setExecutor(new UtilisDebugCommand(this));
-        // Initialize other managers and systems
-        vanishedPlayersManager = new VanishedPlayersManager(this);  // Pass the plugin instance to VanishedPlayersManager
-        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
-
-        SuckCommand suckCommand = new SuckCommand();  // Pass 'this' to the VanishCommand constructor
-        this.getCommand("suck").setExecutor(suckCommand);
-
-        // Conditionally register the /vanish command based on config setting
-        if (config.isVanishEnabled()) {
-            VanishCommand vanishCommand = new VanishCommand(this);  // Pass 'this' to the VanishCommand constructor
-            this.getCommand("vanish").setExecutor(vanishCommand);
-            this.getCommand("v").setExecutor(vanishCommand);
-        }
-
-        // Conditionally enable the MOTD feature based on the config setting
-        if (config.isMOTDEnabled()) {
-            motdManager = new MOTDManager(this);  // Initialize MOTDManager with the plugin instance
         }
 
         // Initialize dynmapPlugin safely
@@ -162,11 +128,11 @@ public class Utilis extends JavaPlugin implements Listener {
         }
         dynmapManager = new DynmapManager(dynmapPlugin, logger);
 
-        // Initialize and register the UtilisNotifier as a listener
-        utilisNotifier = new UtilisNotifier(this);  // Pass only the plugin instance now
-        Bukkit.getPluginManager().registerEvents(utilisNotifier, this);  // Register the event listener
+        // Initialize and register UtilisNotifier as a listener
+        utilisNotifier = new UtilisNotifier(this);
+        Bukkit.getPluginManager().registerEvents(utilisNotifier, this);
 
-        // Register events (also includes the current class for other event handling)
+        // Register events (also includes current class for other event handling)
         Bukkit.getPluginManager().registerEvents(this, this);
     }
 

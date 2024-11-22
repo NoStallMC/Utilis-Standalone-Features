@@ -21,11 +21,10 @@ public class UtilisDebugCommand implements CommandExecutor {
             return false;  // Permission denied
         }
 
-        // Create the debug message as a series of lines
         String[] messages = new String[]{
-            "§6[Utilis Debug Report]§r",
-            plugin.getEssentials() == null ? "§cEssentials plugin is not found!" : "§aEssentials plugin is loaded correctly.",
+            "[Utilis Debug Report]",
             plugin.getConfig() == null || !plugin.getConfig().isLoaded() ? "§cConfig is not loaded properly." : "§aConfig is loaded correctly.",
+            plugin.getEssentials() == null ? "§cEssentials plugin is not found!" : "§aEssentials plugin is loaded correctly.",
             plugin.sleepingManager == null ? "§cSleepingManager is not initialized." : "§aSleepingManager is initialized correctly.",
             plugin.nickManager == null ? "§cNickManager is not initialized." : "§aNickManager is initialized correctly.",
             plugin.getMotdManager() == null ? "§cMOTDManager is not initialized." : "§aMOTDManager is initialized correctly.",
