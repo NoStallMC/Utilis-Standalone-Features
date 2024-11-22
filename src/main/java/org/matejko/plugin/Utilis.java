@@ -6,33 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-
 import main.java.org.matejko.plugin.Commands.VanishCommand;
-import main.java.org.matejko.plugin.FileCreator.Config;
-import main.java.org.matejko.plugin.FileCreator.Messages;
-import main.java.org.matejko.plugin.FileCreator.SleepingWorldConfig;
-import main.java.org.matejko.plugin.Commands.ListCommand;
-import main.java.org.matejko.plugin.Commands.NicknameCommand;
-import main.java.org.matejko.plugin.Commands.RenameCommand;
-import main.java.org.matejko.plugin.Commands.SleepingCommand;
-import main.java.org.matejko.plugin.Commands.SuckCommand;
-import main.java.org.matejko.plugin.Commands.UtilisDebugCommand;
-import main.java.org.matejko.plugin.Commands.ColorCommand;
-import main.java.org.matejko.plugin.Commands.NickResetCommand;
-import main.java.org.matejko.plugin.Commands.RealNameCommand;
-import main.java.org.matejko.plugin.Managers.NickManager;
-import main.java.org.matejko.plugin.Managers.ChatFormattingManager;
-import main.java.org.matejko.plugin.Managers.CooldownManager;
-import main.java.org.matejko.plugin.Managers.DynmapManager;
-import main.java.org.matejko.plugin.Managers.MOTDManager;
-import main.java.org.matejko.plugin.Managers.QoLManager;
-import main.java.org.matejko.plugin.Managers.SleepingManager;
-import main.java.org.matejko.plugin.Managers.VanishUserManager;
-import main.java.org.matejko.plugin.Managers.VanishedPlayersManager;
-
+import main.java.org.matejko.plugin.FileCreator.*;
+import main.java.org.matejko.plugin.Commands.*;
+import main.java.org.matejko.plugin.Managers.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
