@@ -31,7 +31,7 @@ public class Utilis extends JavaPlugin implements Listener {
     @SuppressWarnings("unused")
 	private SleepingWorldConfig sleepingWorldConfig;
     public SleepingManager sleepingManager;
-    public HashMap<World, ArrayList<Player>> sleepingPlayers = new HashMap<>();  // Sleeping players map
+    public HashMap<World, ArrayList<Player>> sleepingPlayers = new HashMap<>();
     public NickManager nickManager;
     private CooldownManager cooldownManager;
 	private Essentials essentials;
