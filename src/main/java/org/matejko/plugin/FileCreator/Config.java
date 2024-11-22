@@ -93,7 +93,12 @@ public class Config {
     public boolean isSleepingEnabled() {
         return config.getBoolean("features.sleeping", true);  // Default to true if not set
     }
+    
     public boolean isChatFormattingEnabled() {
         return config.getBoolean("features.chat-formatting", true);  // Default to true if not set
     }
+
+	public boolean isUpdateEnabled() {
+        return config.getBoolean("features.update-check", true);  // Default to true if not set
+	}
 }

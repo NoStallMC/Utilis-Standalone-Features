@@ -4,12 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
 public class UtilisConfigUpdater {
@@ -18,6 +22,9 @@ public class UtilisConfigUpdater {
     private static final String DEFAULT_CONFIG_FILE_PATH = "/config.yml"; // Config inside the JAR
     private static final String OLD_CONFIG_FILE_PATH = "plugins/Utilis/oldconfig.yml"; // Backup location
     private static JavaPlugin plugin; // Plugin instance
+   
+    // Logger for logging events
+    private static final Logger logger = Logger.getLogger(UtilisConfigUpdater.class.getName());
 
     // Constructor to accept the JavaPlugin instance
     public UtilisConfigUpdater(JavaPlugin plugin) {
@@ -35,7 +42,6 @@ public class UtilisConfigUpdater {
             // If the config doesn't exist, copy the default config from JAR
             if (!configExists) {
                 copyDefaultConfigToServer();
-                System.out.println("Config file does not exist, copied from JAR.");
                 return;
             }
 
@@ -45,9 +51,9 @@ public class UtilisConfigUpdater {
             // Step 3: Get current version from config.yml on the server
             String currentVersion = getCurrentConfigVersion(currentConfig);
 
-         // Step 4: Check if the current config version is outdated or missing
+            // Step 4: Check if the current config version is outdated or missing
             if (currentVersion == null || isVersionOutdated(currentVersion)) {
-                System.out.println("Config is outdated or missing version. Merging will begin.");
+                logger.info("Config is outdated or missing version. Merging will begin.");
 
                 // Step 5: Backup old config (copy it, not rename it)
                 backupOldConfig();
@@ -62,28 +68,28 @@ public class UtilisConfigUpdater {
                 // Step 8: Save the updated config back to the server
                 if (mergeSuccess) {
                     saveConfig(CONFIG_FILE_PATH, defaultConfig);
-                    System.out.println("Config merger done!");
+                    logger.info("Config merger is done!");
 
                     // Step 9: Reload the plugin
                     reloadPlugin();
-
                 } else {
-                    System.out.println("Config merger failed: Could not merge old config.");
+                    logger.severe("Config merger failed: Could not merge old config.");
                 }
             } else {
                 // Get the version number from the current config and append it to the message
                 String configVersion = currentVersion != null ? currentVersion : "unknown";
-                System.out.println("Config is up to date! (v" + configVersion + ")");
+                logger.info("Config is up to date! (v" + configVersion + ")");
             }
 
         } catch (Exception e) {
+            logger.severe("An error occurred while checking and updating the config: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     // Load YAML file from disk into a Map
     @SuppressWarnings("unchecked")
-	private static Map<String, Object> loadConfig(String filePath) throws FileNotFoundException {
+    private static Map<String, Object> loadConfig(String filePath) throws FileNotFoundException {
         Yaml yaml = new Yaml();
         FileInputStream fileInputStream = new FileInputStream(filePath);
         return (Map<String, Object>) yaml.load(fileInputStream);
@@ -91,7 +97,7 @@ public class UtilisConfigUpdater {
 
     // Load default config from the JAR (config.yml)
     @SuppressWarnings("unchecked")
-	private static Map<String, Object> loadDefaultConfig() throws IOException {
+    private static Map<String, Object> loadDefaultConfig() throws IOException {
         Yaml yaml = new Yaml();
         InputStream inputStream = UtilisConfigUpdater.class.getResourceAsStream(DEFAULT_CONFIG_FILE_PATH);
         if (inputStream == null) {
@@ -113,7 +119,7 @@ public class UtilisConfigUpdater {
     private static boolean isVersionOutdated(String currentVersion) throws IOException {
         String serverVersion = getServerVersionFromJar();
         if (serverVersion == null) {
-            System.out.println("Server config version missing, cannot compare.");
+            logger.warning("Server config version missing, cannot compare.");
             return false;
         }
 
@@ -137,7 +143,7 @@ public class UtilisConfigUpdater {
             throw new FileNotFoundException("Default config (config.yml) not found in JAR.");
         }
         @SuppressWarnings("unchecked")
-		Map<String, Object> defaultConfig = (Map<String, Object>) yaml.load(inputStream);
+        Map<String, Object> defaultConfig = (Map<String, Object>) yaml.load(inputStream);
         Object versionObject = defaultConfig.get("Version");
         if (versionObject != null) {
             return versionObject.toString();
@@ -170,9 +176,9 @@ public class UtilisConfigUpdater {
                         outputStream.write(buffer, 0, bytesRead);
                     }
                 }
-                System.out.println("Old config successfully copied to oldconfig.yml.");
+                logger.info("Old config successfully copied to oldconfig.yml.");
             } catch (IOException e) {
-                System.out.println("Failed to copy old config file: " + e.getMessage());
+                logger.severe("Failed to copy old config file: " + e.getMessage());
                 throw e;
             }
         }
@@ -180,25 +186,25 @@ public class UtilisConfigUpdater {
 
     // Copy the default config from JAR to the server config path
     private static void copyDefaultConfigToServer() throws IOException {
-        InputStream inputStream = UtilisConfigUpdater.class.getResourceAsStream(DEFAULT_CONFIG_FILE_PATH);
-        if (inputStream == null) {
-            throw new FileNotFoundException("Default config (config.yml) not found in JAR.");
-        }
-
-        File outputFile = new File(CONFIG_FILE_PATH);
-        try (OutputStream outputStream = new FileOutputStream(outputFile)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
+            InputStream inputStream = UtilisConfigUpdater.class.getResourceAsStream(DEFAULT_CONFIG_FILE_PATH);
+            if (inputStream == null) {
+                throw new FileNotFoundException("Default config (config.yml) not found in JAR.");
             }
-        }
-        System.out.println("Default config copied to server.");
+
+            File outputFile = new File(CONFIG_FILE_PATH);
+            try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+            logger.info("Default config copied from JAR.");
     }
 
- // Merge old config values into the new config (excluding "Version")
+    // Merge old config values into the new config (excluding "Version")
     @SuppressWarnings("unchecked")
-	private static boolean mergeConfigs(Map<String, Object> newConfig, Map<String, Object> oldConfig) {
+    private static boolean mergeConfigs(Map<String, Object> newConfig, Map<String, Object> oldConfig) {
         try {
             // Loop through all entries in the old config
             for (Map.Entry<String, Object> entry : oldConfig.entrySet()) {
@@ -229,14 +235,14 @@ public class UtilisConfigUpdater {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("Merge failed: " + e.getMessage());
+            logger.severe("Merge failed: " + e.getMessage());
             return false;
         }
     }
 
     // Helper method to merge the value into the new config with the correct type
     @SuppressWarnings("unchecked")
-	private static void mergeValue(Map<String, Object> newConfig, String key, Object oldValue) {
+    private static void mergeValue(Map<String, Object> newConfig, String key, Object oldValue) {
         if (oldValue instanceof Boolean) {
             newConfig.put(key, ((Boolean) oldValue));
         } else if (oldValue instanceof String) {
@@ -254,12 +260,11 @@ public class UtilisConfigUpdater {
             newConfig.put(key, oldValue);
         }
     }
-    
+
     // Reload the plugin after updating the config
     private static void reloadPlugin() {
-        System.out.println("Restarting Utilis...");
+        logger.info("Restarting Utilis...");
         Bukkit.getPluginManager().disablePlugin(plugin);
         Bukkit.getPluginManager().enablePlugin(plugin);
-        System.out.println("Utilis has been restarted.");
     }
 }

@@ -7,8 +7,9 @@ commands:
     realname: true
     rename: true
 features:
+    update-check: true
     motd: true
     qol: true
     sleeping: true
     chat-formatting: true
-Version: 1.2
+Version: 1.3

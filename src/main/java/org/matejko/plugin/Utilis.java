@@ -57,8 +57,8 @@ public class Utilis extends JavaPlugin implements Listener {
     public NickManager nickManager;
     private CooldownManager cooldownManager;
 	private Essentials essentials;
-
-    @SuppressWarnings("unused")
+    private UtilisPluginUpdater pluginupdater;
+    @SuppressWarnings({ "static-access" })
 	@Override
     public void onEnable() {
         this.logger = Logger.getLogger("Utilis");
@@ -77,9 +77,20 @@ public class Utilis extends JavaPlugin implements Listener {
         } else {
             getLogger().info("Essentials found!");
         }
+        // Initialize the plugin updater
+        pluginupdater = new UtilisPluginUpdater(this);
+        
+        // Check if update checking is enabled in the config and start the update process
+        if (config.isUpdateEnabled()) {
+            pluginupdater.checkForUpdates();  // Trigger the update check
+        } else {
+            getLogger().info("[Utilis] Update check is disabled in the config.");
+        }
+        
         // Initialize the config updater on startup
-        UtilisConfigUpdater updater = new UtilisConfigUpdater(this);
-        UtilisConfigUpdater.checkAndUpdateConfig();
+        UtilisConfigUpdater configupdater = new UtilisConfigUpdater(this);
+        configupdater.checkAndUpdateConfig();
+        
         // Initialize the ChatFormattingManager
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(this);
         chatFormattingManager.loadConfiguration();  // Load initial configuration for chat formatting
@@ -182,7 +193,7 @@ public class Utilis extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        getLogger().info("Utilis plugin disabled.");
+        getLogger().info("[Utilis] plugin disabled.");
     }
 
     // Getter methods for accessing the plugin's components
