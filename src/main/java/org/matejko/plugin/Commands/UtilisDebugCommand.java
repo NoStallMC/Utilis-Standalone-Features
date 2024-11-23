@@ -22,7 +22,7 @@ public class UtilisDebugCommand implements CommandExecutor {
         }
 
         String[] messages = new String[]{
-            "[Utilis Debug Report]",
+            "§6[Utilis Debug Report]",
             plugin.getUtilisGetters().getConfig() == null || !plugin.getUtilisGetters().getConfig().isLoaded() ? "§cConfig is not loaded properly." : "§aConfig is loaded correctly.",
             plugin.getUtilisGetters().getEssentials() == null ? "§cEssentials plugin is not found!" : "§aEssentials plugin is loaded correctly.",
             plugin.sleepingManager == null ? "§cSleepingManager is not initialized." : "§aSleepingManager is initialized correctly.",
