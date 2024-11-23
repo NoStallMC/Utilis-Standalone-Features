@@ -1,8 +1,11 @@
 package main.java.org.matejko.plugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -10,10 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-public class UtilisPluginUpdater {
+public class UtilisPluginUpdater implements Listener {
 
     private static final String UTILIS_PLUGIN_NAME = "Utilis";
-    private static final String GITHUB_RELEASE_URL = "https://api.github.com/repos/NoStallMC/Utilis/releases/latest"; 
+    private static final String GITHUB_RELEASE_URL = "https://api.github.com/repos/NoStallMC/Utilis/releases/latest";
     private static final String DOWNLOAD_URL = "https://github.com/NoStallMC/Utilis/releases/download/%s/Utilis.jar";
     private static final Logger logger = Bukkit.getLogger();
     private Plugin plugin;
@@ -107,7 +110,7 @@ public class UtilisPluginUpdater {
             logger.info("[Utilis] New update downloaded to Utilis folder.");
 
             // Notify OPs about the update
-            warnOPs("[Utilis] is outdated! New update downloaded to Utilis folder.");
+            warnOPs(ChatColor.RED+"[Utilis] is outdated! New update downloaded to Utilis folder.");
         } else {
             throw new IOException("Failed to download plugin. Response code: " + connection.getResponseCode());
         }
@@ -120,5 +123,18 @@ public class UtilisPluginUpdater {
                 player.sendMessage(message);
             }
         }
+    }
+
+    // Event handler for player join events
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (event.getPlayer().isOp()) {
+            warnOPs(ChatColor.RED+"[Utilis] is outdated! A new update has been downloaded to the Utilis folder.");
+        }
+    }
+
+    // Register the listener in the plugin's onEnable method
+    public void registerListener() {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 }

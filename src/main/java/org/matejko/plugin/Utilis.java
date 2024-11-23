@@ -60,18 +60,28 @@ public class Utilis extends JavaPlugin implements Listener {
             getLogger().info("Essentials found!");
         }
 
+        // Initialize the ChatFormattingManager
+        ChatFormattingManager chatFormattingManager = new ChatFormattingManager(this);
+        chatFormattingManager.loadConfiguration();  // Load initial configuration for chat formatting
+        Bukkit.getPluginManager().registerEvents(chatFormattingManager, this);  // Register as event listener
+        
+        // Enable MOTD feature (if enabled)
+        if (config.isMOTDEnabled()) {
+            motdManager = new MOTDManager(this);
+        }
+
         // Initialize the plugin updater
         pluginupdater = new UtilisPluginUpdater(this);
+        
+        // Register the event listener
+        pluginupdater.registerListener();
+        
+        // Check if updates are enabled in the config
         if (config.isUpdateEnabled()) {
             pluginupdater.checkForUpdates();  // Trigger the update check
         } else {
             getLogger().info("[Utilis] Update check is disabled in the config.");
         }
-
-        // Initialize the ChatFormattingManager
-        ChatFormattingManager chatFormattingManager = new ChatFormattingManager(this);
-        chatFormattingManager.loadConfiguration();  // Load initial configuration for chat formatting
-        Bukkit.getPluginManager().registerEvents(chatFormattingManager, this);  // Register as event listener
 
         // Initialize SleepingWorldConfig to manage the worlds' sleeping settings
         sleepingWorldConfig = new SleepingWorldConfig();
@@ -107,11 +117,6 @@ public class Utilis extends JavaPlugin implements Listener {
         // Enable QoL feature (if enabled)
         if (config.isQoLEnabled()) {
             Bukkit.getPluginManager().registerEvents(new QoLManager(), this);
-        }
-
-        // Enable MOTD feature (if enabled)
-        if (config.isMOTDEnabled()) {
-            motdManager = new MOTDManager(this);
         }
 
         // Initialize dynmapPlugin safely
