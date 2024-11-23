@@ -22,9 +22,14 @@ public class UtilisGetters {
     private Essentials essentials;
     private Plugin dynmapPlugin;
 
+    // New fields for SleepingManager and NickManager
+    private SleepingManager sleepingManager;
+    private NickManager nickManager;
+
     public UtilisGetters(Logger logger, Set<VanishUserManager> vanishedPlayers, VanishedPlayersManager vanishedPlayersManager,
                          MOTDManager motdManager, DynmapManager dynmapManager, UtilisNotifier utilisNotifier,
-                         Config config, Essentials essentials, Plugin dynmapPlugin) {
+                         Config config, Essentials essentials, Plugin dynmapPlugin,
+                         SleepingManager sleepingManager, NickManager nickManager) {
         this.logger = logger;
         this.vanishedPlayers = vanishedPlayers;
         this.vanishedPlayersManager = vanishedPlayersManager;
@@ -34,6 +39,8 @@ public class UtilisGetters {
         this.config = config;
         this.essentials = essentials;
         this.dynmapPlugin = dynmapPlugin;
+        this.sleepingManager = sleepingManager;
+        this.nickManager = nickManager;
     }
 
     // Getter methods for accessing the plugin's components
@@ -71,6 +78,14 @@ public class UtilisGetters {
 
     public Plugin getDynmapPlugin() {
         return dynmapPlugin;
+    }
+
+    public SleepingManager getSleepingManager() {
+        return sleepingManager;
+    }
+
+    public NickManager getNickManager() {
+        return nickManager;
     }
 
     // Check if a player is AFK using the Essentials API
