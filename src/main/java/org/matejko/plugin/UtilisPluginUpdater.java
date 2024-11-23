@@ -46,7 +46,7 @@ public class UtilisPluginUpdater {
                 logger.info("Latest Version on GitHub: " + latestVersion);
 
                 if (isUpdateAvailable(currentVersion, latestVersion)) {
-                    logger.info("[Utilis] is outdated! New update downloaded to Utilis folder.");
+                    logger.warning("[Utilis] is outdated!");
                     downloadAndNotifyUpdate(latestVersion);
                 } else {
                     logger.info("[Utilis] is up to date!");
