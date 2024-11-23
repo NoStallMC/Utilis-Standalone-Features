@@ -1,5 +1,6 @@
-package main.java.org.matejko.plugin;
+package main.java.org.matejko.plugin.UtilisCore;
 
+import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Managers.*;

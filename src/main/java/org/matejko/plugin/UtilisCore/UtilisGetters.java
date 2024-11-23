@@ -1,4 +1,4 @@
-package main.java.org.matejko.plugin;
+package main.java.org.matejko.plugin.UtilisCore;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

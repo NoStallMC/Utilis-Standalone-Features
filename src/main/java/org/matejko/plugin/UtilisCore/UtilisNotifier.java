@@ -1,4 +1,4 @@
-package main.java.org.matejko.plugin;
+package main.java.org.matejko.plugin.UtilisCore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
+import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.FileCreator.Messages;
 import main.java.org.matejko.plugin.Managers.ColorUtil;
 import main.java.org.matejko.plugin.Managers.VanishUserManager;
