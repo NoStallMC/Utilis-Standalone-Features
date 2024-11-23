@@ -45,7 +45,6 @@ permissions:
   utilis.debug:
     description: Allows access to the /utilisdebug command
     default: op
-permissions:
   utilis.sudo:
     description: Allows use of the /sudo command.
     default: op

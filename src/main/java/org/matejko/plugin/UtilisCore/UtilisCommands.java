@@ -11,7 +11,6 @@ public class UtilisCommands {
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
     private final Messages messages;
-
     // Constructor now uses Utilis instead of JavaPlugin
     public UtilisCommands(Utilis plugin, Config config, NickManager nickManager, CooldownManager cooldownManager, Messages messages) {
         this.plugin = plugin;
@@ -20,7 +19,6 @@ public class UtilisCommands {
         this.cooldownManager = cooldownManager;
         this.messages = messages;
     }
-
     public void registerCommands() {
         // Register Nickname-related commands based on config setting
         if (config.isNickEnabled()) {
@@ -38,13 +36,11 @@ public class UtilisCommands {
         if (config.isRealNameEnabled()) {
             plugin.getCommand("realname").setExecutor(new RealNameCommand(nickManager));
         }
-
         // Register /list command
         if (config.isListEnabled()) {
             ListCommand listCommand = new ListCommand(plugin);
             plugin.getCommand("list").setExecutor(listCommand);
         }
-
         // Register /utilisdebug command
         plugin.getCommand("utilisdebug").setExecutor(new UtilisDebugCommand(plugin));
         

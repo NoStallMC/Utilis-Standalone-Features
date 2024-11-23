@@ -31,7 +31,7 @@ public class Utilis extends JavaPlugin implements Listener {
     private Essentials essentials;
     private UtilisPluginUpdater pluginupdater;
     private UtilisGetters utilisGetters;
-
+    
     @SuppressWarnings("static-access")
 	@Override
     public void onEnable() {
