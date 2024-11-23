@@ -30,8 +30,8 @@ public class UtilisNotifier implements Listener {
     // Load custom messages from the config
     private void loadMessages() {
         // Load the custom messages from the config
-        messages.put("messages.vanished", messagesConfig.getMessage("messages.vanished"));
-        messages.put("messages.unvanished", messagesConfig.getMessage("messages.unvanished"));
+        messages.put("messages.vanished", messagesConfig.getMessage("messages.quit"));
+        messages.put("messages.unvanished", messagesConfig.getMessage("messages.join"));
         messages.put("messages.join", messagesConfig.getMessage("messages.join"));
         messages.put("messages.quit", messagesConfig.getMessage("messages.quit"));
     }

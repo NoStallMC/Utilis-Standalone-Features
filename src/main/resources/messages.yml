@@ -3,8 +3,6 @@ motd:
     '2': '&fType &c/help&f for a list of commands.'
     '3': 'Currently online: %players%'
 messages:
-    unvanished: '%player% joined the game.'
-    vanished: '%player% left the game.'
     quit: '%player% left the game.'
     join: '%player% joined the game.'
 sleeping:
