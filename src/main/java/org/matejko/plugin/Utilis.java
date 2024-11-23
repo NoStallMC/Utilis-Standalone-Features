@@ -5,10 +5,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.Listener;
 import com.earth2me.essentials.Essentials;
-import main.java.org.matejko.plugin.UtilisCore.*;
 import main.java.org.matejko.plugin.Managers.*;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
+import main.java.org.matejko.plugin.UtilisCore.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -30,8 +30,6 @@ public class Utilis extends JavaPlugin implements Listener {
     private CooldownManager cooldownManager;
     private Essentials essentials;
     private UtilisPluginUpdater pluginupdater;
-
-    // Add a field for UtilisGetters
     private UtilisGetters utilisGetters;
 
     @SuppressWarnings("static-access")
