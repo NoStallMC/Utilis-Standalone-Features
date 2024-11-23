@@ -67,7 +67,7 @@ public class ListCommand implements CommandExecutor {
 
             // Check if the player is AFK and modify their display name accordingly
             String playerName = player.getDisplayName();
-            if (plugin.isAFK(player)) {  // Check if the player is AFK using the isAFK method from Utilis
+            if (plugin.getUtilisGetters().isAFK(player)) {  // Check if the player is AFK using the isAFK method from Utilis
                 playerName = ChatColor.GRAY + "[AFK] " + playerName;  // Append [AFK] if the player is AFK
             }
 

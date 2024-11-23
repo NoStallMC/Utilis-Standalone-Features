@@ -3,10 +3,8 @@ package main.java.org.matejko.plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import main.java.org.matejko.plugin.Managers.*;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
@@ -151,15 +149,5 @@ public class Utilis extends JavaPlugin implements Listener {
     // Provide access to UtilisGetters
     public UtilisGetters getUtilisGetters() {
         return utilisGetters;
-    }
-
-    // Check if a player is AFK using the Essentials API
-    public boolean isAFK(Player player) {
-        if (essentials == null) {
-            return false;  // Essentials is not available, return false by default
-        }
-
-        User user = essentials.getUser(player);  // Get the Essentials user
-        return user.isAfk();  // Check if the player is AFK using Essentials API
     }
 }
