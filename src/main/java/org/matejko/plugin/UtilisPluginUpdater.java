@@ -6,6 +6,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+
+import main.java.org.matejko.plugin.FileCreator.Config;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,16 +17,17 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 public class UtilisPluginUpdater implements Listener {
-
+	
     private static final String UTILIS_PLUGIN_NAME = "Utilis";
     private static final String GITHUB_RELEASE_URL = "https://api.github.com/repos/NoStallMC/Utilis/releases/latest";
     private static final String DOWNLOAD_URL = "https://github.com/NoStallMC/Utilis/releases/download/%s/Utilis.jar";
     private static final Logger logger = Bukkit.getLogger();
-    private Plugin plugin;
+    private Plugin plugin; 
+    private Config config;
 
-    // Constructor that accepts the main plugin
-    public UtilisPluginUpdater(Plugin plugin) {
+    public UtilisPluginUpdater(Plugin plugin, Config config) {
         this.plugin = plugin;
+        this.config = config;
     }
 
     // Method to be called from Utilis.java to check for updates
@@ -129,7 +133,8 @@ public class UtilisPluginUpdater implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().isOp()) {
-            warnOPs(ChatColor.RED+"[Utilis] is outdated! A new update has been downloaded to the Utilis folder.");
+            if (config.isUpdateEnabled()) {
+            warnOPs(ChatColor.RED+"[Utilis] is outdated! A new update has been downloaded to the Utilis folder."); }
         }
     }
 

@@ -82,8 +82,8 @@ public class UtilisConfigUpdater {
             }
 
         } catch (Exception e) {
-            logger.severe("An error occurred while checking and updating the config: " + e.getMessage());
-            e.printStackTrace();
+            //logger.severe("An error occurred while checking and updating the config: " + e.getMessage());
+            //e.printStackTrace();
         }
     }
 

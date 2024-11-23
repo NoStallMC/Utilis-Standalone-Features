@@ -7,7 +7,7 @@ commands:
     realname: true
     rename: true
 features:
-    update-check: true
+    update-check: false
     motd: true
     qol: true
     sleeping: true

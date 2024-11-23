@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.event.EventHandler;
 import main.java.org.matejko.plugin.Utilis;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -116,9 +115,12 @@ public class NickManager implements Listener {
         String currentColor = getPlayerColor(player);
         String nickWithTilde = "~" + nickname;
 
+        // Apply the translated color codes to the nickname
+        String translatedNickname = ColorUtil.translateColorCodes(nickWithTilde);
+
         // Set the nickname and color in player data
-        playerData.put(playerName, new String[]{nickWithTilde, currentColor});  // Keep current color
-        player.setDisplayName(ChatColor.valueOf(currentColor.toUpperCase()) + nickWithTilde + ChatColor.WHITE);  // Apply current color to display name
+        playerData.put(playerName, new String[]{translatedNickname, currentColor});  // Keep current color
+        player.setDisplayName(ChatColor.valueOf(currentColor.toUpperCase()) + translatedNickname + ChatColor.WHITE);  // Apply current color to display name
 
         savePlayerData();  // Save changes to file immediately
     }

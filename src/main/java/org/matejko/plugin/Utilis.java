@@ -71,7 +71,7 @@ public class Utilis extends JavaPlugin implements Listener {
         }
 
         // Initialize the plugin updater
-        pluginupdater = new UtilisPluginUpdater(this);
+        pluginupdater = new UtilisPluginUpdater(this, config);
         
         // Register the event listener
         pluginupdater.registerListener();
