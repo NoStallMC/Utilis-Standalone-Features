@@ -26,10 +26,10 @@ public class Messages {
             try {
                 // Try to copy the resource from the JAR
                 copyFromJar("messages.yml", messagesFile);
-                plugin.getLogger().info("messages.yml copied from JAR.");
+                plugin.getLogger().info("[Utilis] messages.yml copied from JAR.");
             } catch (IOException e) {
-                plugin.getLogger().warning("Error copying messages.yml from JAR: " + e.getMessage());
-                plugin.getLogger().warning("Message matejkoo on discord!");
+                plugin.getLogger().warning("[Utilis] Error copying messages.yml from JAR: " + e.getMessage());
+                plugin.getLogger().severe("[Utilis] Message matejkoo on discord!");
             }
         }
 

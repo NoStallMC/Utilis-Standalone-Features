@@ -33,16 +33,16 @@ public class UtilisInitializer {
         // Initialize config
         Config config = new Config(plugin);
         if (!config.isLoaded()) {
-            logger.warning("Config was not loaded properly!");
+            logger.warning("[Utilis] Config was not loaded properly!");
             return; // Stop execution if config is not loaded properly
         }
 
         // Essentials plugin setup
         Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
         if (essentials == null) {
-            logger.warning("Essentials plugin not found!");
+            logger.warning("[Utilis] Essentials plugin not found!");
         } else {
-            logger.info("Essentials plugin found!");
+            logger.info("[Utilis] Essentials plugin found!");
         }
 
         // ChatFormattingManager setup
@@ -76,7 +76,7 @@ public class UtilisInitializer {
             SleepingCommand sleepingCommand = new SleepingCommand(plugin);
             plugin.getCommand("as").setExecutor(sleepingCommand);
         } else {
-            logger.info("Sleeping is disabled in the config.");
+            logger.info("[Utilis] Sleeping is disabled in the config.");
         }
 
         // VanishedPlayersManager
@@ -103,7 +103,7 @@ public class UtilisInitializer {
         // Dynmap setup
         Plugin dynmapPlugin = Bukkit.getPluginManager().getPlugin("dynmap");
         if (dynmapPlugin == null) {
-            logger.warning("Dynmap plugin not found!");
+            logger.warning("[Utilis] Dynmap plugin not found!");
         }
         DynmapManager dynmapManager = new DynmapManager(dynmapPlugin, logger);
 

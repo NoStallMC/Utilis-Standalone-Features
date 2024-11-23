@@ -53,7 +53,7 @@ public class UtilisConfigUpdater {
 
             // Step 4: Check if the current config version is outdated or missing
             if (currentVersion == null || isVersionOutdated(currentVersion)) {
-                logger.info("Config is outdated or missing version. Merging will begin.");
+                logger.info("[Utilis] Config is outdated or missing version. Merging will begin.");
 
                 // Step 5: Backup old config (copy it, not rename it)
                 backupOldConfig();
@@ -68,21 +68,21 @@ public class UtilisConfigUpdater {
                 // Step 8: Save the updated config back to the server
                 if (mergeSuccess) {
                     saveConfig(CONFIG_FILE_PATH, defaultConfig);
-                    logger.info("Config merger is done!");
+                    logger.info("[Utilis] Config merger is done!");
 
                     // Step 9: Reload the plugin
                     reloadPlugin();
                 } else {
-                    logger.severe("Config merger failed: Could not merge old config.");
+                    logger.severe("[Utilis] Config merger failed: Could not merge old config.");
                 }
             } else {
                 // Get the version number from the current config and append it to the message
                 String configVersion = currentVersion != null ? currentVersion : "unknown";
-                logger.info("Config is up to date! (v" + configVersion + ")");
+                logger.info("[Utilis] Config is up to date! (v" + configVersion + ")");
             }
 
         } catch (Exception e) {
-            //logger.severe("An error occurred while checking and updating the config: " + e.getMessage());
+            //logger.severe("An error occurred while checking and updating the config: " + e.getMessage()); //FIX THIS IN FUTURE !!!
             //e.printStackTrace();
         }
     }
@@ -119,7 +119,7 @@ public class UtilisConfigUpdater {
     private static boolean isVersionOutdated(String currentVersion) throws IOException {
         String serverVersion = getServerVersionFromJar();
         if (serverVersion == null) {
-            logger.warning("Server config version missing, cannot compare.");
+            logger.warning("[Utilis] config version missing, cannot compare.");
             return false;
         }
 
@@ -176,9 +176,9 @@ public class UtilisConfigUpdater {
                         outputStream.write(buffer, 0, bytesRead);
                     }
                 }
-                logger.info("Old config successfully copied to oldconfig.yml.");
+                logger.info("[Utilis] Old config successfully copied to oldconfig.yml.");
             } catch (IOException e) {
-                logger.severe("Failed to copy old config file: " + e.getMessage());
+                logger.severe("[Utilis] Failed to copy old config file: " + e.getMessage());
                 throw e;
             }
         }
@@ -190,10 +190,10 @@ public class UtilisConfigUpdater {
         File configDirectory = new File("plugins/Utilis");
         if (!configDirectory.exists()) {
             if (configDirectory.mkdirs()) {
-                logger.info("Created directory: " + configDirectory.getPath());
+                logger.info("[Utilis] Created directory: " + configDirectory.getPath());
             } else {
-                logger.severe("Failed to create directory: " + configDirectory.getPath());
-                throw new IOException("Failed to create directory: " + configDirectory.getPath());
+                logger.severe("[Utilis] Failed to create directory: " + configDirectory.getPath());
+                throw new IOException("[Utilis] Failed to create directory: " + configDirectory.getPath());
             }
         }
 
@@ -211,7 +211,7 @@ public class UtilisConfigUpdater {
                 outputStream.write(buffer, 0, bytesRead);
             }
         }
-        logger.info("Default config copied from JAR.");
+        logger.info("[Utilis] Default config copied from JAR.");
     }
     
     // Merge old config values into the new config (excluding "Version")
@@ -247,7 +247,7 @@ public class UtilisConfigUpdater {
             }
             return true;
         } catch (Exception e) {
-            logger.severe("Merge failed: " + e.getMessage());
+            logger.severe("[Utilis] Merge failed: " + e.getMessage());
             return false;
         }
     }
@@ -275,7 +275,7 @@ public class UtilisConfigUpdater {
 
     // Reload the plugin after updating the config
     private static void reloadPlugin() {
-        logger.info("Restarting Utilis...");
+        logger.info("Restarting [Utilis]...");
         Bukkit.getPluginManager().disablePlugin(plugin);
         Bukkit.getPluginManager().enablePlugin(plugin);
     }

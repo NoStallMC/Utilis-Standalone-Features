@@ -54,7 +54,7 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         if (!nickManager.isValidNickname(nickname)) {
             String nicknameUsedMessage = messages.getMessage("nickname.used");
             if (nicknameUsedMessage == null) {
-                logger.warning("Message 'nickname.used' is null. Please check your messages config.");
+                logger.warning("[Utilis] Message 'nickname.used' is null. Please check your messages config.");
                 nicknameUsedMessage = "That nickname is already in use.";  // Fallback message
             }
             player.sendMessage(formatMessage(nicknameUsedMessage, player, nickname));
@@ -65,7 +65,7 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         try {
             nickManager.setNickname(player, nickname);
         } catch (Exception e) {
-            logger.severe("Error while setting nickname for player " + player.getName());
+            logger.severe("[Utilis] Error while setting nickname for player " + player.getName());
             e.printStackTrace();
             player.sendMessage(ChatColor.RED + "An error occurred while setting your nickname.");
             return false;
@@ -77,7 +77,7 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         // Notify the player their nickname has been set
         String nicknameSetMessage = messages.getMessage("nickname.set");
         if (nicknameSetMessage == null) {
-            logger.warning("Message 'nickname.set' is null. Please check your messages config.");
+            logger.warning("[Utilis] Message 'nickname.set' is null. Please check your messages config.");
             nicknameSetMessage = "&7Your nickname has been set to: %nickname%";  // Fallback message
         }
 

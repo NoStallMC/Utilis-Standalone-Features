@@ -42,7 +42,7 @@ public class UtilisNotifier implements Listener {
         if (message != null) {
             Bukkit.broadcastMessage(formatMessage(message, player));
         } else {
-            plugin.getLogger().warning("Vanished message is missing from the config.");
+            plugin.getLogger().warning("[Utilis] Quit message is missing from the config.");
         }
     }
 
@@ -52,7 +52,7 @@ public class UtilisNotifier implements Listener {
         if (message != null) {
             Bukkit.broadcastMessage(formatMessage(message, player));
         } else {
-            plugin.getLogger().warning("Unvanished message is missing from the config.");
+            plugin.getLogger().warning("[Utilis] Join message is missing from the config.");
         }
     }
 
@@ -62,7 +62,7 @@ public class UtilisNotifier implements Listener {
         if (message != null) {
             Bukkit.broadcastMessage(formatMessage(message, player));
         } else {
-            plugin.getLogger().warning("Join message is missing from the config.");
+            plugin.getLogger().warning("[Utilis] Join message is missing from the config.");
         }
     }
 
@@ -72,7 +72,7 @@ public class UtilisNotifier implements Listener {
         if (message != null) {
             Bukkit.broadcastMessage(formatMessage(message, player));
         } else {
-            plugin.getLogger().warning("Quit message is missing from the config.");
+            plugin.getLogger().warning("[Utilis] Quit message is missing from the config.");
         }
     }
 
@@ -103,7 +103,7 @@ public class UtilisNotifier implements Listener {
                 }
             }
         } else {
-            plugin.getLogger().warning("MOTDManager is null.");
+            plugin.getLogger().warning("[Utilis] MOTDManager is null.");
         }
 
         // Send the custom join message if the player is not vanished
@@ -134,7 +134,7 @@ public class UtilisNotifier implements Listener {
     // Helper method to check if a player is vanished
     private boolean isPlayerVanished(Player player) {
         if (plugin.getUtilisGetters().getVanishedPlayers() == null) {
-            plugin.getLogger().warning("Vanished players list is null.");
+            plugin.getLogger().warning("[Utilis] Vanished players list is null.");
             return false;
         }
         return plugin.getUtilisGetters().getVanishedPlayers().stream()

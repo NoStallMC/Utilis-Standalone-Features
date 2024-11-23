@@ -45,12 +45,12 @@ public class UtilisPluginUpdater implements Listener {
                 String currentVersion = getCurrentPluginVersion();
 
                 if (latestVersion == null) {
-                    logger.severe("Failed to fetch the latest version from GitHub.");
+                    logger.severe("[Utilis] Failed to fetch the latest version from GitHub.");
                     return;
                 }
 
-                logger.info("Current Utilis Version: " + currentVersion);
-                logger.info("Latest Version on GitHub: " + latestVersion);
+                logger.info("[Utilis] Current Version: " + currentVersion);
+                logger.info("[Utilis] Latest Version on GitHub: " + latestVersion);
 
                 if (isUpdateAvailable(currentVersion, latestVersion)) {
                     logger.warning("[Utilis] is outdated!");
@@ -59,7 +59,7 @@ public class UtilisPluginUpdater implements Listener {
                     logger.info("[Utilis] is up to date!");
                 }
             } catch (Exception e) {
-                logger.severe("Error during update check: " + e.getMessage());
+                logger.severe("[Utilis] Error during update check: " + e.getMessage());
                 e.printStackTrace();
             }
         });
@@ -76,7 +76,7 @@ public class UtilisPluginUpdater implements Listener {
                 return jsonResponse.split("\"tag_name\":\"")[1].split("\"")[0];  // Parse the tag name (version)
             }
         }
-        throw new IOException("Failed to fetch version. Response code: " + connection.getResponseCode());
+        throw new IOException("[Utilis] Failed to fetch version. Response code: " + connection.getResponseCode());
     }
 
     private String getCurrentPluginVersion() {
@@ -118,7 +118,7 @@ public class UtilisPluginUpdater implements Listener {
                 warnOPs(ChatColor.RED + "[Utilis] is outdated! A new update has been downloaded to the Utilis folder.");
             }
         } else {
-            throw new IOException("Failed to download plugin. Response code: " + connection.getResponseCode());
+            throw new IOException("[Utilis] Failed to download new plugin. Response code: " + connection.getResponseCode());
         }
     }
 

@@ -1,7 +1,6 @@
 package main.java.org.matejko.plugin.Commands;
 
 import java.util.Collection;
-import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,9 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
 public class SuckCommand implements CommandExecutor {
-
-    @SuppressWarnings("unused")
-	private Logger logger;
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("suck")) {
             if (sender instanceof Player) {

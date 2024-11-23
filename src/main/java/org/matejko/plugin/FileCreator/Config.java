@@ -31,7 +31,7 @@ public class Config {
             config.load();  // Load the config from the file
             loaded = true;  // Mark the config as loaded successfully
         } catch (Exception e) {
-            logger.severe("Error loading config file: " + e.getMessage());
+            logger.severe("[Utilis] Error loading config file: " + e.getMessage());
             e.printStackTrace();
             loaded = false;  // Mark the config as failed to load
         }

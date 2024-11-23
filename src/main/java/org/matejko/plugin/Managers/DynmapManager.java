@@ -27,11 +27,11 @@ public class DynmapManager {
             if (!lines.contains(playerName)) {
                 Files.write(Paths.get(HIDDEN_PLAYERS_PATH), (playerName + System.lineSeparator()).getBytes(),
                             java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
-                logger.info(playerName + " added to hidden players.");
+                logger.info("[Utilis]" + playerName + " added to hidden players.");
                 reloadDynmap();
             }
         } catch (IOException e) {
-            logger.warning("Could not add " + playerName + " to hidden players: " + e.getMessage());
+            logger.warning("[Utilis] Could not add " + playerName + " to hidden players: " + e.getMessage());
         }
     }
 
@@ -41,10 +41,10 @@ public class DynmapManager {
             lines.remove(playerName);
 
             Files.write(Paths.get(HIDDEN_PLAYERS_PATH), lines);
-            logger.info(playerName + " removed from hidden players.");
+            logger.info("[Utilis]" + playerName + " removed from hidden players.");
             reloadDynmap();
         } catch (IOException e) {
-            logger.warning("Could not remove " + playerName + " from hidden players: " + e.getMessage());
+            logger.warning("[Utilis] Could not remove " + playerName + " from hidden players: " + e.getMessage());
         }
     }
 
@@ -52,15 +52,15 @@ public class DynmapManager {
         if (dynmapPlugin != null && dynmapPlugin.isEnabled()) {
             Bukkit.getPluginManager().disablePlugin(dynmapPlugin);
             Bukkit.getPluginManager().enablePlugin(dynmapPlugin);
-            logger.info("Dynmap reloaded.");
+            logger.info("[Utilis] Dynmap reloaded.");
         } else {
-            logger.warning("Dynmap plugin is not available or not enabled.");
+            logger.warning("[Utilis] Dynmap plugin is not available or not enabled.");
         }
     }
 
     // Reload method for Dynmap
     public void reload() {
         reloadDynmap();
-        logger.info("Dynmap reloaded.");
+        logger.info("[Utilis] Dynmap reloaded.");
     }
 }

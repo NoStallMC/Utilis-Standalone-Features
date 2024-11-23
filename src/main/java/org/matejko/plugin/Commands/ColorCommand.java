@@ -46,7 +46,7 @@ public class ColorCommand implements org.bukkit.command.CommandExecutor {
         if (args.length == 0) {
             String usageMessage = messages.getMessage("color.usage");
             if (usageMessage == null) {
-                logger.warning("Message 'color.usage' is null. Please check your messages config.");
+                logger.warning("[Utilis] Message 'color.usage' is null. Please check your messages config.");
                 usageMessage = ChatColor.RED + "Usage: /color <color> or /color help";  // Fallback message
             }
             player.sendMessage(usageMessage);
@@ -71,7 +71,7 @@ public class ColorCommand implements org.bukkit.command.CommandExecutor {
         if (!nickManager.isValidColor(color)) {
             String invalidMessage = messages.getMessage("color.invalid");
             if (invalidMessage == null) {
-                logger.warning("Message 'color.invalid' is null. Please check your messages config.");
+                logger.warning("[Utilis] Message 'color.invalid' is null. Please check your messages config.");
                 invalidMessage = ChatColor.RED + "Invalid color.";  // Fallback message
             }
             player.sendMessage(invalidMessage);
@@ -87,7 +87,7 @@ public class ColorCommand implements org.bukkit.command.CommandExecutor {
         // Inform the player of the change
         String colorSetMessage = messages.getMessage("color.set");
         if (colorSetMessage == null) {
-            logger.warning("Message 'color.set' is null. Please check your messages config.");
+            logger.warning("[Utilis] Message 'color.set' is null. Please check your messages config.");
             colorSetMessage = "&7Your color has been changed to %color%";  // Fallback message
         }
 

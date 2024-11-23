@@ -36,9 +36,9 @@ public class NickManager implements Listener {
         if (!playerDataFile.exists()) {
             try {
                 playerDataFile.createNewFile();
-                logger.info("playerData.yml not found. Created a new one.");
+                logger.warning("[Utilis] playerData.yml not found! Creating a new one.");
             } catch (Exception e) {
-                logger.severe("Could not create playerData.yml file.");
+                logger.severe("[Utilis] Could not create playerData.yml file.");
                 e.printStackTrace();
             }
         }
@@ -59,7 +59,7 @@ public class NickManager implements Listener {
                 playerData.put(playerName, new String[]{nickname, color});
             }
         } else {
-            logger.warning("Player data file does not exist.");
+            logger.warning("[Utilis] Player data file does not exist.");
         }
     }
 
@@ -71,7 +71,7 @@ public class NickManager implements Listener {
             String[] data = entry.getValue();
             config.setProperty(playerName + ".nickname", data[0]);
             config.setProperty(playerName + ".color", data[1]);
-            logger.info("Saving data for " + playerName + ": " + data[0] + " " + data[1]);  // Log what is being saved
+            logger.info("[Utilis] Saving data for " + playerName + ": " + data[0] + " " + data[1]);  // Log what is being saved
         }
         config.save();
     }
@@ -188,7 +188,6 @@ public class NickManager implements Listener {
                 // Apply the nickname with the stored color immediately when the player joins
                 ChatColor chatColor = ChatColor.valueOf(color.toUpperCase());
                 player.setDisplayName(chatColor + nickname + ChatColor.WHITE);  // Apply color and default white after
-                logger.info("Applying nickname for " + playerName + ": " + nickname + " " + color);  // Log the applied nickname
             } catch (IllegalArgumentException e) {
                 // Fallback to default color (WHITE) in case of an invalid color
                 player.setDisplayName(ChatColor.WHITE + nickname);

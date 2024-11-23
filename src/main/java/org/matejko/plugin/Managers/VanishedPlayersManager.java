@@ -29,9 +29,9 @@ public class VanishedPlayersManager {
         if (!filePath.exists()) {
             try {
                 filePath.createNewFile(); // Create the file if it doesn't exist
-                logger.info("VanishedPlayers.txt file created.");
+                logger.info("[Utilis] VanishedPlayers.txt file created.");
             } catch (IOException e) {
-                logger.warning("Failed to create VanishedPlayers.txt file: " + e.getMessage());
+                logger.warning("[Utilis] Failed to create VanishedPlayers.txt file: " + e.getMessage());
                 return;
             }
         }
@@ -50,9 +50,9 @@ public class VanishedPlayersManager {
                     }
                 }
             }
-            logger.info("Loaded vanished players: " + vanishedPlayers.size());
+            logger.info("[Utilis] Loaded vanished players: " + vanishedPlayers.size());
         } catch (IOException e) {
-            logger.warning("Could not load vanished players: " + e.getMessage());
+            logger.warning("[Utilis] Could not load vanished players: " + e.getMessage());
         }
     }
 
@@ -63,9 +63,9 @@ public class VanishedPlayersManager {
                 playerNames.add(vanishUser.getName());
             }
             Files.write(filePath.toPath(), playerNames);
-            logger.info("Saved vanished players: " + vanishedPlayers.size());
+            logger.info("[Utilis] Saved vanished players: " + vanishedPlayers.size());
         } catch (IOException e) {
-            logger.warning("Could not save vanished players: " + e.getMessage());
+            logger.warning("[Utilis] Could not save vanished players: " + e.getMessage());
         }
     }
 }
