@@ -186,22 +186,34 @@ public class UtilisConfigUpdater {
 
     // Copy the default config from JAR to the server config path
     private static void copyDefaultConfigToServer() throws IOException {
-            InputStream inputStream = UtilisConfigUpdater.class.getResourceAsStream(DEFAULT_CONFIG_FILE_PATH);
-            if (inputStream == null) {
-                throw new FileNotFoundException("Default config (config.yml) not found in JAR.");
+        // Ensure the "plugins/Utilis" directory exists
+        File configDirectory = new File("plugins/Utilis");
+        if (!configDirectory.exists()) {
+            if (configDirectory.mkdirs()) {
+                logger.info("Created directory: " + configDirectory.getPath());
+            } else {
+                logger.severe("Failed to create directory: " + configDirectory.getPath());
+                throw new IOException("Failed to create directory: " + configDirectory.getPath());
             }
+        }
 
-            File outputFile = new File(CONFIG_FILE_PATH);
-            try (OutputStream outputStream = new FileOutputStream(outputFile)) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
+        // Now ensure that the config file exists and copy it from the JAR if needed
+        InputStream inputStream = UtilisConfigUpdater.class.getResourceAsStream(DEFAULT_CONFIG_FILE_PATH);
+        if (inputStream == null) {
+            throw new FileNotFoundException("Default config (config.yml) not found in JAR.");
+        }
+
+        File outputFile = new File(CONFIG_FILE_PATH);
+        try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
-            logger.info("Default config copied from JAR.");
+        }
+        logger.info("Default config copied from JAR.");
     }
-
+    
     // Merge old config values into the new config (excluding "Version")
     @SuppressWarnings("unchecked")
     private static boolean mergeConfigs(Map<String, Object> newConfig, Map<String, Object> oldConfig) {

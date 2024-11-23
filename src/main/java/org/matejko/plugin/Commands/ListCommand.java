@@ -60,7 +60,7 @@ public class ListCommand implements CommandExecutor {
         // Loop through all online players
         for (Player player : Bukkit.getOnlinePlayers()) {
             // Check if the player is vanished. If vanished, skip adding to the list of visible players.
-            if (plugin.getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player) && vanishUser.isVanished())) {
+            if (plugin.getUtilisGetters().getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player) && vanishUser.isVanished())) {
                 playerHidden++;  // Increment the hidden player counter
                 continue;  // Skip this player as they are vanished
             }

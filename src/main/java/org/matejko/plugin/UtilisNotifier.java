@@ -92,10 +92,10 @@ public class UtilisNotifier implements Listener {
         event.setJoinMessage(null);  // Prevent the default join message
 
         // Ensure MOTD Manager is not null
-        if (plugin.getMotdManager() != null) {
+        if (plugin.getUtilisGetters().getMotdManager() != null) {
             // Send MOTD to the joining player only
             if (!isPlayerVanished(newPlayer)) {  // Optional: Send MOTD only to non-vanished players
-                List<String> motd = plugin.getMotdManager().getMOTD(newPlayer);
+                List<String> motd = plugin.getUtilisGetters().getMotdManager().getMOTD(newPlayer);
                 if (motd != null) {
                     for (String line : motd) {
                         newPlayer.sendMessage(ColorUtil.translateColorCodes(line));
@@ -112,7 +112,7 @@ public class UtilisNotifier implements Listener {
         }
 
         // Hide vanished players from the joining player
-        for (VanishUserManager vanishUser : plugin.getVanishedPlayers()) {
+        for (VanishUserManager vanishUser : plugin.getUtilisGetters().getVanishedPlayers()) {
             if (vanishUser.getPlayer() != null) {
                 newPlayer.hidePlayer(vanishUser.getPlayer());
             }
@@ -133,11 +133,11 @@ public class UtilisNotifier implements Listener {
 
     // Helper method to check if a player is vanished
     private boolean isPlayerVanished(Player player) {
-        if (plugin.getVanishedPlayers() == null) {
+        if (plugin.getUtilisGetters().getVanishedPlayers() == null) {
             plugin.getLogger().warning("Vanished players list is null.");
             return false;
         }
-        return plugin.getVanishedPlayers().stream()
+        return plugin.getUtilisGetters().getVanishedPlayers().stream()
                 .anyMatch(vanishUser -> vanishUser.getPlayer().equals(player) && vanishUser.isVanished());
     }
 }

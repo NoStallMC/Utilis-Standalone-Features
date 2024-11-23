@@ -1,19 +1,15 @@
 package main.java.org.matejko.plugin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import main.java.org.matejko.plugin.FileCreator.*;
-import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.Managers.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import main.java.org.matejko.plugin.Commands.*;
+import main.java.org.matejko.plugin.FileCreator.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -31,16 +27,23 @@ public class Utilis extends JavaPlugin implements Listener {
     @SuppressWarnings("unused")
 	private SleepingWorldConfig sleepingWorldConfig;
     public SleepingManager sleepingManager;
-    public HashMap<World, ArrayList<Player>> sleepingPlayers = new HashMap<>();
     public NickManager nickManager;
     private CooldownManager cooldownManager;
-	private Essentials essentials;
+    private Essentials essentials;
     private UtilisPluginUpdater pluginupdater;
-    @SuppressWarnings({ "static-access" })
-    @Override
+
+    // Add a field for UtilisGetters
+    private UtilisGetters utilisGetters;
+
+    @SuppressWarnings("static-access")
+	@Override
     public void onEnable() {
         this.logger = Logger.getLogger("Utilis");
         getLogger().info("[Utilis] is now active!");
+
+        // Initialize the config updater
+        UtilisConfigUpdater configupdater = new UtilisConfigUpdater(this);
+        configupdater.checkAndUpdateConfig();
 
         // Initialize config early to ensure it's available for use
         config = new Config(this);
@@ -65,10 +68,6 @@ public class Utilis extends JavaPlugin implements Listener {
             getLogger().info("[Utilis] Update check is disabled in the config.");
         }
 
-        // Initialize the config updater
-        UtilisConfigUpdater configupdater = new UtilisConfigUpdater(this);
-        configupdater.checkAndUpdateConfig();
-
         // Initialize the ChatFormattingManager
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(this);
         chatFormattingManager.loadConfiguration();  // Load initial configuration for chat formatting
@@ -91,12 +90,12 @@ public class Utilis extends JavaPlugin implements Listener {
         }
 
         // Initialize vanished players set and managers
-        Bukkit.getPluginManager().registerEvents(new NickManager(this), this);
         vanishedPlayers = new HashSet<>();
         vanishedPlayersManager = new VanishedPlayersManager(this);
         vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
 
         // NickManager initialization
+        Bukkit.getPluginManager().registerEvents(new NickManager(this), this);
         this.nickManager = new NickManager(this);
         Messages messages = new Messages(this);  // Load messages from messages.yml
         this.cooldownManager = new CooldownManager(this, 60);  // Set 60 seconds cooldown
@@ -115,12 +114,6 @@ public class Utilis extends JavaPlugin implements Listener {
             motdManager = new MOTDManager(this);
         }
 
-        // Check and copy default messages.yml if it doesn't exist
-        File messagesFile = new File(getDataFolder(), "messages.yml");
-        if (!messagesFile.exists()) {
-            copyResourceToFile("messages.yml", messagesFile);
-        }
-
         // Initialize dynmapPlugin safely
         dynmapPlugin = Bukkit.getPluginManager().getPlugin("dynmap");
         if (dynmapPlugin == null) {
@@ -131,6 +124,10 @@ public class Utilis extends JavaPlugin implements Listener {
         // Initialize and register UtilisNotifier as a listener
         utilisNotifier = new UtilisNotifier(this);
         Bukkit.getPluginManager().registerEvents(utilisNotifier, this);
+
+        // Initialize UtilisGetters
+        utilisGetters = new UtilisGetters(getLogger(), vanishedPlayers, vanishedPlayersManager, motdManager,
+                dynmapManager, utilisNotifier, config, essentials, dynmapPlugin);
 
         // Register events (also includes current class for other event handling)
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -146,74 +143,10 @@ public class Utilis extends JavaPlugin implements Listener {
         return logger;
     }
 
-    public Set<VanishUserManager> getVanishedPlayers() {
-        return vanishedPlayers;
+    // Provide access to UtilisGetters
+    public UtilisGetters getUtilisGetters() {
+        return utilisGetters;
     }
-
-    public VanishedPlayersManager getVanishedPlayersManager() {
-        return vanishedPlayersManager;
-    }
-
-    public MOTDManager getMotdManager() {
-        return motdManager;
-    }
-
-    public DynmapManager getDynmapManager() {
-        return dynmapManager;
-    }
-
-    public UtilisNotifier getUtilisNotifier() {
-        return utilisNotifier;
-    }
-
-    public Config getConfig() {
-        return config;
-    }
-
-    public String getName() {
-        return "Utilis";
-    }
-    public Essentials getEssentials() {
-        return essentials;
-    }
-
-    public Plugin getDynmapPlugin() {
-        return dynmapPlugin;
-    }
-    private void copyResourceToFile(String resourceName, File outputFile) {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName);
-        
-        if (inputStream == null) {
-            getLogger().warning("Resource not found: " + resourceName);
-            return;
-        }
-
-        // Ensure the output file and directories exist
-        try {
-            if (!outputFile.exists()) {
-                outputFile.getParentFile().mkdirs(); // Ensure parent directories are created
-                outputFile.createNewFile();           // Create the new file
-            }
-
-            // Use a BufferedOutputStream to handle writing
-            try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-                getLogger().info("Resource " + resourceName + " copied successfully.");
-            }
-        } catch (IOException e) {
-            getLogger().warning("Error copying resource " + resourceName + ": " + e.getMessage());
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }    
 
     // Check if a player is AFK using the Essentials API
     public boolean isAFK(Player player) {

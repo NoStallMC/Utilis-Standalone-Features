@@ -26,40 +26,40 @@ public class VanishCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        VanishUserManager vanishUser = plugin.getVanishedPlayers().stream()
+        VanishUserManager vanishUser = plugin.getUtilisGetters().getVanishedPlayers().stream()
                 .filter(vu -> vu.getPlayer().equals(player))
                 .findFirst()
                 .orElse(null);
 
         if (vanishUser != null) {
             // Player is currently vanished; unvanish them
-            plugin.getVanishedPlayers().remove(vanishUser);
+            plugin.getUtilisGetters().getVanishedPlayers().remove(vanishUser);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.showPlayer(player);
             }
-            plugin.getUtilisNotifier().notifyUnvanished(player);  // Updated to use UtilisNotifier
-            plugin.getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Remove from Dynmap
+            plugin.getUtilisGetters().getUtilisNotifier().notifyUnvanished(player);  // Updated to use UtilisNotifier
+            plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Remove from Dynmap
             player.sendMessage(ChatColor.GRAY + "You are now visible to other players.");
         } else {
             // Player is not vanished; vanish them
         	VanishUserManager newVanishUser = new VanishUserManager(player, true);
-            plugin.getVanishedPlayers().add(newVanishUser);
+            plugin.getUtilisGetters().getVanishedPlayers().add(newVanishUser);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.hidePlayer(player);
             }
-            plugin.getUtilisNotifier().notifyVanished(player);  // Updated to use UtilisNotifier
-            plugin.getDynmapManager().addToHiddenPlayersFile(player.getName()); // Add to Dynmap
+            plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player);  // Updated to use UtilisNotifier
+            plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName()); // Add to Dynmap
             player.sendMessage(ChatColor.GRAY + "You are now hidden from other players.");
         }
 
         // Save the updated list of vanished players to the file
-        plugin.getVanishedPlayersManager().saveVanishedPlayers(plugin.getVanishedPlayers());
+        plugin.getUtilisGetters().getVanishedPlayersManager().saveVanishedPlayers(plugin.getUtilisGetters().getVanishedPlayers());
 
         return true;
     }
 
     public boolean isPlayerVanished(Player player) {
-        return plugin.getVanishedPlayers().stream()
+        return plugin.getUtilisGetters().getVanishedPlayers().stream()
                 .anyMatch(vu -> vu.getPlayer().equals(player));
     }
 }

@@ -69,6 +69,6 @@ public class MOTDManager {
 
     private boolean isPlayerVanished(Player player) {
         // Directly check if the vanished players set contains the player
-        return plugin.getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player));
+        return plugin.getUtilisGetters().getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player));
     }
 }
