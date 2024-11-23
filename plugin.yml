@@ -37,8 +37,15 @@ commands:
     usage: /<command>
     permission: utilis.debug
     permission-message: "You do not have permission to run this command."
-
+  sudo:
+    description: Force a player to execute a command or send a chat message.
+    usage: /sudo <player> <command/message>
+    permission: utilis.sudo
 permissions:
   utilis.debug:
     description: Allows access to the /utilisdebug command
+    default: op
+permissions:
+  utilis.sudo:
+    description: Allows use of the /sudo command.
     default: op

@@ -6,7 +6,7 @@ import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Managers.*;
 
 public class UtilisCommands {
-    private final Utilis plugin;  // Use Utilis instead of JavaPlugin
+    private final Utilis plugin;
     private final Config config;
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
@@ -47,6 +47,10 @@ public class UtilisCommands {
 
         // Register /utilisdebug command
         plugin.getCommand("utilisdebug").setExecutor(new UtilisDebugCommand(plugin));
+        
+        // Register sudo command
+        SudoManager sudoCommand = new SudoManager();
+        plugin.getCommand("sudo").setExecutor(sudoCommand);
 
         // Register Suck command
         SuckCommand suckCommand = new SuckCommand();
