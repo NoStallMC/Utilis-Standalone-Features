@@ -22,15 +22,16 @@ public class UtilisDebugCommand implements CommandExecutor {
         }
 
         String[] messages = new String[]{
-            "§6[Utilis Debug Report]",
-            plugin.getUtilisGetters().getConfig() == null || !plugin.getUtilisGetters().getConfig().isLoaded() ? "§cConfig is not loaded properly." : "§aConfig is loaded correctly.",
-            plugin.getUtilisGetters().getEssentials() == null ? "§cEssentials plugin is not found!" : "§aEssentials plugin is loaded correctly.",
-            plugin.getUtilisGetters().getSleepingManager() == null ? "§cSleepingManager is not initialized." : "§aSleepingManager is initialized correctly.",
-            plugin.getUtilisGetters().getNickManager() == null ? "§cNickManager is not initialized." : "§aNickManager is initialized correctly.",
-            plugin.getUtilisGetters().getMotdManager() == null ? "§cMOTDManager is not initialized." : "§aMOTDManager is initialized correctly.",
-            plugin.getUtilisGetters().getDynmapPlugin() == null ? "§cDynmap plugin is not found." : "§aDynmap plugin is loaded correctly.",
-            plugin.getUtilisGetters().getVanishedPlayersManager() == null ? "§cVanish system is not initialized." : "§aVanish system is working correctly."
-        };
+                "§6[Utilis Debug Report]",
+                plugin.getUtilisGetters().getConfig() == null || !plugin.getUtilisGetters().getConfig().isLoaded() ? "§cConfig is not loaded properly." : "§aConfig is loaded correctly.",
+                plugin.getUtilisGetters().getEssentials() == null ? "§cEssentials plugin is not found!" : "§aEssentials plugin is loaded correctly.",
+                plugin.getUtilisGetters().getDynmapPlugin() == null ? "§cDynmap plugin is not found." : "§aDynmap plugin is loaded correctly.",
+                plugin.getUtilisGetters().getSleepingManager() == null ? "§cSleepingManager is not initialized." : "§aSleepingManager is initialized correctly.",
+                plugin.getUtilisGetters().getNickManager() == null ? "§cNickManager is not initialized." : "§aNickManager is initialized correctly.",
+                plugin.getUtilisGetters().getMotdManager() == null ? "§cMOTDManager is not initialized." : "§aMOTDManager is initialized correctly.",
+                plugin.getUtilisGetters().getVanishedPlayersManager() == null ? "§cVanish system is not initialized." : "§aVanish system is working correctly.",
+                plugin.getUtilisGetters().getUtilisNotifier() == null ? "§cUtilisNotifier is not initialized." : "§aUtilisNotifier is initialized correctly."
+            };
 
         // Send each line of the message separately
         for (String line : messages) {
