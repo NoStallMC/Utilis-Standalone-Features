@@ -4,6 +4,10 @@ import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Managers.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class UtilisCommands {
     private final Utilis plugin;
@@ -11,7 +15,7 @@ public class UtilisCommands {
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
     private final Messages messages;
-    // Constructor now uses Utilis instead of JavaPlugin
+
     public UtilisCommands(Utilis plugin, Config config, NickManager nickManager, CooldownManager cooldownManager, Messages messages) {
         this.plugin = plugin;
         this.config = config;
@@ -19,44 +23,58 @@ public class UtilisCommands {
         this.cooldownManager = cooldownManager;
         this.messages = messages;
     }
+
     public void registerCommands() {
-        // Register Nickname-related commands based on config setting
+        // Register commands with permission checks
         if (config.isNickEnabled()) {
-            plugin.getCommand("nickname").setExecutor(new NicknameCommand(nickManager, cooldownManager, messages));
+            registerCommandWithPermission("nickname", "utilis.nickname", new NicknameCommand(nickManager, cooldownManager, messages));
         }
         if (config.isRenameEnabled()) {
-            plugin.getCommand("rename").setExecutor(new RenameCommand(nickManager));
+            registerCommandWithPermission("rename", "utilis.rename", new RenameCommand(nickManager));
         }
         if (config.isColorEnabled()) {
-            plugin.getCommand("color").setExecutor(new ColorCommand(nickManager, cooldownManager, messages));
+            registerCommandWithPermission("color", "utilis.color", new ColorCommand(nickManager, cooldownManager, messages));
         }
         if (config.isNickResetEnabled()) {
-            plugin.getCommand("nickreset").setExecutor(new NickResetCommand(nickManager, cooldownManager));
+            registerCommandWithPermission("nickreset", "utilis.nickreset", new NickResetCommand(nickManager, cooldownManager));
         }
         if (config.isRealNameEnabled()) {
-            plugin.getCommand("realname").setExecutor(new RealNameCommand(nickManager));
+            registerCommandWithPermission("realname", "utilis.realname", new RealNameCommand(nickManager));
         }
-        // Register /list command
         if (config.isListEnabled()) {
-            ListCommand listCommand = new ListCommand(plugin);
-            plugin.getCommand("list").setExecutor(listCommand);
+            registerCommandWithPermission("list", "utilis.list", new ListCommand(plugin));
         }
-        // Register /utilisdebug command
-        plugin.getCommand("utilisdebug").setExecutor(new UtilisDebugCommand(plugin));
-        
-        // Register sudo command
-        SudoManager sudoCommand = new SudoManager();
-        plugin.getCommand("sudo").setExecutor(sudoCommand);
 
-        // Register Suck command
-        SuckCommand suckCommand = new SuckCommand();
-        plugin.getCommand("suck").setExecutor(suckCommand);
+        // Utilisdebug command with specific permission
+        registerCommandWithPermission("utilisdebug", "utilis.debug", new UtilisDebugCommand(plugin));
 
-        // Vanish-related command registration
+        // Sudo command
+        registerCommandWithPermission("sudo", "utilis.sudo", new SudoManager());
+
+        // Suck command
+        registerCommandWithPermission("suck", "utilis.suck", new SuckCommand());
+
+        // Vanish command
         if (config.isVanishEnabled()) {
             VanishCommand vanishCommand = new VanishCommand(plugin);
-            plugin.getCommand("vanish").setExecutor(vanishCommand);
-            plugin.getCommand("v").setExecutor(vanishCommand);
+            registerCommandWithPermission("vanish", "utilis.vanish", vanishCommand);
+            registerCommandWithPermission("v", "utilis.vanish", vanishCommand); // Alias
         }
+    }
+
+    private void registerCommandWithPermission(String commandName, String permission, CommandExecutor executor) {
+        plugin.getCommand(commandName).setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (!player.hasPermission(permission)) {
+                        player.sendMessage("§cYou do not have permission to use this command.");
+                        return true;
+                    }
+                }
+                return executor.onCommand(sender, command, label, args);
+            }
+        });
     }
 }

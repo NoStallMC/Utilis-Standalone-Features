@@ -21,8 +21,6 @@ public class UtilisGetters {
     private Config config;
     private Essentials essentials;
     private Plugin dynmapPlugin;
-
-    // New fields for SleepingManager and NickManager
     private SleepingManager sleepingManager;
     private NickManager nickManager;
 

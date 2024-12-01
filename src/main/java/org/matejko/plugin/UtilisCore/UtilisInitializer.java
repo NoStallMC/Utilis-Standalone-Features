@@ -5,6 +5,8 @@ import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Utilis;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.Essentials;
@@ -16,7 +18,6 @@ import java.util.logging.Logger;
 public class UtilisInitializer {
     private final Utilis plugin;
     private final Logger logger;
-
     public UtilisInitializer(Utilis plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
@@ -50,6 +51,25 @@ public class UtilisInitializer {
         chatFormattingManager.loadConfiguration();
         Bukkit.getPluginManager().registerEvents(chatFormattingManager, plugin);
 
+        // VanishedPlayersManager
+        Set<VanishUserManager> vanishedPlayers = new HashSet<>(); // Use Set<VanishUserManager>
+        VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin);
+        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers); // Populate VanishUserManager instances
+
+        // NickManager and cooldown setup
+        NickManager nickManager = new NickManager(plugin);
+        Messages messages = new Messages(plugin);
+        CooldownManager cooldownManager = new CooldownManager(plugin, 60);
+        Bukkit.getPluginManager().registerEvents(nickManager, plugin);
+
+        // UtilisNotifier setup
+        UtilisNotifier utilisNotifier = new UtilisNotifier(plugin);
+        Bukkit.getPluginManager().registerEvents(utilisNotifier, plugin);
+
+        // Command registration
+        UtilisCommands utilisCommands = new UtilisCommands(plugin, config, nickManager, cooldownManager, messages);
+        utilisCommands.registerCommands();
+
         // MOTD Manager
         MOTDManager motdManager = null;
         if (config.isMOTDEnabled()) {
@@ -65,35 +85,36 @@ public class UtilisInitializer {
             logger.info("[Utilis] Update check is disabled in the config.");
         }
 
-        // Sleeping Manager
+     // Sleeping Manager
         SleepingManager sleepingManager = null;
         if (config.isSleepingEnabled()) {
             sleepingManager = new SleepingManager(plugin);
             sleepingManager.loadConfiguration();
             Bukkit.getPluginManager().registerEvents(sleepingManager, plugin);
 
-            // Register /as command
+            // Register /as command with permission check
             SleepingCommand sleepingCommand = new SleepingCommand(plugin);
-            plugin.getCommand("as").setExecutor(sleepingCommand);
+
+            plugin.getCommand("as").setExecutor((sender, command, label, args) -> {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("Only players can use this command.");
+                    return true;
+                }
+
+                Player player = (Player) sender;
+
+                // Permission check for "utilis.as"
+                if (!player.hasPermission("utilis.as")) {
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                    return true;
+                }
+
+                // Delegate to SleepingCommand logic
+                return sleepingCommand.onCommand(sender, command, label, args);
+            });
         } else {
             logger.info("[Utilis] Sleeping is disabled in the config.");
         }
-
-        // VanishedPlayersManager
-        Set<VanishUserManager> vanishedPlayers = new HashSet<>(); // Use Set<VanishUserManager>
-        VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin);
-        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers); // Populate VanishUserManager instances
-
-        // NickManager and cooldown setup
-        NickManager nickManager = new NickManager(plugin);
-        Messages messages = new Messages(plugin);
-        CooldownManager cooldownManager = new CooldownManager(plugin, 60);
-
-        Bukkit.getPluginManager().registerEvents(nickManager, plugin);
-
-        // Command registration
-        UtilisCommands utilisCommands = new UtilisCommands(plugin, config, nickManager, cooldownManager, messages);
-        utilisCommands.registerCommands();
 
         // QoL Manager
         if (config.isQoLEnabled()) {
@@ -107,10 +128,6 @@ public class UtilisInitializer {
         }
         DynmapManager dynmapManager = new DynmapManager(dynmapPlugin, logger);
 
-        // UtilisNotifier setup
-        UtilisNotifier utilisNotifier = new UtilisNotifier(plugin);
-        Bukkit.getPluginManager().registerEvents(utilisNotifier, plugin);
-
         // Create UtilisGetters instance
         UtilisGetters utilisGetters = new UtilisGetters(
                 logger, vanishedPlayers, vanishedPlayersManager,
@@ -120,7 +137,7 @@ public class UtilisInitializer {
 
         // Store the UtilisGetters in the plugin for later access
         plugin.setUtilisGetters(utilisGetters);
-
+        
         logger.info("[Utilis] Initialization complete!");
     }
 }

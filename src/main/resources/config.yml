@@ -12,4 +12,5 @@ features:
     qol: true
     sleeping: true
     chat-formatting: true
-Version: 1.3
+    debug: false
+Version: 1.4

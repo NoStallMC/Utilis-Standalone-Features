@@ -101,4 +101,8 @@ public class Config {
 	public boolean isUpdateEnabled() {
         return config.getBoolean("features.update-check", true);  // Default to true if not set
 	}
+	
+	public boolean isDebugEnabled() {
+        return config.getBoolean("features.debug", false);  // Default to true if not set
+	}
 }

@@ -2,49 +2,82 @@ author: matejkoo
 description: Utilis plugin
 main: main.java.org.matejko.plugin.Utilis
 name: Utilis
-version: V2.0.7
+version: V2.1.0
 commands:
   vanish:
     description: Toggles vanish mode for the player.
-    usage: /<command>
+    usage: /vanish
     aliases: [v]
   list:
-    description: List connected players
+    description: List connected players.
+    usage: /list
   nickname:
     description: Set or change your nickname.
-    #usage: /nickname <nickname>
+    usage: /nickname <nickname>
   rename:
     description: Rename another player (admin command).
-    #usage: /rename <player> <nickname>
+    usage: /rename <player> <nickname>
   color:
     description: Change your nickname color.
-    #usage: /color <color>
+    usage: /color <color>
   realname:
     description: Returns the real name of a player based on their nickname.
-    #usage: /realname <nickname>
+    usage: /realname <nickname>
   nickreset:
-    description: Reset your nickname to the original name
-    #usage: /nickreset
+    description: Reset your nickname to the original name.
+    usage: /nickreset
   suck:
     description: Teleports all items to you.
+    usage: /suck
   as:
-    description: Any player sleeping skips the night!
+    description: Allows toggling the sleeping skip mode.
     usage: |
-           /<command> - display Sleeping status.
-           /<command> toggle/t - toggle Sleeping.
+      /as - display sleeping status.
+      /as toggle/t - toggle sleeping.
   utilisdebug:
     description: Runs a debug check for the plugin and outputs the status of critical components.
-    usage: /<command>
+    usage: /utilisdebug
     permission: utilis.debug
     permission-message: "You do not have permission to run this command."
   sudo:
     description: Force a player to execute a command or send a chat message.
     usage: /sudo <player> <command/message>
     permission: utilis.sudo
+  isee:
+    description: View and edit another player's inventory silently. Type again to exit and restore your inventory.
+    usage: /isee <player>
+
 permissions:
   utilis.debug:
-    description: Allows access to the /utilisdebug command
+    description: Allows access to the /utilisdebug command.
     default: op
   utilis.sudo:
     description: Allows use of the /sudo command.
+    default: op
+  utilis.nickname:
+    description: Allows setting a nickname.
+    default: true
+  utilis.rename:
+    description: Allows renaming other players.
+    default: op
+  utilis.color:
+    description: Allows changing nickname color.
+    default: true
+  utilis.nickreset:
+    description: Allows resetting your nickname.
+    default: true
+  utilis.realname:
+    description: Allows retrieving the real name of a player by nickname.
+    default: true
+  utilis.list:
+    description: Allows listing all online players.
+    default: true
+  utilis.suck:
+    description: Allows teleporting all items to the player.
+    default: op
+  utilis.vanish:
+    description: Allows toggling vanish mode.
+    default: op
+  utilis.as:
+    description: Allows using the /as command.
     default: op

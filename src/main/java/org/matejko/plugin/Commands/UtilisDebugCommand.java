@@ -30,7 +30,7 @@ public class UtilisDebugCommand implements CommandExecutor {
                 plugin.getUtilisGetters().getNickManager() == null ? "§cNickManager is not initialized." : "§aNickManager is initialized correctly.",
                 plugin.getUtilisGetters().getMotdManager() == null ? "§cMOTDManager is not initialized." : "§aMOTDManager is initialized correctly.",
                 plugin.getUtilisGetters().getVanishedPlayersManager() == null ? "§cVanish system is not initialized." : "§aVanish system is working correctly.",
-                plugin.getUtilisGetters().getUtilisNotifier() == null ? "§cUtilisNotifier is not initialized." : "§aUtilisNotifier is initialized correctly."
+                plugin.getUtilisGetters().getUtilisNotifier() == null ? "§cUtilisNotifier is not initialized." : "§aUtilisNotifier is initialized correctly.",
             };
 
         // Send each line of the message separately
