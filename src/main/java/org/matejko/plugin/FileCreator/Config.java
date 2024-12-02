@@ -1,54 +1,36 @@
 package main.java.org.matejko.plugin.FileCreator;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import main.java.org.matejko.plugin.Utilis;
 import java.io.*;
-import java.util.logging.Logger;
 
 public class Config {
-
-    @SuppressWarnings("unused")
-	private final JavaPlugin plugin;
+	private final Utilis plugin;
     private final File configFile;
     private Configuration config;
-    private Logger logger;  // Logger for logging
-    private boolean loaded = false;  // Track if the config is loaded
+    private boolean loaded = false;
 
-    public Config(JavaPlugin plugin) {
+    public Config(Utilis plugin) {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
-        this.logger = Logger.getLogger("Utilis");  // Manually set logger
-
-        // Load the configuration from the file
         loadConfig();
     }
-
     // Load the configuration using the Configuration class
     private void loadConfig() {
         try {
-            // Initialize the configuration object
             config = new Configuration(configFile);
-            config.load();  // Load the config from the file
-            loaded = true;  // Mark the config as loaded successfully
+            config.load();
+            loaded = true;
         } catch (Exception e) {
-            logger.severe("[Utilis] Error loading config file: " + e.getMessage());
+        	plugin.getLogger().severe("[Utilis] Error loading config file: " + e.getMessage());
             e.printStackTrace();
-            loaded = false;  // Mark the config as failed to load
+            loaded = false;
         }
     }
-
     // Check if the config was loaded successfully
     public boolean isLoaded() {
         return loaded;
     }
-
-    // Save the current configuration back to the file (simplified)
-    public void saveConfig() {
-        if (config != null) {
-            config.save();  // Save the current configuration
-        }
-    }
-
     public File getConfigFile() {
         return configFile;
     }

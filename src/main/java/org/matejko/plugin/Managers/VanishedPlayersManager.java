@@ -3,24 +3,19 @@ package main.java.org.matejko.plugin.Managers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public class VanishedPlayersManager {
-
     private final File filePath;
-    private Logger logger;
+	private final Utilis plugin;
 
     public VanishedPlayersManager(Utilis plugin) {
-        this.logger = Logger.getLogger("Utilis");
-
-        // Use File API for the file path
+        this.plugin = plugin;
         this.filePath = new File(plugin.getDataFolder(), "VanishedPlayers.txt");
     }
 
@@ -29,13 +24,12 @@ public class VanishedPlayersManager {
         if (!filePath.exists()) {
             try {
                 filePath.createNewFile(); // Create the file if it doesn't exist
-                logger.info("[Utilis] VanishedPlayers.txt file created.");
+                plugin.getLogger().info("[Utilis] VanishedPlayers.txt file created.");
             } catch (IOException e) {
-                logger.warning("[Utilis] Failed to create VanishedPlayers.txt file: " + e.getMessage());
+                plugin.getLogger().warning("[Utilis] Failed to create VanishedPlayers.txt file: " + e.getMessage());
                 return;
             }
         }
-
         try {
             List<String> lines = Files.readAllLines(filePath.toPath());
             for (String name : lines) {
@@ -50,9 +44,9 @@ public class VanishedPlayersManager {
                     }
                 }
             }
-            logger.info("[Utilis] Loaded vanished players: " + vanishedPlayers.size());
+            plugin.getLogger().info("[Utilis] Loaded vanished players: " + vanishedPlayers.size());
         } catch (IOException e) {
-            logger.warning("[Utilis] Could not load vanished players: " + e.getMessage());
+            plugin.getLogger().warning("[Utilis] Could not load vanished players: " + e.getMessage());
         }
     }
 
@@ -63,9 +57,9 @@ public class VanishedPlayersManager {
                 playerNames.add(vanishUser.getName());
             }
             Files.write(filePath.toPath(), playerNames);
-            logger.info("[Utilis] Saved vanished players: " + vanishedPlayers.size());
+            plugin.getLogger().info("[Utilis] Saved vanished players: " + vanishedPlayers.size());
         } catch (IOException e) {
-            logger.warning("[Utilis] Could not save vanished players: " + e.getMessage());
+            plugin.getLogger().warning("[Utilis] Could not save vanished players: " + e.getMessage());
         }
     }
 }

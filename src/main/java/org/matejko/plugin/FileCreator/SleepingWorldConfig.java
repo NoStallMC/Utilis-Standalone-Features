@@ -6,61 +6,48 @@ import org.bukkit.util.config.Configuration;
 import java.io.File;
 
 public class SleepingWorldConfig {
-
     private final File file;
     private Configuration config;
-
-    // Constructor: Creates the file path and attempts to load configuration
+    
     public SleepingWorldConfig() {
         file = new File(Bukkit.getServer().getPluginManager().getPlugin("Utilis").getDataFolder(), "SleepingWorlds.yml");
-        loadConfig();  // Load the configuration when the object is created
+        loadConfig();
     }
-
-    // Load the configuration from the file (if the file doesn't exist, it creates one)
+    // Load the configuration
     public void loadConfig() {
-        if (!file.exists()) {
-            createDefaultConfig();  // Create the file if it doesn't exist
+        if (!file.exists()) {  // Create the file if it doesn't exist
+            createDefaultConfig();
         }
-
         config = new Configuration(file);
-        config.load();  // Load the configuration file
+        config.load();
     }
-
-    // Create the default configuration (worlds enabled except for the Nether)
+    // Create the default configuration
     private void createDefaultConfig() {
         config = new Configuration(file);
-
-        // Loop through all the worlds and set the default configuration
         for (World world : Bukkit.getWorlds()) {
             if (world.getName().equalsIgnoreCase("world_nether")) {
-                config.setProperty(world.getName(), "disabled");  // Set the Nether world to disabled
+                config.setProperty(world.getName(), "disabled");
             } else {
-                config.setProperty(world.getName(), "enabled");  // Enable sleeping for all other worlds
+                config.setProperty(world.getName(), "disabled");
             }
         }
-
-        saveConfig();  // Save the configuration after creation
+        saveConfig();
     }
-
-    // Save the configuration to the file
     public void saveConfig() {
         try {
-            config.save();  // Save the configuration to the file
+            config.save();
         } catch (Exception e) {
-            e.printStackTrace();  // Handle potential exceptions when saving
+            e.printStackTrace();
         }
     }
-
-    // Get the sleeping status for a world (default to "enabled" if not found)
+    // Get the sleeping status for a world
     public boolean isSleepingEnabled(World world) {
-        String status = config.getString(world.getName(), "enabled");  // Default to "enabled"
+        String status = config.getString(world.getName(), "disabled");
         return status.equalsIgnoreCase("enabled");
     }
-
     // Set the sleeping status for a world
     public void setSleepingStatus(World world, boolean enabled) {
         config.setProperty(world.getName(), enabled ? "enabled" : "disabled");
-        saveConfig();  // Save the updated status
+        saveConfig();
     }
-
 }

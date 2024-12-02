@@ -14,15 +14,11 @@ public class SuckCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("suck")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                // Check if the player is an OP
-                if (player.isOp()) {
                     teleportItemsToPlayer(player);
                     player.sendMessage(ChatColor.GRAY + "All dropped items have been teleported to you!");
-                } else {
-                    player.sendMessage(ChatColor.RED +"You do not have permission to use this command.");
                 }
-            } else {
-                sender.sendMessage("Only players can use this command.");
+             else {
+               sender.sendMessage("Only players can use this command.");
             }
             return true;
         }
@@ -32,11 +28,10 @@ public class SuckCommand implements CommandExecutor {
     private void teleportItemsToPlayer(Player player) {
         Location playerLocation = player.getLocation();
         Collection<org.bukkit.entity.Entity> entities = player.getWorld().getEntities();
-
         for (org.bukkit.entity.Entity entity : entities) {
             if (entity instanceof Item) {
                 Item item = (Item) entity;
-                if (item.getLocation().distance(playerLocation) < 100) { // Adjust distance as needed
+                if (item.getLocation().distance(playerLocation) < 100) {
                     item.teleport(playerLocation);
                 }
             }

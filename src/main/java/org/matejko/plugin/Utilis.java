@@ -30,26 +30,22 @@ public class Utilis extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ISeeArmorRemover(iSeeManager), this);
         getServer().getPluginManager().registerEvents(iSeeInventoryListener, this);
         getCommand("isee").setExecutor((sender, command, label, args) -> {
-            // Ensure the sender is a player
             if (!(sender instanceof Player)) {
                 sender.sendMessage("Only players can use this command.");
                 return false;
             }
 
             Player player = (Player) sender;
-
-            // Check if the player has permission or is OP
             if (!player.hasPermission("utilis.isee") && !player.isOp()) {
                 player.sendMessage("§cYou do not have permission to use this command.");
                 return false;
             }
 
-            // If permission check passes, execute the original command logic
             new ISeeCommand(iSeeManager, iSeeInventoryListener, iSeeArmorListener, this).onCommand(sender, command, label, args);
             return true;
         });
         
-        // Initialize the plugin using UtilisInitializer
+        // Initialize managers using UtilisInitializer
         UtilisInitializer initializer = new UtilisInitializer(this);
         initializer.initialize();
         getLogger().info("[Utilis] has been enabled!");

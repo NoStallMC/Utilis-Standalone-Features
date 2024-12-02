@@ -2,7 +2,6 @@ package main.java.org.matejko.plugin.Managers;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,10 +10,10 @@ public class CooldownManager {
     private final Map<Player, Long> nicknameCooldowns = new HashMap<>();
     private final Map<Player, Long> colorCooldowns = new HashMap<>();
     private final Map<Player, Long> resetCooldowns = new HashMap<>();
-    private final long cooldownTime; // Cooldown time in seconds
+    private final long cooldownTime;
 
     public CooldownManager(JavaPlugin plugin, long cooldownTimeInSeconds) {
-        this.cooldownTime = cooldownTimeInSeconds * 1000; // Convert to milliseconds
+        this.cooldownTime = cooldownTimeInSeconds * 1000;
     }
 
     // Check if a player is on cooldown for a specific type

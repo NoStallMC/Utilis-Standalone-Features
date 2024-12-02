@@ -26,19 +26,13 @@ public class UtilisInitializer {
     @SuppressWarnings("static-access")
 	public void initialize() {
         logger.info("[Utilis] Initializing...");
-
-        // Initialize config updater
         UtilisConfigUpdater configUpdater = new UtilisConfigUpdater(plugin);
         configUpdater.checkAndUpdateConfig();
-
-        // Initialize config
         Config config = new Config(plugin);
         if (!config.isLoaded()) {
             logger.warning("[Utilis] Config was not loaded properly!");
-            return; // Stop execution if config is not loaded properly
+            return;
         }
-
-        // Essentials plugin setup
         Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
         if (essentials == null) {
             logger.warning("[Utilis] Essentials plugin not found!");
@@ -52,9 +46,9 @@ public class UtilisInitializer {
         Bukkit.getPluginManager().registerEvents(chatFormattingManager, plugin);
 
         // VanishedPlayersManager
-        Set<VanishUserManager> vanishedPlayers = new HashSet<>(); // Use Set<VanishUserManager>
+        Set<VanishUserManager> vanishedPlayers = new HashSet<>();
         VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin);
-        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers); // Populate VanishUserManager instances
+        vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
 
         // NickManager and cooldown setup
         NickManager nickManager = new NickManager(plugin);
@@ -85,31 +79,23 @@ public class UtilisInitializer {
             logger.info("[Utilis] Update check is disabled in the config.");
         }
 
-     // Sleeping Manager
+        // Sleeping Manager
         SleepingManager sleepingManager = null;
         if (config.isSleepingEnabled()) {
             sleepingManager = new SleepingManager(plugin);
             sleepingManager.loadConfiguration();
             Bukkit.getPluginManager().registerEvents(sleepingManager, plugin);
-
-            // Register /as command with permission check
             SleepingCommand sleepingCommand = new SleepingCommand(plugin);
-
             plugin.getCommand("as").setExecutor((sender, command, label, args) -> {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("Only players can use this command.");
                     return true;
                 }
-
                 Player player = (Player) sender;
-
-                // Permission check for "utilis.as"
                 if (!player.hasPermission("utilis.as")) {
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
-
-                // Delegate to SleepingCommand logic
                 return sleepingCommand.onCommand(sender, command, label, args);
             });
         } else {

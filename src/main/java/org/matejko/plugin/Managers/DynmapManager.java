@@ -2,7 +2,6 @@ package main.java.org.matejko.plugin.Managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class DynmapManager {
-
     private final String HIDDEN_PLAYERS_PATH = "plugins/dynmap/hiddenplayers.txt";
     private Plugin dynmapPlugin;
     private Logger logger;
@@ -19,10 +17,8 @@ public class DynmapManager {
         this.dynmapPlugin = dynmapPlugin;
         this.logger = logger;
     }
-
     public void addToHiddenPlayersFile(String playerName) {
         try {
-            // Check if already exists
             List<String> lines = Files.readAllLines(Paths.get(HIDDEN_PLAYERS_PATH));
             if (!lines.contains(playerName)) {
                 Files.write(Paths.get(HIDDEN_PLAYERS_PATH), (playerName + System.lineSeparator()).getBytes(),
@@ -34,12 +30,10 @@ public class DynmapManager {
             logger.warning("[Utilis] Could not add " + playerName + " to hidden players: " + e.getMessage());
         }
     }
-
     public void removeFromHiddenPlayersFile(String playerName) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(HIDDEN_PLAYERS_PATH));
             lines.remove(playerName);
-
             Files.write(Paths.get(HIDDEN_PLAYERS_PATH), lines);
             logger.info("[Utilis]" + playerName + " removed from hidden players.");
             reloadDynmap();
@@ -47,7 +41,6 @@ public class DynmapManager {
             logger.warning("[Utilis] Could not remove " + playerName + " from hidden players: " + e.getMessage());
         }
     }
-
     private void reloadDynmap() {
         if (dynmapPlugin != null && dynmapPlugin.isEnabled()) {
             Bukkit.getPluginManager().disablePlugin(dynmapPlugin);
@@ -57,8 +50,6 @@ public class DynmapManager {
             logger.warning("[Utilis] Dynmap plugin is not available or not enabled.");
         }
     }
-
-    // Reload method for Dynmap
     public void reload() {
         reloadDynmap();
         logger.info("[Utilis] Dynmap reloaded.");

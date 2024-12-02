@@ -4,28 +4,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.FileCreator.Messages;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MOTDManager {
     private final List<String> motdLines;
-    private final Utilis plugin; // Add this line to hold a reference to the plugin
+    private final Utilis plugin;
 
     public MOTDManager(Utilis plugin) {
-        this.plugin = plugin; // Initialize the plugin reference
+        this.plugin = plugin;
         Messages textManager = new Messages(plugin);
         this.motdLines = new ArrayList<>();
         loadMOTD(textManager);
     }
-
+    
     private void loadMOTD(Messages textManager) {
         String[] motdMessages = {
             textManager.getMessage("motd.1"),
             textManager.getMessage("motd.2"),
             textManager.getMessage("motd.3")
         };
-
         for (String message : motdMessages) {
             if (message != null) {
                 motdLines.add(message);
@@ -34,7 +32,6 @@ public class MOTDManager {
     }
 
     public void sendMOTD(Player player) {
-        // Send each MOTD line to the player
         List<String> formattedMOTD = getMOTD(player);
         for (String line : formattedMOTD) {
             player.sendMessage(line);
@@ -44,7 +41,6 @@ public class MOTDManager {
     public List<String> getMOTD(Player player) {
         List<String> formattedMOTD = new ArrayList<>();
         String playerDisplayName = player.getDisplayName();
-
         for (String line : motdLines) {
             // Replace placeholders with actual values
             String formattedLine = line.replace("%player%", playerDisplayName);
@@ -67,8 +63,7 @@ public class MOTDManager {
         return playerList.toString();
     }
 
-    private boolean isPlayerVanished(Player player) {
-        // Directly check if the vanished players set contains the player
+    private boolean isPlayerVanished(Player player) { // Directly check if the vanished players set contains the player
         return plugin.getUtilisGetters().getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player));
     }
 }

@@ -8,7 +8,6 @@ import main.java.org.matejko.plugin.Managers.NickManager;
 import main.java.org.matejko.plugin.Managers.CooldownManager;
 
 public class NickResetCommand implements org.bukkit.command.CommandExecutor {
-
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
 
@@ -23,19 +22,16 @@ public class NickResetCommand implements org.bukkit.command.CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
             return false;
         }
-
         Player player = (Player) sender;
-
         if (cooldownManager.isOnResetCooldown(player)) {
             long remaining = cooldownManager.getRemainingResetCooldown(player);
             player.sendMessage(ChatColor.RED + "You must wait " + remaining + " seconds before using /nickreset again.");
             return false;
         }
-
         // Reset player's nickname
         nickManager.resetNickname(player);
         player.sendMessage(ChatColor.GREEN + "Your nickname has been reset.");
-        cooldownManager.setResetCooldown(player); // Set reset cooldown
+        cooldownManager.setResetCooldown(player);
         return true;
     }
 }

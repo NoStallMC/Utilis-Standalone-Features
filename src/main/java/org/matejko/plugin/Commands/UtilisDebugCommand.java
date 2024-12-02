@@ -6,21 +6,14 @@ import org.bukkit.command.CommandSender;
 import main.java.org.matejko.plugin.Utilis;
 
 public class UtilisDebugCommand implements CommandExecutor {
-
     private final Utilis plugin;
-
+    
     public UtilisDebugCommand(Utilis plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // Check if the sender has the required permission
-        if (!sender.hasPermission("utilis.debug")) {
-            sender.sendMessage("§cYou do not have permission to run this command.");
-            return false;  // Permission denied
-        }
-
         String[] messages = new String[]{
                 "§6[Utilis Debug Report]",
                 plugin.getUtilisGetters().getConfig() == null || !plugin.getUtilisGetters().getConfig().isLoaded() ? "§cConfig is not loaded properly." : "§aConfig is loaded correctly.",
@@ -32,8 +25,7 @@ public class UtilisDebugCommand implements CommandExecutor {
                 plugin.getUtilisGetters().getVanishedPlayersManager() == null ? "§cVanish system is not initialized." : "§aVanish system is working correctly.",
                 plugin.getUtilisGetters().getUtilisNotifier() == null ? "§cUtilisNotifier is not initialized." : "§aUtilisNotifier is initialized correctly.",
             };
-
-        // Send each line of the message separately
+        // Send each line separately
         for (String line : messages) {
             sender.sendMessage(line);
         }

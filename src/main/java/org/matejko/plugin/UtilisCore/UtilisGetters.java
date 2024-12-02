@@ -40,7 +40,6 @@ public class UtilisGetters {
         this.sleepingManager = sleepingManager;
         this.nickManager = nickManager;
     }
-
     // Getter methods for accessing the plugin's components
     public Logger getLogger() {
         return logger;
@@ -85,14 +84,12 @@ public class UtilisGetters {
     public NickManager getNickManager() {
         return nickManager;
     }
-
     // Check if a player is AFK using the Essentials API
     public boolean isAFK(Player player) {
         if (essentials == null) {
-            return false;  // Essentials is not available, return false by default
+            return false;
         }
-
-        User user = essentials.getUser(player);  // Get the Essentials user
-        return user.isAfk();  // Check if the player is AFK using Essentials API
+        User user = essentials.getUser(player);
+        return user.isAfk();
     }
 }

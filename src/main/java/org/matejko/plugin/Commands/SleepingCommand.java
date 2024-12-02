@@ -8,12 +8,9 @@ import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.Managers.SleepingManager;
 
 public class SleepingCommand implements CommandExecutor {
-
-    private final SleepingManager sleepingManager;  // Reference to SleepingManager
-
-    // Constructor that accepts the Utilis plugin instance
+    private final SleepingManager sleepingManager;
     public SleepingCommand(Utilis plugin) {
-        this.sleepingManager = new SleepingManager(plugin);  // Initialize SleepingManager with Utilis plugin
+        this.sleepingManager = new SleepingManager(plugin);
     }
 
     @Override

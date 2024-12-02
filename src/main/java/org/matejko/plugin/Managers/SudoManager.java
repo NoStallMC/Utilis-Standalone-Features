@@ -14,24 +14,19 @@ public class SudoManager implements CommandExecutor {
         if (!label.equalsIgnoreCase("sudo")) {
             return false;
         }
-
         if (!sender.hasPermission("utilis.sudo")) {
             sendError(sender, "You do not have permission to use this command.");
             return true;
         }
-
         if (args.length < 2) {
             sender.sendMessage("Usage: /sudo <player> <command/message>");
             return true;
         }
-
         Player target = findPlayer(args[0]);
         if (target == null) {
             sendError(sender, "Player not found: " + args[0]);
             return true;
         }
-
-        // Construct the message from the arguments after the player's name
         StringBuilder messageBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
             messageBuilder.append(args[i]).append(" ");
@@ -50,14 +45,10 @@ public class SudoManager implements CommandExecutor {
             target.chat(message);
             sendSuccess(sender, ChatColor.GRAY + "Forced " + target.getDisplayName() + ChatColor.GRAY + " to send message: "+ ChatColor.WHITE + message);
         }
-
         return true;
     }
-
     private Player findPlayer(String partialName) {
         String lowerPartialName = partialName.toLowerCase();
-
-        // Check for players whose names contain the partial name
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().toLowerCase().contains(lowerPartialName)) {
                 return player;

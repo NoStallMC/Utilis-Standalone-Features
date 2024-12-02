@@ -44,21 +44,13 @@ public class UtilisCommands {
         if (config.isListEnabled()) {
             registerCommandWithPermission("list", "utilis.list", new ListCommand(plugin));
         }
-
-        // Utilisdebug command with specific permission
         registerCommandWithPermission("utilisdebug", "utilis.debug", new UtilisDebugCommand(plugin));
-
-        // Sudo command
         registerCommandWithPermission("sudo", "utilis.sudo", new SudoManager());
-
-        // Suck command
         registerCommandWithPermission("suck", "utilis.suck", new SuckCommand());
-
-        // Vanish command
         if (config.isVanishEnabled()) {
             VanishCommand vanishCommand = new VanishCommand(plugin);
             registerCommandWithPermission("vanish", "utilis.vanish", vanishCommand);
-            registerCommandWithPermission("v", "utilis.vanish", vanishCommand); // Alias
+            registerCommandWithPermission("v", "utilis.vanish", vanishCommand);
         }
     }
 
