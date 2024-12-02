@@ -81,3 +81,6 @@ permissions:
   utilis.as:
     description: Allows using the /as command.
     default: op
+  utilis.isee:
+    description: Allows using the /isee command.
+    default: op
