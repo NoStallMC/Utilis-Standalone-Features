@@ -2,7 +2,7 @@ author: matejkoo
 description: Utilis plugin
 main: main.java.org.matejko.plugin.Utilis
 name: Utilis
-version: V2.1.1
+version: V2.1.2
 commands:
   vanish:
     description: Toggles vanish mode for the player.

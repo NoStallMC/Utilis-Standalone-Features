@@ -23,6 +23,7 @@ public class UtilisGetters {
     private Plugin dynmapPlugin;
     private SleepingManager sleepingManager;
     private NickManager nickManager;
+	private static ISeeManager iSeeManager;
 
     public UtilisGetters(Logger logger, Set<VanishUserManager> vanishedPlayers, VanishedPlayersManager vanishedPlayersManager,
                          MOTDManager motdManager, DynmapManager dynmapManager, UtilisNotifier utilisNotifier,
@@ -84,6 +85,14 @@ public class UtilisGetters {
     public NickManager getNickManager() {
         return nickManager;
     }
+
+	static void setISeeManager(ISeeManager iSeeManager) {
+		UtilisGetters.iSeeManager = iSeeManager;
+	}
+
+	public static ISeeManager getISeeManager() {
+		return iSeeManager;
+	}
     // Check if a player is AFK using the Essentials API
     public boolean isAFK(Player player) {
         if (essentials == null) {

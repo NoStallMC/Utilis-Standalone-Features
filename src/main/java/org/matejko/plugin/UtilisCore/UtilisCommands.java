@@ -3,6 +3,7 @@ package main.java.org.matejko.plugin.UtilisCore;
 import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
+import main.java.org.matejko.plugin.Listeners.*;
 import main.java.org.matejko.plugin.Managers.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,6 +53,29 @@ public class UtilisCommands {
             registerCommandWithPermission("vanish", "utilis.vanish", vanishCommand);
             registerCommandWithPermission("v", "utilis.vanish", vanishCommand);
         }
+        // Register ISee Command
+        ISeeManager iSeeManager = UtilisGetters.getISeeManager();
+        ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(plugin, iSeeManager);
+        ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(plugin, iSeeManager);
+        plugin.getCommand("isee").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("Only players can use this command.");
+                    return true;
+                }
+
+                Player player = (Player) sender;
+                if (!player.hasPermission("utilis.isee")) {
+                    player.sendMessage("§cYou do not have permission to use this command.");
+                    return true;
+                }
+
+                new ISeeCommand(iSeeManager, iSeeInventoryListener, iSeeArmorListener, plugin)
+                        .onCommand(sender, command, label, args);
+                return true;
+            }
+        });
     }
 
     private void registerCommandWithPermission(String commandName, String permission, CommandExecutor executor) {

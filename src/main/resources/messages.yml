@@ -16,6 +16,8 @@ nickname:
 color:
     set: '&7Your color has been changed to %color%'
     invalid: '&cInvalid color.'
+Version: 1.0
+#--------------------------------------------------------------------------------------------
 #Colors:                #Placeholders:  
 # "&0" = BLACK          # %player% = Name of player.
 # "&1" = DARK_BLUE      # %players% = List of online players.
@@ -33,3 +35,4 @@ color:
 # "&d" = LIGHT_PURPLE   #
 # "&e" = YELLOW         #
 # "&f" = WHITE          #
+#--------------------------------------------------------------------------------------------

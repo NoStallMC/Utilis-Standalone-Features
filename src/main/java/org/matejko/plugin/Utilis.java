@@ -1,12 +1,9 @@
 package main.java.org.matejko.plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import main.java.org.matejko.plugin.Managers.*;
-import main.java.org.matejko.plugin.Commands.ISeeCommand;
 import main.java.org.matejko.plugin.FileCreator.*;
-import main.java.org.matejko.plugin.Listeners.*;
 import main.java.org.matejko.plugin.UtilisCore.*;
 import java.util.logging.Logger;
 
@@ -16,35 +13,11 @@ public class Utilis extends JavaPlugin implements Listener {
     public SleepingManager sleepingManager;
     public NickManager nickManager;
     private UtilisGetters utilisGetters;
-	private ISeeManager iSeeManager;
 
 	@Override
     public void onEnable() {
         this.logger = Logger.getLogger("Utilis");
         getLogger().info("[Utilis] is starting up!");
-        
-        // Initialize ISee
-        iSeeManager = new ISeeManager(this);
-        ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(this, iSeeManager);
-        ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(this, iSeeManager);
-        getServer().getPluginManager().registerEvents(new ISeeArmorRemover(iSeeManager), this);
-        getServer().getPluginManager().registerEvents(iSeeInventoryListener, this);
-        getCommand("isee").setExecutor((sender, command, label, args) -> {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("Only players can use this command.");
-                return false;
-            }
-
-            Player player = (Player) sender;
-            if (!player.hasPermission("utilis.isee") && !player.isOp()) {
-                player.sendMessage("§cYou do not have permission to use this command.");
-                return false;
-            }
-
-            new ISeeCommand(iSeeManager, iSeeInventoryListener, iSeeArmorListener, this).onCommand(sender, command, label, args);
-            return true;
-        });
-        
         // Initialize managers using UtilisInitializer
         UtilisInitializer initializer = new UtilisInitializer(this);
         initializer.initialize();

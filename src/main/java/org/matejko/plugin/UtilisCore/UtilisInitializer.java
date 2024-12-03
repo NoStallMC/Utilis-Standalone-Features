@@ -3,6 +3,9 @@ package main.java.org.matejko.plugin.UtilisCore;
 import main.java.org.matejko.plugin.Managers.*;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
+import main.java.org.matejko.plugin.Listeners.ISeeArmorListener;
+import main.java.org.matejko.plugin.Listeners.ISeeArmorRemover;
+import main.java.org.matejko.plugin.Listeners.ISeeInventoryListener;
 import main.java.org.matejko.plugin.Utilis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +21,7 @@ import java.util.logging.Logger;
 public class UtilisInitializer {
     private final Utilis plugin;
     private final Logger logger;
+	static ISeeManager iSeeManager;
     public UtilisInitializer(Utilis plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
@@ -28,6 +32,8 @@ public class UtilisInitializer {
         logger.info("[Utilis] Initializing...");
         UtilisConfigUpdater configUpdater = new UtilisConfigUpdater(plugin);
         configUpdater.checkAndUpdateConfig();
+        UtilisMessagesUpdater messagesUpdater = new UtilisMessagesUpdater(plugin);
+        messagesUpdater.checkAndUpdateConfig();
         Config config = new Config(plugin);
         if (!config.isLoaded()) {
             logger.warning("[Utilis] Config was not loaded properly!");
@@ -39,7 +45,14 @@ public class UtilisInitializer {
         } else {
             logger.info("[Utilis] Essentials plugin found!");
         }
-
+        // Initialize ISee
+        ISeeManager iSeeManager = new ISeeManager(plugin);
+        ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(plugin, iSeeManager);
+        @SuppressWarnings("unused")
+		ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(plugin, iSeeManager);
+        Bukkit.getPluginManager().registerEvents(new ISeeArmorRemover(iSeeManager), plugin);
+        Bukkit.getPluginManager().registerEvents(iSeeInventoryListener, plugin);
+        UtilisGetters.setISeeManager(iSeeManager); 
         // ChatFormattingManager setup
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(plugin);
         chatFormattingManager.loadConfiguration();
@@ -101,29 +114,24 @@ public class UtilisInitializer {
         } else {
             logger.info("[Utilis] Sleeping is disabled in the config.");
         }
-
         // QoL Manager
         if (config.isQoLEnabled()) {
             Bukkit.getPluginManager().registerEvents(new QoLManager(), plugin);
         }
-
         // Dynmap setup
         Plugin dynmapPlugin = Bukkit.getPluginManager().getPlugin("dynmap");
         if (dynmapPlugin == null) {
             logger.warning("[Utilis] Dynmap plugin not found!");
         }
         DynmapManager dynmapManager = new DynmapManager(dynmapPlugin, logger);
-
         // Create UtilisGetters instance
         UtilisGetters utilisGetters = new UtilisGetters(
                 logger, vanishedPlayers, vanishedPlayersManager,
                 motdManager, dynmapManager, utilisNotifier,
                 config, essentials, dynmapPlugin, sleepingManager, nickManager
         );
-
         // Store the UtilisGetters in the plugin for later access
         plugin.setUtilisGetters(utilisGetters);
-        
         logger.info("[Utilis] Initialization complete!");
     }
 }

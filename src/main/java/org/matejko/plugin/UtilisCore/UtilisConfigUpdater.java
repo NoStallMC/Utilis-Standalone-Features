@@ -4,6 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+
+import main.java.org.matejko.plugin.Utilis;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,17 +22,18 @@ public class UtilisConfigUpdater {
     private static final String CONFIG_FILE_PATH = "plugins/Utilis/config.yml";
     private static final String DEFAULT_CONFIG_FILE_PATH = "/config.yml";
     private static final String OLD_CONFIG_FILE_PATH = "plugins/Utilis/oldconfig.yml";
-    private static JavaPlugin plugin;
-    private static final Logger logger = Logger.getLogger(UtilisConfigUpdater.class.getName());
-
-    public UtilisConfigUpdater(JavaPlugin plugin) {
+    private final Logger logger;
+	private static Utilis plugin;
+	
+    public UtilisConfigUpdater(Utilis plugin) {
         UtilisConfigUpdater.plugin = plugin;
+        this.logger = plugin.getLogger();
     }
 
     public static void checkAndUpdateConfig() {
         boolean requiresRestart = false;
         try {
-            // Step 1: Check if the config file exists in the plugin folder
+            // Step 1: Check if the config exists in the plugin folder
             File configFile = new File(CONFIG_FILE_PATH);
             boolean configExists = configFile.exists();
             if (!configExists) {
@@ -44,7 +48,7 @@ public class UtilisConfigUpdater {
 
             // Step 4: Check if the current config version is outdated or missing
             if (currentVersion == null || isVersionOutdated(currentVersion)) {
-                logger.info("[Utilis] Config is outdated or missing version. Merging will begin.");
+            	plugin.getLogger().info("[Utilis] Config is outdated or missing version. Merging will begin.");
 
                 // Step 5: Backup old config
                 backupOldConfig();
@@ -62,16 +66,16 @@ public class UtilisConfigUpdater {
                     Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
                         @Override
                         public void run() {
-                            logger.info("[Utilis] Config merger is done!");
-                            logger.severe("[Utilis] Server reload needed!");
+                        	plugin.getLogger().info("[Utilis] Config merger is done!");
+                        	plugin.getLogger().severe("[Utilis] Server reload needed!");
                         }
                     }, 40L);
                 } else {
-                    logger.severe("[Utilis] Config merger failed: Could not merge old config.");
+                	plugin.getLogger().severe("[Utilis] Config merger failed: Could not merge old config.");
                 }
             } else {
                 String configVersion = currentVersion != null ? currentVersion : "unknown";
-                logger.info("[Utilis] Config is up to date! (v" + configVersion + ")");
+                plugin.getLogger().info("[Utilis] Config is up to date! (v" + configVersion + ")");
             }
 
         } catch (Exception e) {
@@ -107,7 +111,7 @@ public class UtilisConfigUpdater {
     private static boolean isVersionOutdated(String currentVersion) throws IOException {
         String serverVersion = getServerVersionFromJar();
         if (serverVersion == null) {
-            logger.warning("[Utilis] config version missing, cannot compare.");
+        	plugin.getLogger().warning("[Utilis] config version missing, cannot compare.");
             return false;
         }
 
@@ -140,7 +144,7 @@ public class UtilisConfigUpdater {
 
     private static void saveConfig(String filePath, Map<String, Object> config) throws IOException {
         DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // Nice block style for YAML
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(options);
         FileWriter writer = new FileWriter(filePath);
         yaml.dump(config, writer);
@@ -160,9 +164,9 @@ public class UtilisConfigUpdater {
                         outputStream.write(buffer, 0, bytesRead);
                     }
                 }
-                logger.info("[Utilis] Old config successfully copied to oldconfig.yml.");
+                plugin.getLogger().info("[Utilis] Old config successfully copied to oldconfig.yml.");
             } catch (IOException e) {
-                logger.severe("[Utilis] Failed to copy old config file: " + e.getMessage());
+            	plugin.getLogger().severe("[Utilis] Failed to copy old config file: " + e.getMessage());
                 throw e;
             }
         }
@@ -172,9 +176,9 @@ public class UtilisConfigUpdater {
         File configDirectory = new File("plugins/Utilis");
         if (!configDirectory.exists()) {
             if (configDirectory.mkdirs()) {
-                logger.info("[Utilis] Created directory: " + configDirectory.getPath());
+            	plugin.getLogger().info("[Utilis] Created directory: " + configDirectory.getPath());
             } else {
-                logger.severe("[Utilis] Failed to create directory: " + configDirectory.getPath());
+            	plugin.getLogger().severe("[Utilis] Failed to create directory: " + configDirectory.getPath());
                 throw new IOException("[Utilis] Failed to create directory: " + configDirectory.getPath());
             }
         }
@@ -192,7 +196,7 @@ public class UtilisConfigUpdater {
                 outputStream.write(buffer, 0, bytesRead);
             }
         }
-        logger.info("[Utilis] Default config copied from JAR.");
+        plugin.getLogger().info("[Utilis] Default config copied from JAR.");
     }
     
     @SuppressWarnings("unchecked")
@@ -220,7 +224,7 @@ public class UtilisConfigUpdater {
             }
             return true;
         } catch (Exception e) {
-            logger.severe("[Utilis] Merge failed: " + e.getMessage());
+        	plugin.getLogger().severe("[Utilis] Merge failed: " + e.getMessage());
             return false;
         }
     }
