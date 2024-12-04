@@ -70,7 +70,7 @@ public class UtilisMessagesUpdater {
         Yaml yaml = new Yaml();
         InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
         if (inputStream == null) {
-            throw new FileNotFoundException("Default messages.yml not found in JAR.");
+    //        throw new FileNotFoundException("Default messages.yml not found in JAR.");
         }
         return (Map<String, Object>) yaml.load(inputStream);
     }
