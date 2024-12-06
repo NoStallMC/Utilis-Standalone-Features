@@ -3,7 +3,7 @@
 **Author**: matejkoo  
 
 Utilis is a robust and feature-rich plugin for beta 1.7.3 servers, offering useful utilities and tools to enhance the multiplayer experience.
-From managing nicknames to toggling vanish mode, Utilis is designed to simplify server administration while adding fun and convenience for players.
+From managing nicknames to toggling vanish mode, Utilis is designed to simplify server administration while adding fun things for players.
 
 ### Features
 
