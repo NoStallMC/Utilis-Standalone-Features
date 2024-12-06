@@ -9,7 +9,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 
 - **Vanish**: Toggle invisibility to other players with `/vanish`.
 - **Nickname Management**: Set, reset, and customize player nicknames and colors.
-- **Sleeping Skip Mode**: Manage sleeping mechanics with `/as`.
+- **Night Skip**: Manage sleeping mechanics with `/as`.
 - **Inventory Management**: Use `/isee` to view and edit another player's inventory.
 - **Item Teleportation**: Instantly pull all nearby items with `/suck`.
 - **Player Listing**: View a detailed list of all connected players.
