@@ -1,4 +1,4 @@
-## Utilis Plugin
+## Utilis
 
 **Author**: matejkoo  
 
