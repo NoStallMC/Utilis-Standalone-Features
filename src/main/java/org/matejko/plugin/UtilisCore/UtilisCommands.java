@@ -16,7 +16,7 @@ public class UtilisCommands {
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
     private final Messages messages;
-
+    
     public UtilisCommands(Utilis plugin, Config config, NickManager nickManager, CooldownManager cooldownManager, Messages messages) {
         this.plugin = plugin;
         this.config = config;
@@ -53,6 +53,9 @@ public class UtilisCommands {
             registerCommandWithPermission("vanish", "utilis.vanish", vanishCommand);
             registerCommandWithPermission("v", "utilis.vanish", vanishCommand);
         }
+        // Register the RecoverCommand with the plugin and pass the RecoverManager
+        RecoverManager recoverManager = new RecoverManager();
+        plugin.getCommand("recover").setExecutor(new RecoverCommand(recoverManager));
         // Register ISee Command
         ISeeManager iSeeManager = UtilisGetters.getISeeManager();
         ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(plugin, iSeeManager);

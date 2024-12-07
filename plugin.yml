@@ -2,38 +2,47 @@ author: matejkoo
 description: Utilis plugin
 main: main.java.org.matejko.plugin.Utilis
 name: Utilis
-version: V2.1.2
+version: V2.1.3
 commands:
   vanish:
     description: Toggles vanish mode for the player.
     usage: /vanish
     aliases: [v]
+    permission-message: You do not have permission to use this command.
   list:
     description: List connected players.
     usage: /list
+    permission-message: You do not have permission to use this command.
   nickname:
     description: Set or change your nickname.
     usage: /nickname <nickname>
+    permission-message: You do not have permission to use this command.
   rename:
     description: Rename another player (admin command).
     usage: /rename <player> <nickname>
+    permission-message: You do not have permission to use this command.
   color:
     description: Change your nickname color.
     usage: /color <color>
+    permission-message: You do not have permission to use this command.
   realname:
     description: Returns the real name of a player based on their nickname.
     usage: /realname <nickname>
+    permission-message: You do not have permission to use this command.
   nickreset:
     description: Reset your nickname to the original name.
     usage: /nickreset
+    permission-message: You do not have permission to use this command.
   suck:
     description: Teleports all items to you.
     usage: /suck
+    permission-message: You do not have permission to use this command.
   as:
     description: Allows toggling the sleeping skip mode.
     usage: |
       /as - display sleeping status.
       /as toggle/t - toggle sleeping.
+    permission-message: You do not have permission to use this command.
   utilisdebug:
     description: Runs a debug check for the plugin and outputs the status of critical components.
     usage: /utilisdebug
@@ -43,10 +52,15 @@ commands:
     description: Force a player to execute a command or send a chat message.
     usage: /sudo <player> <command/message>
     permission: utilis.sudo
+    permission-message: You do not have permission to use this command.
   isee:
     description: View and edit another player's inventory silently. Type again to exit and restore your inventory.
     usage: /isee <player>
-
+  recover:
+    description: Recovers a player's inventory.
+    usage: /recover <player>
+    permission: utilis.recover
+    permission-message: You do not have permission to use this command.
 permissions:
   utilis.debug:
     description: Allows access to the /utilisdebug command.
@@ -83,4 +97,7 @@ permissions:
     default: op
   utilis.isee:
     description: Allows using the /isee command.
+    default: op
+  utilis.recover:
+    description: Allows the user to use the /recover command.
     default: op

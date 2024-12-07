@@ -98,7 +98,7 @@ public class UtilisMessagesUpdater {
         Yaml yaml = new Yaml();
         InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
         if (inputStream == null) {
-            throw new FileNotFoundException("Default messages.yml not found in JAR.");
+        //    throw new FileNotFoundException("Default messages.yml not found in JAR.");
         }
         @SuppressWarnings("unchecked")
         Map<String, Object> defaultConfig = (Map<String, Object>) yaml.load(inputStream);
@@ -114,7 +114,7 @@ public class UtilisMessagesUpdater {
         // Load comments from the JAR resource
         InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
         if (inputStream == null) {
-            throw new FileNotFoundException("Default messages.yml not found in JAR.");
+      //      throw new FileNotFoundException("Default messages.yml not found in JAR.");
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder commentsBuilder = new StringBuilder();
@@ -161,7 +161,7 @@ public class UtilisMessagesUpdater {
         }
         InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
         if (inputStream == null) {
-            throw new FileNotFoundException("Default messages.yml not found in JAR.");
+          //  throw new FileNotFoundException("Default messages.yml not found in JAR.");
         }
         File outputFile = new File(MESSAGES_FILE_PATH);
         try (OutputStream outputStream = new FileOutputStream(outputFile)) {

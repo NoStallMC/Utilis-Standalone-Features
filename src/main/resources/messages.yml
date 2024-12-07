@@ -16,7 +16,7 @@ nickname:
 color:
     set: '&7Your color has been changed to %color%'
     invalid: '&cInvalid color.'
-Version: 1.0
+Version: 1.1
 #--------------------------------------------------------------------------------------------
 #Colors:                #Placeholders:  
 # "&0" = BLACK          # %player% = Name of player.

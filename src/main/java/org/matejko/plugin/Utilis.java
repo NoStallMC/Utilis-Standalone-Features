@@ -13,12 +13,13 @@ public class Utilis extends JavaPlugin implements Listener {
     public SleepingManager sleepingManager;
     public NickManager nickManager;
     private UtilisGetters utilisGetters;
-
+    
+	@SuppressWarnings("unused")
 	@Override
     public void onEnable() {
         this.logger = Logger.getLogger("Utilis");
         getLogger().info("[Utilis] is starting up!");
-        // Initialize managers using UtilisInitializer
+        RecoverManager recoverManager = new RecoverManager();
         UtilisInitializer initializer = new UtilisInitializer(this);
         initializer.initialize();
         getLogger().info("[Utilis] has been enabled!");

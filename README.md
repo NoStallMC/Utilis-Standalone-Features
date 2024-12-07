@@ -11,6 +11,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 - **Nickname Management**: Set, reset, and customize player nicknames and colors.
 - **Night Skip**: Manage sleeping mechanics with `/as`.
 - **Inventory Management**: Use `/isee` to view and edit another player's inventory.
+- **Inventory Recovery**: Recover a player's inventory after death using /recover.
 - **Item Teleportation**: Instantly pull all nearby items with `/suck`.
 - **Player Listing**: View a detailed list of all connected players.
 - **Debug Tools**: Diagnose plugin functionality with `/utilisdebug`.
@@ -31,6 +32,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 | `/utilisdebug` | Runs a debug check for the plugin.                                | `/utilisdebug`                 | -        |
 | `/sudo`        | Force a player to execute a command or send a chat message.       | `/sudo <player> <command>`     | -        |
 | `/isee`        | View and edit another player's inventory silently.                | `/isee <player>`               | -        |
+| `/recover`     | Recover a player's inventory after they die.                      | `/recover <player>`            | -        |
 
 ### Permissions
 
@@ -48,6 +50,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 | `utilis.vanish`     | Allows toggling vanish mode.                      | `op`    |
 | `utilis.as`         | Allows using the `/as` command.                   | `op`    |
 | `utilis.isee`       | Allows using the `/isee` command.                 | `op`    |
+| `utilis.recover`    | Allows using the `/recover` command.              | `op`    |
 
 ### Installation
 

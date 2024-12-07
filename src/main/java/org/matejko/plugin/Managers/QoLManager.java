@@ -16,18 +16,21 @@ public class QoLManager implements Listener{
         // Check if the block is wodden_stairs (ID: 53) or cobblestone_stairs (ID: 67)
         if (block.getTypeId() == 53 || block.getTypeId() == 67 || block.getTypeId() == 30) {
             block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(block.getTypeId(), 1));
+            block.setTypeId(0); 
         }
 
         // Check if the block is either glass (ID: 20), or glowstone (ID: 89), or ice (ID: 79), or stone (ID: 1)
         if (block.getTypeId() == 20 || block.getTypeId() == 89 || block.getTypeId() == 79 || block.getTypeId() == 1) {
             if (player.getInventory().getItemInHand().getTypeId() == 285) {
                 block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(block.getTypeId(), 1));
+                block.setTypeId(0); 
             }
         }
             // Check if the block is grass (ID: 2)
             if (block.getTypeId() == 2) {
                 if (player.getInventory().getItemInHand().getTypeId() == 284) {
                     block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(block.getTypeId(), 1));
+                    block.setTypeId(0); 
                 }
             }
     }

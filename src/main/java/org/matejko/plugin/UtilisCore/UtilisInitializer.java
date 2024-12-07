@@ -22,9 +22,11 @@ public class UtilisInitializer {
     private final Utilis plugin;
     private final Logger logger;
 	static ISeeManager iSeeManager;
+    private final RecoverManager recoverManager; 
     public UtilisInitializer(Utilis plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
+		this.recoverManager = new RecoverManager();
     }
 
     @SuppressWarnings("static-access")
@@ -53,6 +55,7 @@ public class UtilisInitializer {
         Bukkit.getPluginManager().registerEvents(new ISeeArmorRemover(iSeeManager), plugin);
         Bukkit.getPluginManager().registerEvents(iSeeInventoryListener, plugin);
         UtilisGetters.setISeeManager(iSeeManager); 
+        
         // ChatFormattingManager setup
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(plugin);
         chatFormattingManager.loadConfiguration();
@@ -82,7 +85,11 @@ public class UtilisInitializer {
         if (config.isMOTDEnabled()) {
             motdManager = new MOTDManager(plugin);
         }
-
+        // Register the RecoverManager as an event listener
+        plugin.getServer().getPluginManager().registerEvents(recoverManager, plugin);
+        
+        // Register the RecoverCommand with the plugin and pass the RecoverManager
+        plugin.getCommand("recover").setExecutor(new RecoverCommand(recoverManager));
         // Plugin Updater
         UtilisPluginUpdater pluginUpdater = new UtilisPluginUpdater(plugin, config);
         pluginUpdater.registerListener();
