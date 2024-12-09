@@ -24,11 +24,9 @@ public class UtilisMessagesUpdater {
     }
 
     public static void checkAndUpdateConfig() {
-        boolean requiresRestart = false;
         try {
             File configFile = new File(MESSAGES_FILE_PATH);
-            boolean configExists = configFile.exists();
-            if (!configExists) {
+            if (!configFile.exists()) {
                 copyDefaultConfigToServer();
                 return;
             }
@@ -45,39 +43,44 @@ public class UtilisMessagesUpdater {
                     saveConfigWithComments(MESSAGES_FILE_PATH, defaultConfig);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                         plugin.getLogger().info("[Utilis] Messages merger is done!");
-                        plugin.getLogger().severe("[Utilis] Server reload needed!");
+                        plugin.getLogger().severe("[Utilis] Server restart is needed!");
                     }, 40L);
                 } else {
                     plugin.getLogger().severe("[Utilis] messages.yml merger failed: Could not merge old messages.yml.");
                 }
             } else {
-                String configVersion = currentVersion != null ? currentVersion : "unknown";
-                plugin.getLogger().info("[Utilis] messages.yml is up to date! (v" + configVersion + ")");
+                plugin.getLogger().info("[Utilis] messages.yml is up to date! (v" + currentVersion + ")");
             }
         } catch (Exception e) {
-            plugin.getLogger().severe("An error occurred while checking and updating the messages.yml: " + e.getMessage());
-            e.printStackTrace();
+          //  plugin.getLogger().severe("An error occurred while checking and updating the messages.yml: " + e.getMessage());
+          //  e.printStackTrace();
         }
     }
+
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> loadConfig(String filePath) throws FileNotFoundException {
-        Yaml yaml = new Yaml();
-        FileInputStream fileInputStream = new FileInputStream(filePath);
-        return (Map<String, Object>) yaml.load(fileInputStream);
+    private static Map<String, Object> loadConfig(String filePath) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
+            Yaml yaml = new Yaml();
+            return (Map<String, Object>) yaml.load(fileInputStream);
+        }
     }
+
     @SuppressWarnings("unchecked")
     private static Map<String, Object> loadDefaultConfig() throws IOException {
-        Yaml yaml = new Yaml();
-        InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
-        if (inputStream == null) {
-    //        throw new FileNotFoundException("Default messages.yml not found in JAR.");
+        try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH)) {
+            if (inputStream == null) {
+               throw new FileNotFoundException();
+            }
+            Yaml yaml = new Yaml();
+            return (Map<String, Object>) yaml.load(inputStream);
         }
-        return (Map<String, Object>) yaml.load(inputStream);
     }
+
     private static String getCurrentConfigVersion(Map<String, Object> currentConfig) {
         Object versionObject = currentConfig.get("Version");
         return versionObject != null ? versionObject.toString() : null;
     }
+
     private static boolean isVersionOutdated(String currentVersion) throws IOException {
         String serverVersion = getServerVersionFromJar();
         if (serverVersion == null) {
@@ -94,43 +97,44 @@ public class UtilisMessagesUpdater {
         }
         return false;
     }
-    private static String getServerVersionFromJar() throws FileNotFoundException {
-        Yaml yaml = new Yaml();
-        InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
-        if (inputStream == null) {
-        //    throw new FileNotFoundException("Default messages.yml not found in JAR.");
+
+    private static String getServerVersionFromJar() throws IOException {
+        try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new FileNotFoundException();
+            }
+            Yaml yaml = new Yaml();
+            @SuppressWarnings("unchecked")
+            Map<String, Object> defaultConfig = (Map<String, Object>) yaml.load(inputStream);
+            Object versionObject = defaultConfig.get("Version");
+            return versionObject != null ? versionObject.toString() : null;
         }
-        @SuppressWarnings("unchecked")
-        Map<String, Object> defaultConfig = (Map<String, Object>) yaml.load(inputStream);
-        Object versionObject = defaultConfig.get("Version");
-        return versionObject != null ? versionObject.toString() : null;
     }
+
     private static void saveConfigWithComments(String filePath, Map<String, Object> config) throws IOException {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(options);
-        // Convert YAML data to string format
         String yamlContent = yaml.dump(config);
-        // Load comments from the JAR resource
-        InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
-        if (inputStream == null) {
-      //      throw new FileNotFoundException("Default messages.yml not found in JAR.");
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder commentsBuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.startsWith("#")) {
-                commentsBuilder.append(line).append("\n");
+
+        try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+             FileWriter writer = new FileWriter(filePath)) {
+
+            if (inputStream == null) {
+                throw new FileNotFoundException();
             }
+            StringBuilder commentsBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    commentsBuilder.append(line).append("\n");
+                }
+            }
+            writer.write(yamlContent + "\n" + commentsBuilder.toString());
         }
-        // Add comments to the bottom
-        String finalContent = yamlContent + "\n" + commentsBuilder.toString();
-        // Save file
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(finalContent);
-        writer.close();
     }
+
     private static void backupOldConfig() throws IOException {
         File configFile = new File(MESSAGES_FILE_PATH);
         File backupFile = new File(OLD_MESSAGES_FILE_PATH);
@@ -149,30 +153,27 @@ public class UtilisMessagesUpdater {
             }
         }
     }
+
     private static void copyDefaultConfigToServer() throws IOException {
         File configDirectory = new File("plugins/Utilis");
-        if (!configDirectory.exists()) {
-            if (configDirectory.mkdirs()) {
-                plugin.getLogger().info("[Utilis] Created directory: " + configDirectory.getPath());
-            } else {
-                plugin.getLogger().severe("[Utilis] Failed to create directory: " + configDirectory.getPath());
-                throw new IOException("[Utilis] Failed to create directory: " + configDirectory.getPath());
+        if (!configDirectory.exists() && !configDirectory.mkdirs()) {
+            throw new IOException("[Utilis] Failed to create directory: " + configDirectory.getPath());
+        }
+        try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
+             OutputStream outputStream = new FileOutputStream(new File(MESSAGES_FILE_PATH))) {
+
+            if (inputStream == null) {
+                throw new FileNotFoundException();
             }
-        }
-        InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
-        if (inputStream == null) {
-          //  throw new FileNotFoundException("Default messages.yml not found in JAR.");
-        }
-        File outputFile = new File(MESSAGES_FILE_PATH);
-        try (OutputStream outputStream = new FileOutputStream(outputFile)) {
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
+            plugin.getLogger().info("[Utilis] Default messages.yml copied from JAR.");
         }
-        plugin.getLogger().info("[Utilis] Default messages.yml copied from JAR.");
     }
+
     @SuppressWarnings("unchecked")
     private static boolean mergeConfigs(Map<String, Object> newConfig, Map<String, Object> oldConfig) {
         try {

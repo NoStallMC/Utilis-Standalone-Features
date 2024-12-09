@@ -21,7 +21,7 @@ public class ISeeInventoryListener implements Listener {
     private long lastViewerSyncTime = 0L;
     private long lastTargetSyncTime = 0L;
     private int taskId = -1;
-    
+
     public ISeeInventoryListener(Utilis plugin, ISeeManager iSeeManager) {
         this.iSeeManager = iSeeManager;
         this.plugin = plugin;

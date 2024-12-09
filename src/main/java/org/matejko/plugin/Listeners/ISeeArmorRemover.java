@@ -8,10 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import main.java.org.matejko.plugin.Managers.ISeeManager;
 
 public class ISeeArmorRemover implements Listener {
-    private final ISeeManager manager;
-
-    public ISeeArmorRemover(ISeeManager manager) {
-        this.manager = manager;
+    private final ISeeManager iSeeManager;
+    
+    public ISeeArmorRemover(ISeeManager iSeeManager) {
+        this.iSeeManager = iSeeManager;
     }
 
     @EventHandler
@@ -21,7 +21,7 @@ public class ISeeArmorRemover implements Listener {
         if (droppedItem == null || droppedItem.getTypeId() == 0) {
             return;
         }
-        Player target = manager.getCurrentTarget(player);  // Fetch the target player from ISeeManager
+        Player target = iSeeManager.getCurrentTarget(player);  // Fetch the target player from ISeeManager
         if (target != null && isMatchingArmor(droppedItem, target)) {
             // Remove the matching armor piece from the target's inventory
             removeArmorPieceFromTarget(target, droppedItem);
@@ -76,13 +76,13 @@ public class ISeeArmorRemover implements Listener {
             armorChanged = true;
         }
         if (armorChanged) {
-            manager.saveInventoryAndArmor(target);
-            if (manager.isDebugEnabled()) {
+        	iSeeManager.saveInventoryAndArmor(target);
+            if (iSeeManager.isDebugEnabled()) {
                 System.out.println("[DEBUG] Updated armor for player: " + target.getName());
             }
         }
     }
     private boolean isDebugEnabled() {
-        return manager.isDebugEnabled();
+        return iSeeManager.isDebugEnabled();
     }
 }

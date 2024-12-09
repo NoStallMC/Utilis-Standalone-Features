@@ -5,8 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import main.java.org.matejko.plugin.Utilis;
+import main.java.org.matejko.plugin.FileCreator.Config;
 import main.java.org.matejko.plugin.FileCreator.Messages;
 import main.java.org.matejko.plugin.Managers.ColorUtil;
 import main.java.org.matejko.plugin.Managers.VanishUserManager;
@@ -15,10 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 public class UtilisNotifier implements Listener {
-    private final Utilis plugin;
     private final Map<String, String> messages;
     private final Messages messagesConfig;
-    public UtilisNotifier(Utilis plugin) {
+    private final Utilis plugin;
+	private Config config;
+
+    public UtilisNotifier(Utilis plugin, Config config) {
+    	this.config = config;
         this.plugin = plugin;
         this.messages = new HashMap<>();
         this.messagesConfig = new Messages(plugin);
@@ -89,13 +94,10 @@ public class UtilisNotifier implements Listener {
         } else {
             plugin.getLogger().warning("[Utilis] MOTDManager is null.");
         }
-
-        // Send the custom join message if the player is not vanished
-        if (!isPlayerVanished(newPlayer)) {
-            sendJoinMessage(newPlayer);
-        }
-
-        // Hide vanished players from the joining player
+        if (config.isJoinleaveEnabled()) {
+           if (!isPlayerVanished(newPlayer)) {
+                     sendJoinMessage(newPlayer);}
+           }
         for (VanishUserManager vanishUser : plugin.getUtilisGetters().getVanishedPlayers()) {
             if (vanishUser.getPlayer() != null) {
                 newPlayer.hidePlayer(vanishUser.getPlayer());
@@ -103,11 +105,17 @@ public class UtilisNotifier implements Listener {
         }
     }
     @EventHandler
+    public void handlePlayerKick(PlayerKickEvent event) {
+        if (config.isJoinleaveEnabled()) {
+        event.setLeaveMessage(null);}
+    }
+    @EventHandler
     public void handlePlayerQuit(PlayerQuitEvent event) {
         Player quittingPlayer = event.getPlayer();
+        if (config.isJoinleaveEnabled()) {
         event.setQuitMessage(null);
         if (!isPlayerVanished(quittingPlayer)) {
-            sendQuitMessage(quittingPlayer);
+            sendQuitMessage(quittingPlayer);}
         }
     }
     private boolean isPlayerVanished(Player player) {

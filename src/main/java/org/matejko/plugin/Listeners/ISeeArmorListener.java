@@ -24,14 +24,14 @@ public class ISeeArmorListener {
             public void run() {
                 // Check if viewer is valid before continuing
                 if (viewer == null || !viewer.isOnline()) {
-                    if (isDebugEnabled()) {
+                    if (iSeeManager.isDebugEnabled()) {
                         System.out.println("[DEBUG] Viewer is invalid or offline. Stopping armor sync.");
                     }
                     stopArmorSync(viewer);
                     return;
                 }
                 if (!alive) {
-                    if (isDebugEnabled()) {
+                    if (iSeeManager.isDebugEnabled()) {
                         System.out.println("[DEBUG] Stopping armor sync for viewer " + viewer.getName());
                     }
                     plugin.getServer().getScheduler().cancelTask(taskId);
@@ -43,7 +43,7 @@ public class ISeeArmorListener {
                 if (target != null && target.isOnline()) {
                     syncArmorFromTargetToViewer(viewer, target);
                 } else {
-                    if (isDebugEnabled()) {
+                    if (iSeeManager.isDebugEnabled()) {
                         System.out.println("[DEBUG] Target is either null or offline. Stopping sync.");
                     }
                     stopArmorSync(viewer);
@@ -64,7 +64,7 @@ public class ISeeArmorListener {
 
     private void syncArmorFromTargetToViewer(Player viewer, Player target) {
         if (viewer == null || target == null || !viewer.isOnline() || !target.isOnline()) {
-            if (isDebugEnabled()) {
+            if (iSeeManager.isDebugEnabled()) {
                 System.out.println("[DEBUG] Viewer or target is invalid or offline. Stopping sync.");
             }
             stopArmorSync(viewer);
@@ -95,18 +95,15 @@ public class ISeeArmorListener {
             } else {
                 viewer.getInventory().setBoots(null);
             }
-            if (isDebugEnabled()) {
+            if (iSeeManager.isDebugEnabled()) {
                 System.out.println("[DEBUG] Armor synced from " + target.getName() + " to " + viewer.getName());
             }
         } catch (Exception e) {
-            if (isDebugEnabled()) {
+            if (iSeeManager.isDebugEnabled()) {
                 System.out.println("[ERROR] Exception occurred while syncing armor: " + e.getMessage());
                 e.printStackTrace();
             }
             stopArmorSync(viewer);
         }
-    }
-    private boolean isDebugEnabled() {
-        return iSeeManager.isDebugEnabled();
     }
 }

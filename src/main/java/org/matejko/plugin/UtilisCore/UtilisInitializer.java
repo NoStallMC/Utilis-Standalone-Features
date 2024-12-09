@@ -48,7 +48,7 @@ public class UtilisInitializer {
             logger.info("[Utilis] Essentials plugin found!");
         }
         // Initialize ISee
-        ISeeManager iSeeManager = new ISeeManager(plugin);
+        ISeeManager iSeeManager = new ISeeManager(config);
         ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(plugin, iSeeManager);
         @SuppressWarnings("unused")
 		ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(plugin, iSeeManager);
@@ -73,7 +73,7 @@ public class UtilisInitializer {
         Bukkit.getPluginManager().registerEvents(nickManager, plugin);
 
         // UtilisNotifier setup
-        UtilisNotifier utilisNotifier = new UtilisNotifier(plugin);
+        UtilisNotifier utilisNotifier = new UtilisNotifier(plugin, config);
         Bukkit.getPluginManager().registerEvents(utilisNotifier, plugin);
 
         // Command registration

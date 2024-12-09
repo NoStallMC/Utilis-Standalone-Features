@@ -1,16 +1,17 @@
 commands:
-    list: true
-    vanish: true
-    nickname: true
-    nickreset: true
-    color: true
-    realname: true
-    rename: true
+  list: true
+  vanish: true
+  nickname: true
+  nickreset: true
+  color: true
+  realname: true
+  rename: true
 features:
-    update-check: true
-    motd: true
-    qol: true
-    sleeping: true
-    chat-formatting: true
-    debug: false
-Version: 1.4
+  update-check: true
+  join-leave: true
+  motd: true
+  qol: true
+  sleeping: true
+  chat-formatting: true
+  debug: false
+Version: 1.5

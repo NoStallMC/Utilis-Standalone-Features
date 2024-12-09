@@ -67,7 +67,7 @@ public class UtilisConfigUpdater {
                         @Override
                         public void run() {
                         	plugin.getLogger().info("[Utilis] Config merger is done!");
-                        	plugin.getLogger().severe("[Utilis] Server reload needed!");
+                        	plugin.getLogger().severe("[Utilis] Server restart is needed!");
                         }
                     }, 40L);
                 } else {

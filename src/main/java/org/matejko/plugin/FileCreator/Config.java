@@ -84,7 +84,11 @@ public class Config {
         return config.getBoolean("features.update-check", true);  // Default to true if not set
 	}
 	
+	public boolean isJoinleaveEnabled() {
+        return config.getBoolean("features.join-leave", true);  // Default to true if not set
+	}
+	
 	public boolean isDebugEnabled() {
-        return config.getBoolean("features.debug", false);  // Default to true if not set
+        return config.getBoolean("features.debug", false);  // Default to false if not set
 	}
 }
