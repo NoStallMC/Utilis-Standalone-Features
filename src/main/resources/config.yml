@@ -12,6 +12,7 @@ features:
   motd: true
   qol: true
   sleeping: true
+  nickname-length: 32
   chat-formatting: true
   debug: false
-Version: 1.5
+Version: 1.6

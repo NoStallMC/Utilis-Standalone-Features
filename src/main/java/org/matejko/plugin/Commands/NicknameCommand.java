@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Managers.NickManager;
 import main.java.org.matejko.plugin.Managers.CooldownManager;
 import main.java.org.matejko.plugin.FileCreator.Messages;
+import main.java.org.matejko.plugin.FileCreator.Config;
 import main.java.org.matejko.plugin.Managers.ColorUtil;
 import java.util.logging.Logger;
 
@@ -14,15 +15,17 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
     private final NickManager nickManager;
     private final CooldownManager cooldownManager;
     private final Messages messages;
+    private final Config config;
     private final Logger logger;
-    
-    public NicknameCommand(NickManager nickManager, CooldownManager cooldownManager, Messages messages) {
+
+    public NicknameCommand(NickManager nickManager, CooldownManager cooldownManager, Messages messages, Config config) {
         this.nickManager = nickManager;
         this.cooldownManager = cooldownManager;
         this.messages = messages;
+        this.config = config;
         this.logger = Logger.getLogger("Utilis");
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -42,8 +45,14 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
             player.sendMessage(ChatColor.RED + "Usage: /nickname <nickname>");
             return false;
         }
-        // Check if the nickname is available
+        // Check nickname length
         String nickname = args[0];
+        int maxNicknameLength = config.maxNicknameLength();
+        if (maxNicknameLength > 0 && nickname.length() > maxNicknameLength) {
+            player.sendMessage(ChatColor.RED + "The nickname is too long. Maximum allowed length is " + maxNicknameLength + " characters.");
+            return false;
+        }
+        // Check if the nickname is available
         if (!nickManager.isValidNickname(nickname)) {
             String nicknameUsedMessage = messages.getMessage("nickname.used");
             if (nicknameUsedMessage == null) {
@@ -66,19 +75,21 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         String nicknameSetMessage = messages.getMessage("nickname.set");
         if (nicknameSetMessage == null) {
             logger.warning("[Utilis] Message 'nickname.set' is null. Please check your messages config.");
-            nicknameSetMessage = "&7Your nickname has been set to: %nickname%";  // Fallback message
+            nicknameSetMessage = "&7Your nickname has been set to: %nickname%";
         }
         player.sendMessage(formatMessage(nicknameSetMessage, player, nickname));
         return true;
     }
+
     private String formatMessage(String message, Player player) {
         message = message.replace("%player%", player.getDisplayName());
         return ColorUtil.translateColorCodes(message);
     }
+
     private String formatMessage(String message, Player player, String nickname) {
         String playerColor = nickManager.getPlayerColor(player);
-        message = message.replace("%nickname%", ChatColor.valueOf(playerColor.toUpperCase()) + "~" + nickname + ChatColor.WHITE);  // Apply the player's color
-        message = formatMessage(message, player);  // Apply player name formatting
+        message = message.replace("%nickname%", ChatColor.valueOf(playerColor.toUpperCase()) + "~" + nickname + ChatColor.WHITE);
+        message = formatMessage(message, player);
         return message;
     }
 }

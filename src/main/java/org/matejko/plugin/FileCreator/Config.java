@@ -80,6 +80,10 @@ public class Config {
         return config.getBoolean("features.chat-formatting", true);  // Default to true if not set
     }
 
+    public int maxNicknameLength() {
+        return config.getInt("features.nickname-length", 32);  // Default to 32 if not set
+    }
+    
 	public boolean isUpdateEnabled() {
         return config.getBoolean("features.update-check", true);  // Default to true if not set
 	}

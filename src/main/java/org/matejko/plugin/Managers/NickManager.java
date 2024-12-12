@@ -27,8 +27,6 @@ public class NickManager implements Listener {
         }
         // Initialize player data file
         this.playerDataFile = new File(nicksFolder, "playerData.yml");
-
-        // Check if the file exists, if not create it
         if (!playerDataFile.exists()) {
             try {
                 playerDataFile.createNewFile();
@@ -108,7 +106,7 @@ public class NickManager implements Listener {
     public void setNicknameColor(Player player, String color) {
         String playerName = player.getName();
         String[] data = playerData.get(playerName);
-        String currentNickname = (data != null) ? data[0] : playerName;  // Fallback to player name if no nickname
+        String currentNickname = (data != null) ? data[0] : playerName;
         try {
             player.setDisplayName(ChatColor.valueOf(color.toUpperCase()) + currentNickname + ChatColor.WHITE);
         } catch (IllegalArgumentException e) {
@@ -136,7 +134,6 @@ public class NickManager implements Listener {
         String[] data = playerData.get(player.getName());
         return (data != null && data[1] != null) ? data[1] : "WHITE";
     }
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -156,7 +153,7 @@ public class NickManager implements Listener {
                 plugin.getLogger().warning("Invalid color for player " + playerName + ". Defaulting to white.");
             }
         } else {
-            player.setDisplayName(playerName);  // Default to player name if no nickname exists
+            player.setDisplayName(playerName);
         }
     }
 

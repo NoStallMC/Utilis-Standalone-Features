@@ -28,7 +28,7 @@ public class UtilisCommands {
     public void registerCommands() {
         // Register commands with permission checks
         if (config.isNickEnabled()) {
-            registerCommandWithPermission("nickname", "utilis.nickname", new NicknameCommand(nickManager, cooldownManager, messages));
+            registerCommandWithPermission("nickname", "utilis.nickname", new NicknameCommand(nickManager, cooldownManager, messages, config));
         }
         if (config.isRenameEnabled()) {
             registerCommandWithPermission("rename", "utilis.rename", new RenameCommand(nickManager));
@@ -67,13 +67,11 @@ public class UtilisCommands {
                     sender.sendMessage("Only players can use this command.");
                     return true;
                 }
-
                 Player player = (Player) sender;
                 if (!player.hasPermission("utilis.isee")) {
                     player.sendMessage("§cYou do not have permission to use this command.");
                     return true;
                 }
-
                 new ISeeCommand(iSeeManager, iSeeInventoryListener, iSeeArmorListener, plugin)
                         .onCommand(sender, command, label, args);
                 return true;
