@@ -81,7 +81,7 @@ public class UtilisGetters {
     public SleepingManager getSleepingManager() {
         return sleepingManager;
     }
-
+    
     public NickManager getNickManager() {
         return nickManager;
     }

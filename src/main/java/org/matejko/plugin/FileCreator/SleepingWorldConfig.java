@@ -25,12 +25,8 @@ public class SleepingWorldConfig {
     private void createDefaultConfig() {
         config = new Configuration(file);
         for (World world : Bukkit.getWorlds()) {
-            if (world.getName().equalsIgnoreCase("world_nether")) {
-                config.setProperty(world.getName(), "disabled");
-            } else {
                 config.setProperty(world.getName(), "disabled");
             }
-        }
         saveConfig();
     }
     public void saveConfig() {

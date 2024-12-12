@@ -11,9 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
 import com.earth2me.essentials.Essentials;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -21,16 +19,16 @@ import java.util.logging.Logger;
 public class UtilisInitializer {
     private final Utilis plugin;
     private final Logger logger;
-	static ISeeManager iSeeManager;
-    private final RecoverManager recoverManager; 
+    static ISeeManager iSeeManager;
+    private final RecoverManager recoverManager;
+
     public UtilisInitializer(Utilis plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-		this.recoverManager = new RecoverManager();
+        this.recoverManager = new RecoverManager();
     }
-
     @SuppressWarnings("static-access")
-	public void initialize() {
+    public void initialize() {
         logger.info("[Utilis] Initializing...");
         UtilisConfigUpdater configUpdater = new UtilisConfigUpdater(plugin);
         configUpdater.checkAndUpdateConfig();
@@ -51,35 +49,29 @@ public class UtilisInitializer {
         ISeeManager iSeeManager = new ISeeManager(config);
         ISeeInventoryListener iSeeInventoryListener = new ISeeInventoryListener(plugin, iSeeManager);
         @SuppressWarnings("unused")
-		ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(plugin, iSeeManager);
+        ISeeArmorListener iSeeArmorListener = new ISeeArmorListener(plugin, iSeeManager);
         Bukkit.getPluginManager().registerEvents(new ISeeArmorRemover(iSeeManager), plugin);
         Bukkit.getPluginManager().registerEvents(iSeeInventoryListener, plugin);
-        UtilisGetters.setISeeManager(iSeeManager); 
-        
+        UtilisGetters.setISeeManager(iSeeManager);
         // ChatFormattingManager setup
         ChatFormattingManager chatFormattingManager = new ChatFormattingManager(plugin);
         chatFormattingManager.loadConfiguration();
         Bukkit.getPluginManager().registerEvents(chatFormattingManager, plugin);
-
         // VanishedPlayersManager
         Set<VanishUserManager> vanishedPlayers = new HashSet<>();
         VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin);
         vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
-
         // NickManager and cooldown setup
         NickManager nickManager = new NickManager(plugin);
         Messages messages = new Messages(plugin);
         CooldownManager cooldownManager = new CooldownManager(plugin, 60);
         Bukkit.getPluginManager().registerEvents(nickManager, plugin);
-
         // UtilisNotifier setup
         UtilisNotifier utilisNotifier = new UtilisNotifier(plugin, config);
         Bukkit.getPluginManager().registerEvents(utilisNotifier, plugin);
-
         // Command registration
         UtilisCommands utilisCommands = new UtilisCommands(plugin, config, nickManager, cooldownManager, messages);
         utilisCommands.registerCommands();
-
         // MOTD Manager
         MOTDManager motdManager = null;
         if (config.isMOTDEnabled()) {
@@ -87,8 +79,6 @@ public class UtilisInitializer {
         }
         // Register the RecoverManager as an event listener
         plugin.getServer().getPluginManager().registerEvents(recoverManager, plugin);
-        
-        // Register the RecoverCommand with the plugin and pass the RecoverManager
         plugin.getCommand("recover").setExecutor(new RecoverCommand(recoverManager));
         // Plugin Updater
         UtilisPluginUpdater pluginUpdater = new UtilisPluginUpdater(plugin, config);
@@ -98,7 +88,6 @@ public class UtilisInitializer {
         } else {
             logger.info("[Utilis] Update check is disabled in the config.");
         }
-
         // Sleeping Manager
         SleepingManager sleepingManager = null;
         if (config.isSleepingEnabled()) {
@@ -131,13 +120,19 @@ public class UtilisInitializer {
             logger.warning("[Utilis] Dynmap plugin not found!");
         }
         DynmapManager dynmapManager = new DynmapManager(dynmapPlugin, logger);
-        // Create UtilisGetters instance
+        // Anti-Spam Manager setup
+        if (config.isAntiSpamEnabled()) {
+            AntiSpamManager antiSpamManager = new AntiSpamManager(plugin);
+            Bukkit.getPluginManager().registerEvents(antiSpamManager, plugin);
+            logger.info("[Utilis] Anti-Spam is enabled.");
+        } else {
+            logger.info("[Utilis] Anti-Spam is disabled in the config.");
+        }
         UtilisGetters utilisGetters = new UtilisGetters(
                 logger, vanishedPlayers, vanishedPlayersManager,
                 motdManager, dynmapManager, utilisNotifier,
                 config, essentials, dynmapPlugin, sleepingManager, nickManager
         );
-        // Store the UtilisGetters in the plugin for later access
         plugin.setUtilisGetters(utilisGetters);
         logger.info("[Utilis] Initialization complete!");
     }

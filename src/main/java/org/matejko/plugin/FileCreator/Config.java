@@ -92,6 +92,18 @@ public class Config {
         return config.getBoolean("features.join-leave", true);  // Default to true if not set
 	}
 	
+    public boolean isAntiSpamEnabled() {
+        return config.getBoolean("anti-spam.enabled", true);  // Default to true if not set
+    }
+
+    public int getMessageLimit() {
+        return config.getInt("anti-spam.message-limit", 10);  // Default to 10 messages if not set
+    }
+
+    public int getTimeWindow() {
+        return config.getInt("anti-spam.time-window", 10);  // Default to 10 seconds if not set
+    }
+	
 	public boolean isDebugEnabled() {
         return config.getBoolean("features.debug", false);  // Default to false if not set
 	}

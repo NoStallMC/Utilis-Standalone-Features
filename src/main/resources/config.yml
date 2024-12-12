@@ -15,4 +15,8 @@ features:
   nickname-length: 32
   chat-formatting: true
   debug: false
-Version: 1.6
+anti-spam:
+  enabled: true
+  message-limit: 10
+  time-window: 10
+Version: 1.7

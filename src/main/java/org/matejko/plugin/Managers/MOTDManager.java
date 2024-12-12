@@ -1,6 +1,7 @@
 package main.java.org.matejko.plugin.Managers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.FileCreator.Messages;
@@ -42,7 +43,6 @@ public class MOTDManager {
         List<String> formattedMOTD = new ArrayList<>();
         String playerDisplayName = player.getDisplayName();
         for (String line : motdLines) {
-            // Replace placeholders with actual values
             String formattedLine = line.replace("%player%", playerDisplayName);
             formattedLine = formattedLine.replace("%players%", getOnlinePlayerList());
             formattedMOTD.add(ColorUtil.translateColorCodes(formattedLine));
@@ -54,16 +54,21 @@ public class MOTDManager {
         StringBuilder playerList = new StringBuilder();
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!isPlayerVanished(onlinePlayer)) {
+                String playerName = onlinePlayer.getDisplayName();
+                // Add [AFK] if the player is AFK
+                if (plugin.getUtilisGetters().isAFK(onlinePlayer)) {
+                    playerName = ChatColor.GRAY + "[AFK] " + playerName;
+                }
                 if (playerList.length() > 0) {
                     playerList.append(", ");
                 }
-                playerList.append(onlinePlayer.getDisplayName());
+                playerList.append(playerName);
             }
         }
         return playerList.toString();
     }
 
-    private boolean isPlayerVanished(Player player) { // Directly check if the vanished players set contains the player
+    private boolean isPlayerVanished(Player player) {
         return plugin.getUtilisGetters().getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player));
     }
 }
