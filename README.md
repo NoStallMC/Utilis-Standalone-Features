@@ -14,6 +14,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 - **Inventory Recovery**: Recover a player's inventory after death using /recover.
 - **Item Teleportation**: Instantly pull all nearby items with `/suck`.
 - **Player Listing**: View a detailed list of all connected players.
+- **Anti-Spam**: Stops players from spamming messages.
 - **Debug Tools**: Diagnose plugin functionality with `/utilisdebug`.
 
 ### Commands
