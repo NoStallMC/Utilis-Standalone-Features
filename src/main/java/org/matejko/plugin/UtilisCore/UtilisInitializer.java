@@ -6,6 +6,7 @@ import main.java.org.matejko.plugin.FileCreator.*;
 import main.java.org.matejko.plugin.Listeners.ISeeArmorListener;
 import main.java.org.matejko.plugin.Listeners.ISeeArmorRemover;
 import main.java.org.matejko.plugin.Listeners.ISeeInventoryListener;
+import main.java.org.matejko.plugin.Listeners.MinecartEventListener;
 import main.java.org.matejko.plugin.Utilis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -113,6 +114,11 @@ public class UtilisInitializer {
         // QoL Manager
         if (config.isQoLEnabled()) {
             Bukkit.getPluginManager().registerEvents(new QoLManager(), plugin);
+        }
+        // MinecartFallDamageManager
+        if (config.isMinecartdmgFixEnabled()) {
+        MinecartFallDamageManager fallDamageManager = new MinecartFallDamageManager(plugin, config);
+        Bukkit.getPluginManager().registerEvents(new MinecartEventListener(fallDamageManager), plugin);
         }
         // Dynmap setup
         Plugin dynmapPlugin = Bukkit.getPluginManager().getPlugin("dynmap");

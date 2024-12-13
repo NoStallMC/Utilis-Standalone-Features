@@ -13,6 +13,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 - **Inventory Management**: Use `/isee` to view and edit another player's inventory.
 - **Inventory Recovery**: Recover a player's inventory after death using /recover.
 - **Item Teleportation**: Instantly pull all nearby items with `/suck`.
+- **Minecart Fix**: Stops players from getting fall damage.
 - **Player Listing**: View a detailed list of all connected players.
 - **Anti-Spam**: Stops players from spamming messages.
 - **Debug Tools**: Diagnose plugin functionality with `/utilisdebug`.

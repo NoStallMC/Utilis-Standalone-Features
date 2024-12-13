@@ -16,7 +16,7 @@ public class Config {
         loadConfig();
     }
     // Load the configuration using the Configuration class
-    private void loadConfig() {
+    public void loadConfig() {
         try {
             config = new Configuration(configFile);
             config.load();
@@ -51,7 +51,11 @@ public class Config {
     public boolean isQoLEnabled() {
         return config.getBoolean("features.qol", true);  // Default to true if not set
     }
-
+    
+    public boolean isMinecartdmgFixEnabled() {
+        return config.getBoolean("features.minecartdmg-fix", true);  // Default to true if not set
+    }
+    
     public boolean isNickEnabled() {
         return config.getBoolean("commands.nickname", true);  // Default to true if not set
     }

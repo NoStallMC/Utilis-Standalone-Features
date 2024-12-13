@@ -14,9 +14,10 @@ features:
   sleeping: true
   nickname-length: 32
   chat-formatting: true
+  minecartdmg-fix: true
   debug: false
 anti-spam:
   enabled: true
   message-limit: 10
   time-window: 10
-Version: 1.7
+Version: 1.8
