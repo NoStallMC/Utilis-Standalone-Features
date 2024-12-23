@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.event.EventHandler;
 import main.java.org.matejko.plugin.Utilis;
+import main.java.org.matejko.plugin.FileCreator.Config;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +16,12 @@ public class NickManager implements Listener {
     private final Utilis plugin;
     private final File playerDataFile;
     private final Configuration config;
+    private final Config debug;
     private final Map<String, String[]> playerData;
 
-    public NickManager(Utilis plugin) {
+    public NickManager(Utilis plugin, Config debug) {
         this.plugin = plugin;
+		this.debug = debug;
         this.playerData = new HashMap<>();
         // Ensure the data folder exists
         File nicksFolder = plugin.getDataFolder();
@@ -62,7 +65,8 @@ public class NickManager implements Listener {
             String[] data = entry.getValue();
             config.setProperty(playerName + ".nickname", data[0]);
             config.setProperty(playerName + ".color", data[1]);
-            plugin.getLogger().info("[Utilis] Saving data for " + playerName + ": " + data[0] + " " + data[1]);
+            if(debug.isDebugEnabled())
+            	plugin.getLogger().info("[DEBUG] Saving data for " + playerName + ": " + data[0] + " " + data[1]);
         }
         config.save();
     }
@@ -150,7 +154,8 @@ public class NickManager implements Listener {
             } catch (IllegalArgumentException e) {
                 // Fallback to default color (WHITE) in case of an invalid color
                 player.setDisplayName(ChatColor.WHITE + nickname);
-                plugin.getLogger().warning("Invalid color for player " + playerName + ". Defaulting to white.");
+                if(debug.isDebugEnabled()) {
+                	plugin.getLogger().warning("[DEBUG] Invalid color for player " + playerName + ". Defaulting to white.");}
             }
         } else {
             player.setDisplayName(playerName);

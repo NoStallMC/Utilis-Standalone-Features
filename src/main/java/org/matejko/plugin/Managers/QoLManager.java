@@ -13,7 +13,7 @@ public class QoLManager implements Listener{
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
-        // Check if the block is wodden_stairs (ID: 53) or cobblestone_stairs (ID: 67)
+        // Check if the block is wooden_stairs (ID: 53) or cobblestone_stairs (ID: 67)
         if (block.getTypeId() == 53 || block.getTypeId() == 67 || block.getTypeId() == 30) {
             block.getWorld().dropItem(block.getLocation().add(0.5, 0.5, 0.5), new ItemStack(block.getTypeId(), 1));
             block.setTypeId(0); 

@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import main.java.org.matejko.plugin.Managers.NickManager;
-
 import java.util.Map;
 
 public class RealNameCommand implements org.bukkit.command.CommandExecutor {
@@ -21,40 +20,52 @@ public class RealNameCommand implements org.bukkit.command.CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Usage: /realname <nickname>");
             return false;
         }
-        String nickname = "~" + args[0];
-        String realName = getRealNameFromNickname(nickname);
+        String nicknameInput = "~" + args[0].toLowerCase();
+        String realName = getRealNameFromNickname(nicknameInput);
         if (realName != null) {
-            String nicknameColor = getNicknameColor(nickname);
-            String coloredNickname = nicknameColor + nickname + ChatColor.WHITE;
+            String nicknameColor = getNicknameColor(nicknameInput);
+            String fullNickname = getFullNickname(nicknameInput);
+            String coloredNickname = nicknameColor + fullNickname + ChatColor.WHITE;
             sender.sendMessage(ChatColor.GOLD + "Real name of " + coloredNickname + ChatColor.GOLD + " is " + realName + ".");
         } else {
-            sender.sendMessage(ChatColor.RED + "No real name found for " + nickname + ".");
+            sender.sendMessage(ChatColor.RED + "No real name found for nickname containing " + nicknameInput + ".");
         }
         return true;
     }
-    // Method to get the real player name from the nickname stored in playerData
+    
     private String getRealNameFromNickname(String nickname) {
         for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
             String[] data = entry.getValue();
-            if (data[0].equals(nickname)) {
+            if (data[0].toLowerCase().contains(nickname.substring(1))) {
                 return entry.getKey();
             }
         }
         return null;
     }
+
+    private String getFullNickname(String nickname) {
+        for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
+            String[] data = entry.getValue();
+            if (data[0].toLowerCase().contains(nickname.substring(1))) {
+                return data[0];
+            }
+        }
+        return nickname;
+    }
+
     private String getNicknameColor(String nickname) {
         for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
             String[] data = entry.getValue();
-            if (data[0].equals(nickname)) {
+            if (data[0].toLowerCase().contains(nickname.substring(1))) {
                 String color = data[1];
                 try {
                     // Try to convert the color to a ChatColor
                     return ChatColor.valueOf(color.toUpperCase()).toString();
-                  } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     return ChatColor.WHITE.toString();   // If the color is invalid, use white
                 }
             }
         }
-        return ChatColor.WHITE.toString();  // Use white if no color is found
+        return ChatColor.WHITE.toString();
     }
 }

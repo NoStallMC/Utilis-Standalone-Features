@@ -3,10 +3,7 @@ package main.java.org.matejko.plugin.UtilisCore;
 import main.java.org.matejko.plugin.Managers.*;
 import main.java.org.matejko.plugin.Commands.*;
 import main.java.org.matejko.plugin.FileCreator.*;
-import main.java.org.matejko.plugin.Listeners.ISeeArmorListener;
-import main.java.org.matejko.plugin.Listeners.ISeeArmorRemover;
-import main.java.org.matejko.plugin.Listeners.ISeeInventoryListener;
-import main.java.org.matejko.plugin.Listeners.MinecartEventListener;
+import main.java.org.matejko.plugin.Listeners.*;
 import main.java.org.matejko.plugin.Utilis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -60,10 +57,12 @@ public class UtilisInitializer {
         Bukkit.getPluginManager().registerEvents(chatFormattingManager, plugin);
         // VanishedPlayersManager
         Set<VanishUserManager> vanishedPlayers = new HashSet<>();
-        VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin);
+        VanishedPlayersManager vanishedPlayersManager = new VanishedPlayersManager(plugin, config);
         vanishedPlayersManager.loadVanishedPlayers(vanishedPlayers);
+        // Register the VanishEntityEventListener
+        new VanishEntityEventListener(plugin); 
         // NickManager and cooldown setup
-        NickManager nickManager = new NickManager(plugin);
+        NickManager nickManager = new NickManager(plugin, config);
         Messages messages = new Messages(plugin);
         CooldownManager cooldownManager = new CooldownManager(plugin, 60);
         Bukkit.getPluginManager().registerEvents(nickManager, plugin);

@@ -8,6 +8,7 @@ import main.java.org.matejko.plugin.Managers.NickManager;
 
 public class RenameCommand implements org.bukkit.command.CommandExecutor {
     private final NickManager nickManager;
+
     public RenameCommand(NickManager nickManager) {
         this.nickManager = nickManager;
     }
@@ -19,8 +20,8 @@ public class RenameCommand implements org.bukkit.command.CommandExecutor {
             player.sendMessage(ChatColor.RED + "Usage: /rename <player> <nickname>");
             return false;
         }
-        String targetName = args[0];   // Nickname
-        String newNickname = args[1];  // New Nickname
+        String targetName = args[0];
+        String newNickname = args[1];
         Player targetPlayer = getTargetPlayer(targetName);
         if (targetPlayer == null) {
             player.sendMessage(ChatColor.RED + "Player with the name or nickname '" + targetName + "' not found.");
@@ -36,12 +37,13 @@ public class RenameCommand implements org.bukkit.command.CommandExecutor {
         targetPlayer.sendMessage(ChatColor.GRAY + "You have been renamed to " + ChatColor.valueOf(playerColor.toUpperCase()) + "~" + newNickname + ".");
         return true;
     }
+
     private Player getTargetPlayer(String targetName) {
         Player targetPlayer = null;
-        String nickname = "~" + targetName;
+        String nickname = "~" + targetName.toLowerCase();
         for (String playerName : nickManager.getPlayerData().keySet()) {
             String[] data = nickManager.getPlayerData().get(playerName);
-            if (data != null && data[0].equals(nickname)) {
+            if (data != null && data[0].toLowerCase().contains(nickname.substring(1))) {
                 targetPlayer = nickManager.getServer().getPlayer(playerName);
                 break;
             }

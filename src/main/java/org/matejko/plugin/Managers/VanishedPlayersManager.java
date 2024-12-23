@@ -3,6 +3,8 @@ package main.java.org.matejko.plugin.Managers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
+import main.java.org.matejko.plugin.FileCreator.Config;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,17 +15,17 @@ import java.util.Set;
 public class VanishedPlayersManager {
     private final File filePath;
 	private final Utilis plugin;
-
-    public VanishedPlayersManager(Utilis plugin) {
+	private final Config debug;
+    public VanishedPlayersManager(Utilis plugin, Config debug) {
         this.plugin = plugin;
         this.filePath = new File(plugin.getDataFolder(), "VanishedPlayers.txt");
+		this.debug = debug;
     }
 
     public void loadVanishedPlayers(Set<VanishUserManager> vanishedPlayers) {
-        // Ensure the file exists; create it if necessary
         if (!filePath.exists()) {
             try {
-                filePath.createNewFile(); // Create the file if it doesn't exist
+                filePath.createNewFile();
                 plugin.getLogger().info("[Utilis] VanishedPlayers.txt file created.");
             } catch (IOException e) {
                 plugin.getLogger().warning("[Utilis] Failed to create VanishedPlayers.txt file: " + e.getMessage());
@@ -44,7 +46,8 @@ public class VanishedPlayersManager {
                     }
                 }
             }
-            plugin.getLogger().info("[Utilis] Loaded vanished players: " + vanishedPlayers.size());
+            if(debug.isDebugEnabled()) {
+            	plugin.getLogger().info("[DEBUG] Loaded vanished players: " + vanishedPlayers.size());}
         } catch (IOException e) {
             plugin.getLogger().warning("[Utilis] Could not load vanished players: " + e.getMessage());
         }
@@ -57,7 +60,8 @@ public class VanishedPlayersManager {
                 playerNames.add(vanishUser.getName());
             }
             Files.write(filePath.toPath(), playerNames);
-            plugin.getLogger().info("[Utilis] Saved vanished players: " + vanishedPlayers.size());
+            if(debug.isDebugEnabled()) {
+            	plugin.getLogger().info("[DEBUG] Saved vanished players: " + vanishedPlayers.size());}
         } catch (IOException e) {
             plugin.getLogger().warning("[Utilis] Could not save vanished players: " + e.getMessage());
         }

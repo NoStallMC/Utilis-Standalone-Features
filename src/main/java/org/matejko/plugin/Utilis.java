@@ -13,7 +13,6 @@ public class Utilis extends JavaPlugin implements Listener {
     public SleepingManager sleepingManager;
     public NickManager nickManager;
     private UtilisGetters utilisGetters;
-    
 	@SuppressWarnings("unused")
 	@Override
     public void onEnable() {
@@ -24,12 +23,11 @@ public class Utilis extends JavaPlugin implements Listener {
         initializer.initialize();
         getLogger().info("[Utilis] has been enabled!");
     }
-    
+	
     @Override
     public void onDisable() {
         getLogger().info("[Utilis] is shutting down...");
     }
-
     // Getter methods for accessing the plugin's components
     public Logger getLogger() {
         return logger;
@@ -37,7 +35,6 @@ public class Utilis extends JavaPlugin implements Listener {
     public Config getConfig() {
         return config;
     }
-
     public void setConfig(Config config) {
         this.config = config;
     }

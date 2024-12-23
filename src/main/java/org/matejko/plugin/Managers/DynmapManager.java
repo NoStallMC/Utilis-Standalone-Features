@@ -19,24 +19,26 @@ public class DynmapManager {
     }
     public void addToHiddenPlayersFile(String playerName) {
         try {
+            if (dynmapPlugin != null) {
             List<String> lines = Files.readAllLines(Paths.get(HIDDEN_PLAYERS_PATH));
             if (!lines.contains(playerName)) {
                 Files.write(Paths.get(HIDDEN_PLAYERS_PATH), (playerName + System.lineSeparator()).getBytes(),
                             java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
                 logger.info("[Utilis]" + playerName + " added to hidden players.");
-                reloadDynmap();
+                reloadDynmap();}
             }
         } catch (IOException e) {
-            logger.warning("[Utilis] Could not add " + playerName + " to hidden players: " + e.getMessage());
+           logger.warning("[Utilis] Could not add " + playerName + " to hidden players: " + e.getMessage());
         }
     }
     public void removeFromHiddenPlayersFile(String playerName) {
         try {
+            if (dynmapPlugin != null) {
             List<String> lines = Files.readAllLines(Paths.get(HIDDEN_PLAYERS_PATH));
             lines.remove(playerName);
             Files.write(Paths.get(HIDDEN_PLAYERS_PATH), lines);
             logger.info("[Utilis]" + playerName + " removed from hidden players.");
-            reloadDynmap();
+            reloadDynmap();}
         } catch (IOException e) {
             logger.warning("[Utilis] Could not remove " + playerName + " from hidden players: " + e.getMessage());
         }
