@@ -9,9 +9,10 @@ commands:
 features:
   update-check: true
   join-leave: true
+  dynmap-hide: true
   motd: true
   qol: true
-  sleeping: true
+  night-skip: true
   nickname-length: 32
   chat-formatting: true
   minecartdmg-fix: true
@@ -20,4 +21,4 @@ anti-spam:
   enabled: true
   message-limit: 10
   time-window: 10
-Version: 1.8
+Version: 1.9

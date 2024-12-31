@@ -95,13 +95,13 @@ public class UtilisInitializer {
             sleepingManager.loadConfiguration();
             Bukkit.getPluginManager().registerEvents(sleepingManager, plugin);
             SleepingCommand sleepingCommand = new SleepingCommand(plugin);
-            plugin.getCommand("as").setExecutor((sender, command, label, args) -> {
+            plugin.getCommand("ns").setExecutor((sender, command, label, args) -> {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("Only players can use this command.");
                     return true;
                 }
                 Player player = (Player) sender;
-                if (!player.hasPermission("utilis.as")) {
+                if (!player.hasPermission("utilis.ns")) {
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }

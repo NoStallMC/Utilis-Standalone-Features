@@ -6,14 +6,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
+import main.java.org.matejko.plugin.FileCreator.Config;
 import main.java.org.matejko.plugin.Managers.VanishUserManager;
 import org.bukkit.ChatColor;
 
 public class VanishCommand implements CommandExecutor {
     private final Utilis plugin;
-
-    public VanishCommand(Utilis plugin) {
+    private final Config config;
+    public VanishCommand(Utilis plugin, Config config) {
         this.plugin = plugin;
+		this.config = config;
     }
 
     @Override
@@ -35,7 +37,9 @@ public class VanishCommand implements CommandExecutor {
                 p.showPlayer(player);
             }
             plugin.getUtilisGetters().getUtilisNotifier().notifyUnvanished(player);
+            if (config.isDynmapHideEnabled()) {
             plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Show them on Dynmap.
+            }
             player.sendMessage(ChatColor.GRAY + "You are now visible to other players.");
         } else {
         	VanishUserManager newVanishUser = new VanishUserManager(player, true);
@@ -44,7 +48,9 @@ public class VanishCommand implements CommandExecutor {
                 p.hidePlayer(player);
             }
             plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player); 
+            if (config.isDynmapHideEnabled()) {
             plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName()); // Hide them on Dynmap.
+            }
             player.sendMessage(ChatColor.GRAY + "You are now hidden from other players.");
         }
         // Save the updated list of vanished players to the file

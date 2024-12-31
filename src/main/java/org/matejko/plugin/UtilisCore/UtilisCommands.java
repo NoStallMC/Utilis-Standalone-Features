@@ -49,7 +49,7 @@ public class UtilisCommands {
         registerCommandWithPermission("sudo", "utilis.sudo", new SudoManager());
         registerCommandWithPermission("suck", "utilis.suck", new SuckCommand());
         if (config.isVanishEnabled()) {
-            VanishCommand vanishCommand = new VanishCommand(plugin);
+            VanishCommand vanishCommand = new VanishCommand(plugin, config);
             registerCommandWithPermission("vanish", "utilis.vanish", vanishCommand);
             registerCommandWithPermission("v", "utilis.vanish", vanishCommand);
         }

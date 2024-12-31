@@ -43,7 +43,11 @@ public class Config {
     public boolean isVanishEnabled() {
         return config.getBoolean("commands.vanish", true);  // Default to true if not set
     }
-
+    
+    public boolean isDynmapHideEnabled() {
+        return config.getBoolean("commands.dynmap-hide", false);  // Default to false if not set
+    }
+    
     public boolean isMOTDEnabled() {
         return config.getBoolean("features.motd", true);  // Default to true if not set
     }
@@ -77,7 +81,7 @@ public class Config {
     }
 
     public boolean isSleepingEnabled() {
-        return config.getBoolean("features.sleeping", true);  // Default to true if not set
+        return config.getBoolean("features.night-skip", true);  // Default to true if not set
     }
     
     public boolean isChatFormattingEnabled() {
