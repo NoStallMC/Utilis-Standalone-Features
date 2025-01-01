@@ -29,11 +29,11 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 | `/color`       | Change your nickname color.                                       | `/color <color>`               | -        |
 | `/realname`    | Returns the real name of a player based on their nickname.        | `/realname <nickname>`         | -        |
 | `/nickreset`   | Resets your nickname to your original name.                       | `/nickreset`                   | -        |
-| `/suck`        | Teleports all items around you to your inventory.                 | `/suck`                        | -        |
-| `/ns`          | Toggle sleeping mechanics.                                        | `/ns toggle`                   | `/ns t`  |
+| `/suck`        | Teleports all items around you to you.                            | `/suck`                        | -        |
+| `/ns`          | Toggle sleeping mechanics in current world.                       | `/ns toggle`                   | `/ns t`  |
 | `/utilisdebug` | Runs a debug check for the plugin.                                | `/utilisdebug`                 | -        |
 | `/sudo`        | Force a player to execute a command or send a chat message.       | `/sudo <player> <command>`     | -        |
-| `/isee`        | View and edit another player's inventory silently.                | `/isee <player>`               | -        |
+| `/isee`        | View and edit another player's inventory.                         | `/isee <player>`               | -        |
 | `/recover`     | Recover a player's inventory after they die.                      | `/recover <player>`            | -        |
 
 ### Permissions

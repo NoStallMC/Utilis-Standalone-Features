@@ -10,10 +10,11 @@ features:
   update-check: true
   join-leave: true
   dynmap-hide: true
+  op-see-vanish: true
   motd: true
   qol: true
   night-skip: true
-  nickname-length: 32
+  nickname-length: 16
   chat-formatting: true
   minecartdmg-fix: true
   debug: false
@@ -21,4 +22,4 @@ anti-spam:
   enabled: true
   message-limit: 10
   time-window: 10
-Version: 1.9
+Version: 2.0

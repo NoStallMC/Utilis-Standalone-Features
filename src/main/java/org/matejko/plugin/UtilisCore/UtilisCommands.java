@@ -43,7 +43,7 @@ public class UtilisCommands {
             registerCommandWithPermission("realname", "utilis.realname", new RealNameCommand(nickManager));
         }
         if (config.isListEnabled()) {
-            registerCommandWithPermission("list", "utilis.list", new ListCommand(plugin));
+            registerCommandWithPermission("list", "utilis.list", new ListCommand(plugin, config));
         }
         registerCommandWithPermission("utilisdebug", "utilis.debug", new UtilisDebugCommand(plugin));
         registerCommandWithPermission("sudo", "utilis.sudo", new SudoManager());

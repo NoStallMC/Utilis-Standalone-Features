@@ -21,7 +21,7 @@ public class SleepingCommand implements CommandExecutor {
         String commandName = command.getName();
         if (commandName == null) return true;
 
-        if (commandName.equalsIgnoreCase("as")) {
+        if (commandName.equalsIgnoreCase("ns")) {
             if (args.length == 0) {
                 // Show the sleeping status for the current world
                 if (sleepingManager.isSleepingEnabled(p.getWorld())) {

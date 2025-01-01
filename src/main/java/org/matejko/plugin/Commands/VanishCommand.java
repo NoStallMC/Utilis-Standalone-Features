@@ -13,9 +13,10 @@ import org.bukkit.ChatColor;
 public class VanishCommand implements CommandExecutor {
     private final Utilis plugin;
     private final Config config;
+
     public VanishCommand(Utilis plugin, Config config) {
         this.plugin = plugin;
-		this.config = config;
+        this.config = config;
     }
 
     @Override
@@ -24,7 +25,6 @@ public class VanishCommand implements CommandExecutor {
             sender.sendMessage("This command can only be executed by a player.");
             return true;
         }
-
         Player player = (Player) sender;
         VanishUserManager vanishUser = plugin.getUtilisGetters().getVanishedPlayers().stream()
                 .filter(vu -> vu.getPlayer().equals(player))
@@ -32,24 +32,30 @@ public class VanishCommand implements CommandExecutor {
                 .orElse(null);
 
         if (vanishUser != null) {
+            // Player is already vanished, so unvanish them
             plugin.getUtilisGetters().getVanishedPlayers().remove(vanishUser);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.showPlayer(player);
             }
             plugin.getUtilisGetters().getUtilisNotifier().notifyUnvanished(player);
             if (config.isDynmapHideEnabled()) {
-            plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Show them on Dynmap.
+                plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Show them on Dynmap.
             }
             player.sendMessage(ChatColor.GRAY + "You are now visible to other players.");
         } else {
-        	VanishUserManager newVanishUser = new VanishUserManager(player, true);
+            // Player isn't vanished, so vanish them
+            VanishUserManager newVanishUser = new VanishUserManager(player, true);
             plugin.getUtilisGetters().getVanishedPlayers().add(newVanishUser);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.hidePlayer(player);
+                // Only show player to those with the permission
+                if (config.isOpSeeVanishEnabled() && p.hasPermission("utilis.vanish")) {
+                    p.showPlayer(player);
+                }
             }
-            plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player); 
+            plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player);
             if (config.isDynmapHideEnabled()) {
-            plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName()); // Hide them on Dynmap.
+                plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName()); // Hide them on Dynmap.
             }
             player.sendMessage(ChatColor.GRAY + "You are now hidden from other players.");
         }

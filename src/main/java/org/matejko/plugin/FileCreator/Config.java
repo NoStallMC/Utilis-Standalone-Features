@@ -48,6 +48,10 @@ public class Config {
         return config.getBoolean("features.dynmap-hide", true);  // Default to true if not set
     }
     
+    public boolean isOpSeeVanishEnabled() {
+        return config.getBoolean("features.op-see-vanish", true);  // Default to true if not set
+    }
+    
     public boolean isMOTDEnabled() {
         return config.getBoolean("features.motd", true);  // Default to true if not set
     }

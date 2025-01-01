@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
+import main.java.org.matejko.plugin.FileCreator.Config;
 import main.java.org.matejko.plugin.FileCreator.Messages;
 import main.java.org.matejko.plugin.Managers.ColorUtil;
 import java.util.ArrayList;
@@ -17,13 +18,14 @@ import java.util.Map;
 public class ListCommand implements CommandExecutor {
     private final Utilis plugin;
     private final Map<String, String> messages;
+	private Config config;
 
-    public ListCommand(Utilis plugin) {
+    public ListCommand(Utilis plugin, Config config) {
         this.plugin = plugin;
+        this.config = config;
         this.messages = new HashMap<>();
         loadMessages();
     }
-
     private void loadMessages() {
         Messages textManager = new Messages(plugin);
         String playerCountMessage = textManager.getMessagesConfig().getString("list.playerCountMessage");
@@ -45,14 +47,21 @@ public class ListCommand implements CommandExecutor {
         int playerHidden = 0;
         List<String> onlinePlayerNames = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (plugin.getUtilisGetters().getVanishedPlayers().stream().anyMatch(vanishUser -> vanishUser.getPlayer().equals(player) && vanishUser.isVanished())) {
+            boolean isVanished = plugin.getUtilisGetters().getVanishedPlayers().stream()
+                    .anyMatch(vanishUser -> vanishUser.getPlayer().equals(player) && vanishUser.isVanished());
+            if (isVanished && !(sender instanceof Player && ((Player) sender).hasPermission("utilis.vanish") && config.isOpSeeVanishEnabled())) {
                 playerHidden++;
                 continue;
             }
+            
             // Add [AFK] if the player is AFK
             String playerName = player.getDisplayName();
             if (plugin.getUtilisGetters().isAFK(player)) {
                 playerName = ChatColor.GRAY + "[AFK] " + playerName;
+            }
+            // If player has permission and config allows, show vanished players with [Vanished] prefix
+            if (isVanished && sender instanceof Player && ((Player) sender).hasPermission("utilis.vanish") && config.isOpSeeVanishEnabled()) {
+                playerName = ChatColor.GRAY + "[Vanished] " + playerName;
             }
             onlinePlayerNames.add(playerName);
         }
