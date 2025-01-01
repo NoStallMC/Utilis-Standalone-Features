@@ -45,7 +45,7 @@ public class Config {
     }
     
     public boolean isDynmapHideEnabled() {
-        return config.getBoolean("commands.dynmap-hide", true);  // Default to true if not set
+        return config.getBoolean("features.dynmap-hide", true);  // Default to true if not set
     }
     
     public boolean isMOTDEnabled() {
