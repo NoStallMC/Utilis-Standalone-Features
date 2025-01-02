@@ -53,7 +53,6 @@ public class ListCommand implements CommandExecutor {
                 playerHidden++;
                 continue;
             }
-            
             // Add [AFK] if the player is AFK
             String playerName = player.getDisplayName();
             if (plugin.getUtilisGetters().isAFK(player)) {

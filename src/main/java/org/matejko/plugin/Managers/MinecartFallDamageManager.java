@@ -18,7 +18,6 @@ public class MinecartFallDamageManager {
         this.plugin = plugin;
 		this.config = config;
     }
-
     public void onPlayerEnterMinecart(Player player) {
         if (playersInMinecarts.add(player)) {
             if (isDebugEnabled()) {
@@ -26,7 +25,6 @@ public class MinecartFallDamageManager {
             startTaskIfNeeded();
         }
     }
-
 	public void onPlayerExitMinecart(Player player) {
         if (playersInMinecarts.remove(player)) {
             if (isDebugEnabled()) {
@@ -34,7 +32,6 @@ public class MinecartFallDamageManager {
             stopTaskIfNeeded();
         }
     }
-
     private void startTaskIfNeeded() {
         if (taskId == -1) {
             if (isDebugEnabled()) {
@@ -42,7 +39,6 @@ public class MinecartFallDamageManager {
             taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::checkPlayers, 0L, 1L);
         }
     }
-
     private void stopTaskIfNeeded() {
         if (playersInMinecarts.isEmpty() && taskId != -1) {
             if (isDebugEnabled()) {
@@ -51,13 +47,11 @@ public class MinecartFallDamageManager {
             taskId = -1;
         }
     }
-
     private void checkPlayers() {
         for (Player player : playersInMinecarts) {
             MinecartFallDamageListener.handleFallDamage(player, plugin);
         }
     }
-
     private boolean isDebugEnabled() {
         return config.isDebugEnabled();
     }

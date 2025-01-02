@@ -23,7 +23,6 @@ public class NickManager implements Listener {
         this.plugin = plugin;
 		this.debug = debug;
         this.playerData = new HashMap<>();
-        // Ensure the data folder exists
         File nicksFolder = plugin.getDataFolder();
         if (!nicksFolder.exists()) {
             nicksFolder.mkdirs();
@@ -43,7 +42,6 @@ public class NickManager implements Listener {
         this.config = new Configuration(playerDataFile);
         loadPlayerData();
     }
-
     private void loadPlayerData() {
         if (playerDataFile.exists()) {
             config.load();
@@ -57,7 +55,6 @@ public class NickManager implements Listener {
         	plugin.getLogger().warning("[Utilis] Player data file does not exist.");
         }
     }
-    
     private void savePlayerData() {
         config.load();
         for (Map.Entry<String, String[]> entry : playerData.entrySet()) {
@@ -70,7 +67,6 @@ public class NickManager implements Listener {
         }
         config.save();
     }
-
     public boolean isValidColor(String color) {
         try {
             ChatColor.valueOf(color.toUpperCase());
@@ -79,7 +75,6 @@ public class NickManager implements Listener {
             return false;
         }
     }
-
     public boolean isNicknameUsed(String nickname) {
         for (String[] data : playerData.values()) {
             if (data[0].equals(nickname)) {
@@ -88,11 +83,9 @@ public class NickManager implements Listener {
         }
         return false;
     }
-
     public boolean isValidNickname(String nickname) {
         return !isNicknameUsed("~" + nickname);
     }
-
     public void setNickname(Player player, String nickname) {
         String playerName = player.getName();
         if (!isValidNickname(nickname)) {
@@ -106,7 +99,6 @@ public class NickManager implements Listener {
         player.setDisplayName(ChatColor.valueOf(currentColor.toUpperCase()) + translatedNickname + ChatColor.WHITE);
         savePlayerData();
     }
-
     public void setNicknameColor(Player player, String color) {
         String playerName = player.getName();
         String[] data = playerData.get(playerName);
@@ -121,19 +113,16 @@ public class NickManager implements Listener {
         playerData.put(playerName, new String[]{currentNickname, color});
         savePlayerData();
     }
-
     public void resetNickname(Player player) {
         String playerName = player.getName();
         player.setDisplayName(playerName);
         playerData.put(playerName, new String[]{playerName, "WHITE"});
         savePlayerData();
     }
-
     public String getPlayerNickname(Player player) {
         String[] data = playerData.get(player.getName());
         return (data != null && data[0] != null) ? data[0] : player.getName();
     }
-
     public String getPlayerColor(Player player) {
         String[] data = playerData.get(player.getName());
         return (data != null && data[1] != null) ? data[1] : "WHITE";
@@ -161,11 +150,9 @@ public class NickManager implements Listener {
             player.setDisplayName(playerName);
         }
     }
-
     public Map<String, String[]> getPlayerData() {
         return playerData;
     }
-
     public org.bukkit.Server getServer() {
         return plugin.getServer();
     }

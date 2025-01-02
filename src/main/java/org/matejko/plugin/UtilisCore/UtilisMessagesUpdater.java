@@ -22,7 +22,6 @@ public class UtilisMessagesUpdater {
         UtilisMessagesUpdater.plugin = plugin;
         this.logger = plugin.getLogger();
     }
-
     public static void checkAndUpdateConfig() {
         try {
             File configFile = new File(MESSAGES_FILE_PATH);
@@ -34,7 +33,6 @@ public class UtilisMessagesUpdater {
             String currentVersion = getCurrentConfigVersion(currentConfig);
             if (currentVersion == null || isVersionOutdated(currentVersion)) {
                 plugin.getLogger().info("[Utilis] messages.yml is outdated or missing version. Merging will begin.");
-
                 backupOldConfig();
                 Map<String, Object> defaultConfig = loadDefaultConfig();
                 Map<String, Object> oldConfig = loadConfig(OLD_MESSAGES_FILE_PATH);
@@ -56,7 +54,6 @@ public class UtilisMessagesUpdater {
           //  e.printStackTrace();
         }
     }
-
     @SuppressWarnings("unchecked")
     private static Map<String, Object> loadConfig(String filePath) throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
@@ -64,7 +61,6 @@ public class UtilisMessagesUpdater {
             return (Map<String, Object>) yaml.load(fileInputStream);
         }
     }
-
     @SuppressWarnings("unchecked")
     private static Map<String, Object> loadDefaultConfig() throws IOException {
         try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH)) {
@@ -75,12 +71,10 @@ public class UtilisMessagesUpdater {
             return (Map<String, Object>) yaml.load(inputStream);
         }
     }
-
     private static String getCurrentConfigVersion(Map<String, Object> currentConfig) {
         Object versionObject = currentConfig.get("Version");
         return versionObject != null ? versionObject.toString() : null;
     }
-
     private static boolean isVersionOutdated(String currentVersion) throws IOException {
         String serverVersion = getServerVersionFromJar();
         if (serverVersion == null) {
@@ -97,7 +91,6 @@ public class UtilisMessagesUpdater {
         }
         return false;
     }
-
     private static String getServerVersionFromJar() throws IOException {
         try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH)) {
             if (inputStream == null) {
@@ -110,17 +103,14 @@ public class UtilisMessagesUpdater {
             return versionObject != null ? versionObject.toString() : null;
         }
     }
-
     private static void saveConfigWithComments(String filePath, Map<String, Object> config) throws IOException {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(options);
         String yamlContent = yaml.dump(config);
-
         try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
              FileWriter writer = new FileWriter(filePath)) {
-
             if (inputStream == null) {
                 throw new FileNotFoundException();
             }
@@ -134,7 +124,6 @@ public class UtilisMessagesUpdater {
             writer.write(yamlContent + "\n" + commentsBuilder.toString());
         }
     }
-
     private static void backupOldConfig() throws IOException {
         File configFile = new File(MESSAGES_FILE_PATH);
         File backupFile = new File(OLD_MESSAGES_FILE_PATH);
@@ -153,7 +142,6 @@ public class UtilisMessagesUpdater {
             }
         }
     }
-
     private static void copyDefaultConfigToServer() throws IOException {
         File configDirectory = new File("plugins/Utilis");
         if (!configDirectory.exists() && !configDirectory.mkdirs()) {
@@ -161,7 +149,6 @@ public class UtilisMessagesUpdater {
         }
         try (InputStream inputStream = UtilisMessagesUpdater.class.getResourceAsStream(DEFAULT_MESSAGES_FILE_PATH);
              OutputStream outputStream = new FileOutputStream(new File(MESSAGES_FILE_PATH))) {
-
             if (inputStream == null) {
                 throw new FileNotFoundException();
             }
@@ -173,7 +160,6 @@ public class UtilisMessagesUpdater {
             plugin.getLogger().info("[Utilis] Default messages.yml copied from JAR.");
         }
     }
-
     @SuppressWarnings("unchecked")
     private static boolean mergeConfigs(Map<String, Object> newConfig, Map<String, Object> oldConfig) {
         try {

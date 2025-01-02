@@ -6,9 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-
 import main.java.org.matejko.plugin.FileCreator.Config;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;

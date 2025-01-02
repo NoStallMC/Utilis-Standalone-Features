@@ -18,12 +18,10 @@ public class UtilisInitializer {
     private final Utilis plugin;
     private final Logger logger;
     static ISeeManager iSeeManager;
-    private final RecoverManager recoverManager;
 
     public UtilisInitializer(Utilis plugin) {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
-        this.recoverManager = new RecoverManager();
     }
     @SuppressWarnings("static-access")
     public void initialize() {
@@ -64,7 +62,7 @@ public class UtilisInitializer {
         // NickManager and cooldown setup
         NickManager nickManager = new NickManager(plugin, config);
         Messages messages = new Messages(plugin);
-        CooldownManager cooldownManager = new CooldownManager(plugin, 60);
+        CooldownManager cooldownManager = new CooldownManager(plugin, 15);
         Bukkit.getPluginManager().registerEvents(nickManager, plugin);
         // UtilisNotifier setup
         UtilisNotifier utilisNotifier = new UtilisNotifier(plugin, config);
@@ -75,9 +73,10 @@ public class UtilisInitializer {
         // MOTD Manager
         MOTDManager motdManager = null;
         if (config.isMOTDEnabled()) {
-            motdManager = new MOTDManager(plugin);
+            motdManager = new MOTDManager(plugin, config);
         }
         // Register the RecoverManager as an event listener
+        RecoverManager recoverManager = new RecoverManager();
         plugin.getServer().getPluginManager().registerEvents(recoverManager, plugin);
         plugin.getCommand("recover").setExecutor(new RecoverCommand(recoverManager));
         // Plugin Updater

@@ -18,7 +18,6 @@ public class VanishCommand implements CommandExecutor {
         this.plugin = plugin;
         this.config = config;
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -26,11 +25,27 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        // If a player name is specified, toggle vanish for the target player
+        if (args.length == 1) {
+            String targetName = args[0];
+            Player targetPlayer = getTargetPlayer(targetName);
+            if (targetPlayer == null) {
+                player.sendMessage(ChatColor.RED + "Player not found or offline.");
+                return true;
+            }
+            toggleVanish(targetPlayer);
+            return true;
+        }
+        // If no player name is provided, toggle vanish for the sender
+        toggleVanish(player);
+        return true;
+    }
+    // Toggle vanish for a player (whether the sender or a target player)
+    private void toggleVanish(Player player) {
         VanishUserManager vanishUser = plugin.getUtilisGetters().getVanishedPlayers().stream()
                 .filter(vu -> vu.getPlayer().equals(player))
                 .findFirst()
                 .orElse(null);
-
         if (vanishUser != null) {
             // Player is already vanished, so unvanish them
             plugin.getUtilisGetters().getVanishedPlayers().remove(vanishUser);
@@ -61,11 +76,19 @@ public class VanishCommand implements CommandExecutor {
         }
         // Save the updated list of vanished players to the file
         plugin.getUtilisGetters().getVanishedPlayersManager().saveVanishedPlayers(plugin.getUtilisGetters().getVanishedPlayers());
-        return true;
     }
-
-    public boolean isPlayerVanished(Player player) {
-        return plugin.getUtilisGetters().getVanishedPlayers().stream()
-                .anyMatch(vu -> vu.getPlayer().equals(player));
+    // Get a target player using partial name match
+    private Player getTargetPlayer(String targetName) {
+        Player targetPlayer = null;
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.getName().toLowerCase().contains(targetName.toLowerCase())) {
+                targetPlayer = onlinePlayer;
+                break;
+            }
+        }
+        if (targetPlayer == null) {
+            targetPlayer = Bukkit.getPlayerExact(targetName);
+        }
+        return targetPlayer;
     }
 }

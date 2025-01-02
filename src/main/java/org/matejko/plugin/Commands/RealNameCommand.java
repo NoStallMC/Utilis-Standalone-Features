@@ -7,13 +7,10 @@ import main.java.org.matejko.plugin.Managers.NickManager;
 import java.util.Map;
 
 public class RealNameCommand implements org.bukkit.command.CommandExecutor {
-
     private final NickManager nickManager;
-
     public RealNameCommand(NickManager nickManager) {
         this.nickManager = nickManager;
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
@@ -32,7 +29,6 @@ public class RealNameCommand implements org.bukkit.command.CommandExecutor {
         }
         return true;
     }
-    
     private String getRealNameFromNickname(String nickname) {
         for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
             String[] data = entry.getValue();
@@ -42,7 +38,6 @@ public class RealNameCommand implements org.bukkit.command.CommandExecutor {
         }
         return null;
     }
-
     private String getFullNickname(String nickname) {
         for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
             String[] data = entry.getValue();
@@ -52,7 +47,6 @@ public class RealNameCommand implements org.bukkit.command.CommandExecutor {
         }
         return nickname;
     }
-
     private String getNicknameColor(String nickname) {
         for (Map.Entry<String, String[]> entry : nickManager.getPlayerData().entrySet()) {
             String[] data = entry.getValue();

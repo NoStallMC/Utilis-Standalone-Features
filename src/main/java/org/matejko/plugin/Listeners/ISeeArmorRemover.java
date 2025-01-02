@@ -13,7 +13,6 @@ public class ISeeArmorRemover implements Listener {
     public ISeeArmorRemover(ISeeManager iSeeManager) {
         this.iSeeManager = iSeeManager;
     }
-
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
@@ -57,11 +56,10 @@ public class ISeeArmorRemover implements Listener {
         }
         return true;
     }
- // Remove the matching armor piece from the target's inventory
+    // Remove the matching armor piece from the target's inventory
     private void removeArmorPieceFromTarget(Player target, ItemStack droppedItem) {
         // Ensure armor removal is handled correctly, with proper null checks
         boolean armorChanged = false;
-
         if (target.getInventory().getHelmet() != null && isSameItem(droppedItem, target.getInventory().getHelmet())) {
             target.getInventory().setHelmet(null);  // Use `null` to remove helmet
             armorChanged = true;

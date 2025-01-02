@@ -13,7 +13,6 @@ public class Messages {
         this.plugin = plugin;
         setup();
     }
-
     private void setup() {
         messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
@@ -29,7 +28,6 @@ public class Messages {
         messagesConfig = new Configuration(messagesFile);
         messagesConfig.load();
     }
-
     private void copyFromJar(String resourceName, File outputFile) throws IOException {
         InputStream inputStream = plugin.getClass().getClassLoader().getResourceAsStream(resourceName);
         if (inputStream == null) {
@@ -51,7 +49,6 @@ public class Messages {
             inputStream.close();
         }
     }
-
     public String getMessage(String path) {
         return messagesConfig.getString(path);
     }

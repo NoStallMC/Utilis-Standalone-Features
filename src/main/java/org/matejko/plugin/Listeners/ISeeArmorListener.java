@@ -15,7 +15,6 @@ public class ISeeArmorListener {
         this.plugin = plugin;
         this.iSeeManager = iSeeManager;
     }
-
     public void startArmorSync(final Player viewer) {
         if (isSyncing) return;
         alive = true;
@@ -52,7 +51,6 @@ public class ISeeArmorListener {
         }, 0L, 20L); // Sync armor every 20 ticks (1 second)
         isSyncing = true;
     }
-
     public void stopArmorSync(Player viewer) {
         alive = false;
         if (taskId != -1) {
@@ -61,7 +59,6 @@ public class ISeeArmorListener {
         }
         isSyncing = false;
     }
-
     private void syncArmorFromTargetToViewer(Player viewer, Player target) {
         if (viewer == null || target == null || !viewer.isOnline() || !target.isOnline()) {
             if (iSeeManager.isDebugEnabled()) {
@@ -77,19 +74,16 @@ public class ISeeArmorListener {
             } else {
                 viewer.getInventory().setHelmet(null);
             }
-
             if (target.getInventory().getChestplate() != null && target.getInventory().getChestplate().getType() != null && !target.getInventory().getChestplate().getType().equals(org.bukkit.Material.AIR)) {
                 viewer.getInventory().setChestplate(target.getInventory().getChestplate());
             } else {
                 viewer.getInventory().setChestplate(null);
             }
-
             if (target.getInventory().getLeggings() != null && target.getInventory().getLeggings().getType() != null && !target.getInventory().getLeggings().getType().equals(org.bukkit.Material.AIR)) {
                 viewer.getInventory().setLeggings(target.getInventory().getLeggings());
             } else {
                 viewer.getInventory().setLeggings(null);
             }
-            
             if (target.getInventory().getBoots() != null && target.getInventory().getBoots().getType() != null && !target.getInventory().getBoots().getType().equals(org.bukkit.Material.AIR)) {
                 viewer.getInventory().setBoots(target.getInventory().getBoots());
             } else {

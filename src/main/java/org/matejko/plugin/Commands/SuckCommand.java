@@ -24,7 +24,6 @@ public class SuckCommand implements CommandExecutor {
         }
         return false;
     }
-
     private void teleportItemsToPlayer(Player player) {
         Location playerLocation = player.getLocation();
         Collection<org.bukkit.entity.Entity> entities = player.getWorld().getEntities();

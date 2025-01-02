@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
 
 public class MinecartFallDamageListener {
-
     public static void handleFallDamage(Player player, Utilis plugin) {
         Entity vehicle = player.getVehicle();
         if (vehicle instanceof Minecart) {
@@ -19,7 +18,6 @@ public class MinecartFallDamageListener {
           //  plugin.getLogger().info("Player " + player.getName() + " is NOT in a minecart.");
         }
     }
-
     private static void resetFallDistance(Minecart minecart, Utilis plugin) {
         minecart.setFallDistance(0.0F);
         //plugin.getLogger().info("Fall damage cancelled for minecart with player.");

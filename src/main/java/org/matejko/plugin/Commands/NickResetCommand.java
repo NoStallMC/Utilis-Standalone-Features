@@ -15,7 +15,6 @@ public class NickResetCommand implements org.bukkit.command.CommandExecutor {
         this.nickManager = nickManager;
         this.cooldownManager = cooldownManager;
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {

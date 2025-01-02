@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import main.java.org.matejko.plugin.Utilis;
 import main.java.org.matejko.plugin.FileCreator.Config;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +20,6 @@ public class VanishedPlayersManager {
         this.filePath = new File(plugin.getDataFolder(), "VanishedPlayers.txt");
 		this.debug = debug;
     }
-
     public void loadVanishedPlayers(Set<VanishUserManager> vanishedPlayers) {
         if (!filePath.exists()) {
             try {
@@ -52,7 +50,6 @@ public class VanishedPlayersManager {
             plugin.getLogger().warning("[Utilis] Could not load vanished players: " + e.getMessage());
         }
     }
-
     public void saveVanishedPlayers(Set<VanishUserManager> vanishedPlayers) {
         try {
             List<String> playerNames = new ArrayList<>();

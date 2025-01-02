@@ -8,7 +8,6 @@ import main.java.org.matejko.plugin.Managers.NickManager;
 import main.java.org.matejko.plugin.Managers.CooldownManager;
 import main.java.org.matejko.plugin.FileCreator.Messages;
 import main.java.org.matejko.plugin.Managers.ColorUtil;
-
 import java.util.logging.Logger;
 
 public class ColorCommand implements org.bukkit.command.CommandExecutor {
@@ -23,7 +22,6 @@ public class ColorCommand implements org.bukkit.command.CommandExecutor {
         this.messages = messages;
         this.logger = Logger.getLogger("Utilis");
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -46,7 +44,6 @@ public class ColorCommand implements org.bukkit.command.CommandExecutor {
             player.sendMessage(usageMessage);
             return false;
         }
-
         if (args[0].equalsIgnoreCase("help")) {
             player.sendMessage(ChatColor.GOLD + "Available nickname colors: " +
                     ChatColor.BLACK + "black, " + ChatColor.DARK_BLUE + "dark_blue, " +

@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SudoManager implements CommandExecutor {
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!label.equalsIgnoreCase("sudo")) {
@@ -32,7 +31,6 @@ public class SudoManager implements CommandExecutor {
             messageBuilder.append(args[i]).append(" ");
         }
         String message = messageBuilder.toString().trim();
-
         // Check if it's a command or a chat message
         if (message.startsWith("/")) {
             boolean success = Bukkit.dispatchCommand(target, message.substring(1));
@@ -56,11 +54,9 @@ public class SudoManager implements CommandExecutor {
         }
         return null;
     }
-
     public static void sendError(CommandSender sender, String message) {
         sender.sendMessage(ChatColor.RED + message);
     }
-
     public static void sendSuccess(CommandSender sender, String message) {
         sender.sendMessage(message);
     }

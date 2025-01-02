@@ -12,7 +12,6 @@ public class SleepingCommand implements CommandExecutor {
     public SleepingCommand(Utilis plugin) {
         this.sleepingManager = new SleepingManager(plugin);
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (sender instanceof Player) ? (Player) sender : null;

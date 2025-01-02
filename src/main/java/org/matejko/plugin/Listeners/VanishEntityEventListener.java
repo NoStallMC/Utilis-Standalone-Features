@@ -19,7 +19,6 @@ public class VanishEntityEventListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         startMobCheckTask();
     }
-
     @EventHandler(priority = Priority.High)
     public void onEntityTarget(EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {

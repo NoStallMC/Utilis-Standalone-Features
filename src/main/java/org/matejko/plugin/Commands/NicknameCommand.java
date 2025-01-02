@@ -25,7 +25,6 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         this.config = config;
         this.logger = Logger.getLogger("Utilis");
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -80,12 +79,10 @@ public class NicknameCommand implements org.bukkit.command.CommandExecutor {
         player.sendMessage(formatMessage(nicknameSetMessage, player, nickname));
         return true;
     }
-
     private String formatMessage(String message, Player player) {
         message = message.replace("%player%", player.getDisplayName());
         return ColorUtil.translateColorCodes(message);
     }
-
     private String formatMessage(String message, Player player, String nickname) {
         String playerColor = nickManager.getPlayerColor(player);
         message = message.replace("%nickname%", ChatColor.valueOf(playerColor.toUpperCase()) + "~" + nickname + ChatColor.WHITE);

@@ -12,7 +12,6 @@ public class RenameCommand implements org.bukkit.command.CommandExecutor {
     public RenameCommand(NickManager nickManager) {
         this.nickManager = nickManager;
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
@@ -37,7 +36,6 @@ public class RenameCommand implements org.bukkit.command.CommandExecutor {
         targetPlayer.sendMessage(ChatColor.GRAY + "You have been renamed to " + ChatColor.valueOf(playerColor.toUpperCase()) + "~" + newNickname + ".");
         return true;
     }
-
     private Player getTargetPlayer(String targetName) {
         Player targetPlayer = null;
         String nickname = "~" + targetName.toLowerCase();

@@ -26,7 +26,6 @@ public class ISeeInventoryListener implements Listener {
         this.iSeeManager = iSeeManager;
         this.plugin = plugin;
     }
-
     public void startInventorySync(final Player viewer) {
         if (isSyncing) return; // Prevent multiple sync tasks
         alive = true; // Ensure sync task is alive when starting
@@ -61,7 +60,6 @@ public class ISeeInventoryListener implements Listener {
         }, 0L, 1L); // Run every tick for real-time updates
         isSyncing = true;
     }
-
     public void onCancelSync(Player viewer) {
         alive = false;
         if (taskId != -1) {
@@ -75,7 +73,6 @@ public class ISeeInventoryListener implements Listener {
         }
         isSyncing = false;
     }
-
     public void stopInventorySync(Player viewer) {
         alive = false;
         if (taskId != -1) {
@@ -84,11 +81,9 @@ public class ISeeInventoryListener implements Listener {
         }
         isSyncing = false;
     }
-
     private void syncInventory(Player viewer, Player target) {
         if (isSyncingInventory) return;
         isSyncingInventory = true;
-
         try {
             // Get the current inventories
             ItemStack[] viewerContents = viewer.getInventory().getContents();
@@ -128,7 +123,6 @@ public class ISeeInventoryListener implements Listener {
             isSyncingInventory = false;
         }
     }
-
     private boolean inventoryContentsMatch(ItemStack[] inventory1, ItemStack[] inventory2) {
         if (inventory1.length != inventory2.length) return false;
 
@@ -142,10 +136,8 @@ public class ISeeInventoryListener implements Listener {
         }
         return true;
     }
-
     private boolean itemsAreEqual(ItemStack item1, ItemStack item2) {
         if (item1 == null || item2 == null) return item1 == item2;
-
         return item1.getType().equals(item2.getType()) &&
                item1.getAmount() == item2.getAmount() &&
                item1.getDurability() == item2.getDurability();
@@ -155,13 +147,11 @@ public class ISeeInventoryListener implements Listener {
             // This just allows one tick delay to avoid feedback loop
         }, 1L);
     }
-
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         syncAfterItemChange(player);
     }
-
     @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();

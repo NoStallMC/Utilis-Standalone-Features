@@ -22,7 +22,6 @@ public class ISeeCommand implements CommandExecutor {
         this.iSeeInventoryListener = iSeeInventoryListener;
         this.iSeeArmorListener = iSeeArmorListener;
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check if the sender is a player
@@ -30,8 +29,8 @@ public class ISeeCommand implements CommandExecutor {
             sender.sendMessage("§cOnly players can use this command!");
             return true;
         }
-        // Check if iSeeManager is null
         Player player = (Player) sender;
+        // Check if iSeeManager is null
         if (iSeeManager == null) {
             player.sendMessage("§cInternal error: iSeeManager is not initialized.");
             System.err.println("Error: iSeeManager is null. Check plugin initialization.");
@@ -44,7 +43,7 @@ public class ISeeCommand implements CommandExecutor {
             try {
                 iSeeManager.restoreInventoryAndArmor(player);
                 iSeeManager.clearTarget(player);
-                player.sendMessage("§aYou have exited inventory viewing mode and your inventory and armor has been restored.");        
+                player.sendMessage("§aYou have exited inventory viewing mode and your inventory and armor have been restored.");
                 // Stop inventory and armor syncing
                 iSeeInventoryListener.stopInventorySync(player);
                 iSeeArmorListener.stopArmorSync(player);
@@ -59,13 +58,13 @@ public class ISeeCommand implements CommandExecutor {
             player.sendMessage("§cUsage: /isee <player>");
             return true;
         }
-        // Find the target player
-        Player target = Bukkit.getPlayer(args[0]);
+        // Get target player by partial name
+        Player target = getTargetPlayer(args[0]);
         if (target == null || !target.isOnline()) {
             player.sendMessage("§cPlayer not found or offline.");
             return true;
         }
-        // Save the viewer´s current inventory to restore later.
+        // Save the viewer's current inventory to restore later
         try {
             iSeeManager.saveInventoryAndArmor(player);
         } catch (Exception e) {
@@ -92,5 +91,19 @@ public class ISeeCommand implements CommandExecutor {
             return true;
         }
         return true;
+    }
+    private Player getTargetPlayer(String targetName) {
+        Player targetPlayer = null;
+        String nickname = targetName.toLowerCase();
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.getName().toLowerCase().contains(nickname)) {
+                if (targetPlayer != null) {
+                    // More than one player matches, return null
+                    return null;
+                }
+                targetPlayer = onlinePlayer;
+            }
+        }
+        return targetPlayer;
     }
 }

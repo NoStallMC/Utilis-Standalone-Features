@@ -13,7 +13,6 @@ public class ChatFormattingManager implements Listener {
         this.plugin = plugin;
         this.chatFormattingEnabled = plugin.getConfiguration().getBoolean("features.chat-formatting", true);  // Default is true
     }
-
     @EventHandler
     public void onChat(PlayerChatEvent event) {
         if (chatFormattingEnabled) {

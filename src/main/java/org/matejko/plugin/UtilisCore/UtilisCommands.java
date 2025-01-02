@@ -24,7 +24,6 @@ public class UtilisCommands {
         this.cooldownManager = cooldownManager;
         this.messages = messages;
     }
-
     public void registerCommands() {
         // Register commands with permission checks
         if (config.isNickEnabled()) {
@@ -78,7 +77,6 @@ public class UtilisCommands {
             }
         });
     }
-
     private void registerCommandWithPermission(String commandName, String permission, CommandExecutor executor) {
         plugin.getCommand(commandName).setExecutor(new CommandExecutor() {
             @Override

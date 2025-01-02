@@ -86,7 +86,6 @@ public class ISeeManager {
             resetArmor(player); // Reset armor if no saved armor is found
         }
     }
-
     private void resetInventory(Player player) {
         try {
             player.getInventory().clear();
@@ -100,7 +99,6 @@ public class ISeeManager {
             e.printStackTrace();
         }
     }
-
     private void resetArmor(Player player) {
         try {
             player.getInventory().setHelmet(new ItemStack(0));  // AIR is ID 0

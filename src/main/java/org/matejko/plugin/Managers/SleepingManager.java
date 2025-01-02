@@ -18,24 +18,23 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SleepingManager implements Listener {
     private final SleepingWorldConfig worldConfig;
     private final ConcurrentHashMap<World, ArrayList<Player>> sleepingPlayers;
+    private final ConcurrentHashMap<World, Boolean> nightSkipped;
     private final Messages messages;
 
     public SleepingManager(Utilis plugin) {
         this.worldConfig = new SleepingWorldConfig();
         this.sleepingPlayers = new ConcurrentHashMap<>();
+        this.nightSkipped = new ConcurrentHashMap<>();
         this.messages = new Messages(plugin);
     }
-
     public boolean isSleepingEnabled(World world) {
         return worldConfig.isSleepingEnabled(world);
     }
-
     public void toggleSleeping(World world) {
         boolean currentStatus = isSleepingEnabled(world);
         worldConfig.setSleepingStatus(world, !currentStatus);
         Bukkit.getLogger().info("Sleeping in world '" + world.getName() + "' has been " + (currentStatus ? "disabled" : "enabled"));
     }
-
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
@@ -59,41 +58,41 @@ public class SleepingManager implements Listener {
         if (worldSleepingPlayers != null) {
             worldSleepingPlayers.remove(player);
         }
+        // Reset the nightSkipped flag when no players are sleeping
+        if (worldSleepingPlayers == null || worldSleepingPlayers.isEmpty()) {
+            nightSkipped.put(world, false);
+        }
     }
-
-    // Check if at least one player in the world is sleeping
     private void checkForAtLeastOnePlayerSleeping(World world, Player player) {
         if (!isSleepingEnabled(world)) {
             return;
         }
+        // Ensure night is skipped only once per cycle
+        if (nightSkipped.getOrDefault(world, false)) {
+            return;
+        }
+
         List<Player> sleepingPlayersInWorld = sleepingPlayers.getOrDefault(world, new ArrayList<>());
         if (!sleepingPlayersInWorld.isEmpty()) {
+            world.setStorm(false);
+            world.setThundering(false);
+            nightSkipped.put(world, true); // Mark the night as skipped
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Utilis"), new Runnable() {
-                @Override
-                public void run() {
-                    world.setTime(23500);
-                    String messageTemplate = messages.getMessage("sleeping.night-skip");
-                    if (messageTemplate == null || messageTemplate.isEmpty()) {
-                        messageTemplate = "%player% took a little nap. It is now morning!";
-                    }
-                    // Replace the %player% placeholder with the actual player's name
-                    String message = messageTemplate.replace("%player%", player.getDisplayName());
-                    // Apply color code translation
-                    message = ColorUtil.translateColorCodes(message);
-                    // Log the message that will be sent to players
-                    Bukkit.getLogger().info("Sending morning message to players in " + world.getName());
-                    // Loop through all players in the same world and send the message to them
-                    for (Player p : world.getPlayers()) {
-                        p.sendMessage(message);
-                    }
-
-                    Bukkit.getLogger().info("At least one player is asleep. Skipping the night in '" + world.getName() + "'.");
+            scheduler.scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("Utilis"), () -> {
+                world.setTime(23500);
+                String messageTemplate = messages.getMessage("sleeping.night-skip");
+                if (messageTemplate == null || messageTemplate.isEmpty()) {
+                    messageTemplate = "%player% took a little nap. It is now morning!";
                 }
+                String message = messageTemplate.replace("%player%", player.getDisplayName());
+                message = ColorUtil.translateColorCodes(message);
+                for (Player p : world.getPlayers()) {
+                    p.sendMessage(message);
+                }
+                Bukkit.getLogger().info("At least one player is asleep. Skipping the night in '" + world.getName() + "'.");
             }, 50L);  // 50 ticks (2.5 seconds)
         }
     }
-
     public void cleanupPlayer(Player player) {
         for (World world : sleepingPlayers.keySet()) {
             ArrayList<Player> worldSleepingPlayers = sleepingPlayers.get(world);
@@ -102,7 +101,6 @@ public class SleepingManager implements Listener {
             }
         }
     }
-
     public void loadConfiguration() {
         worldConfig.loadConfig();
     }
