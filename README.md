@@ -22,7 +22,7 @@ From managing nicknames to toggling vanish mode, Utilis is designed to simplify 
 
 | Command        | Description                                                       | Usage                          | Aliases  |
 |----------------|-------------------------------------------------------------------|--------------------------------|----------|
-| `/vanish`      | Toggles vanish mode for the player.                               | `/vanish`                      | `/v`     |
+| `/vanish`      | Toggles vanish mode for the player.                               | `/v, /v s/silent`, /v player   | `/v`     |
 | `/list`        | Lists all connected players.                                      | `/list`                        | -        |
 | `/nickname`    | Set or change your nickname.                                      | `/nickname <nickname>`         | -        |
 | `/rename`      | Rename another player (admin command).                            | `/rename <player> <nickname>`  | -        |
