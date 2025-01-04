@@ -25,59 +25,79 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        // Check if silent mode is enabled (e.g., /v s or /v silent)
+        boolean silent = args.length > 0 && (args[0].equalsIgnoreCase("s") || args[0].equalsIgnoreCase("silent"));
         // If a player name is specified, toggle vanish for the target player
-        if (args.length == 1) {
+        if (args.length == 1 && !silent) {
             String targetName = args[0];
             Player targetPlayer = getTargetPlayer(targetName);
             if (targetPlayer == null) {
                 player.sendMessage(ChatColor.RED + "Player not found or offline.");
                 return true;
             }
-            toggleVanish(targetPlayer);
+            toggleVanish(targetPlayer, silent);
             return true;
         }
         // If no player name is provided, toggle vanish for the sender
-        toggleVanish(player);
+        toggleVanish(player, silent);
         return true;
     }
-    // Toggle vanish for a player (whether the sender or a target player)
-    private void toggleVanish(Player player) {
-        VanishUserManager vanishUser = plugin.getUtilisGetters().getVanishedPlayers().stream()
-                .filter(vu -> vu.getPlayer().equals(player))
-                .findFirst()
-                .orElse(null);
+    private void toggleVanish(Player player, boolean silent) {
+        VanishUserManager vanishUser = null;
+        // Check if the player is already vanished
+        for (VanishUserManager vu : plugin.getUtilisGetters().getVanishedPlayers()) {
+            if (vu.getPlayer().equals(player)) {
+                vanishUser = vu;
+                break;
+            }
+        }
         if (vanishUser != null) {
             // Player is already vanished, so unvanish them
             plugin.getUtilisGetters().getVanishedPlayers().remove(vanishUser);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.showPlayer(player);
+            for (Player target : Bukkit.getOnlinePlayers()) {
+                target.showPlayer(player);
             }
-            plugin.getUtilisGetters().getUtilisNotifier().notifyUnvanished(player);
-            if (config.isDynmapHideEnabled()) {
-                plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName()); // Show them on Dynmap.
+            if (!silent) {
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (target.hasPermission("utilis.vanish") && target != player) {
+                    	if (config.isOpSeeVanishEnabled()) {target.sendMessage(player.getDisplayName() + ChatColor.GRAY + " has unvanished.");}
+                    } else {
+                        plugin.getUtilisGetters().getUtilisNotifier().notifyUnvanished(player);
+                    }
+                }
             }
             player.sendMessage(ChatColor.GRAY + "You are now visible to other players.");
+            if (config.isDynmapHideEnabled()) {
+                plugin.getUtilisGetters().getDynmapManager().removeFromHiddenPlayersFile(player.getName());
+            }
         } else {
             // Player isn't vanished, so vanish them
             VanishUserManager newVanishUser = new VanishUserManager(player, true);
             plugin.getUtilisGetters().getVanishedPlayers().add(newVanishUser);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.hidePlayer(player);
+            for (Player target : Bukkit.getOnlinePlayers()) {
+                target.hidePlayer(player);
                 // Only show player to those with the permission
-                if (config.isOpSeeVanishEnabled() && p.hasPermission("utilis.vanish")) {
-                    p.showPlayer(player);
+                if (config.isOpSeeVanishEnabled() && target.hasPermission("utilis.vanish")) {
+                    target.showPlayer(player);
                 }
             }
-            plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player);
-            if (config.isDynmapHideEnabled()) {
-                plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName()); // Hide them on Dynmap.
+            if (!silent) {
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (target.hasPermission("utilis.vanish") && target != player) {
+                        if (config.isOpSeeVanishEnabled()) {target.sendMessage(player.getDisplayName() + ChatColor.GRAY + " has vanished.");}
+                    } else {
+                        plugin.getUtilisGetters().getUtilisNotifier().notifyVanished(player);
+                    }
+                }
             }
             player.sendMessage(ChatColor.GRAY + "You are now hidden from other players.");
+            if (config.isDynmapHideEnabled()) {
+                plugin.getUtilisGetters().getDynmapManager().addToHiddenPlayersFile(player.getName());
+            }
         }
-        // Save the updated list of vanished players to the file
+        // Save the updated list of vanished players
         plugin.getUtilisGetters().getVanishedPlayersManager().saveVanishedPlayers(plugin.getUtilisGetters().getVanishedPlayers());
     }
-    // Get a target player using partial name match
     private Player getTargetPlayer(String targetName) {
         Player targetPlayer = null;
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

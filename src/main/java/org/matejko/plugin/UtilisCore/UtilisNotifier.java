@@ -1,6 +1,7 @@
 package main.java.org.matejko.plugin.UtilisCore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -94,10 +95,21 @@ public class UtilisNotifier implements Listener {
         } else {
             plugin.getLogger().warning("[Utilis] MOTDManager is null.");
         }
-        if (config.isJoinleaveEnabled()) {
-           if (!isPlayerVanished(newPlayer)) {
-                     sendJoinMessage(newPlayer);}
-           }
+        if (config.isJoinleaveEnabled() && !isPlayerVanished(newPlayer)) {
+            sendJoinMessage(newPlayer);
+        }
+        // Notify players with "utilis.vanish" permission if the joining player is vanished
+        if (isPlayerVanished(newPlayer)) {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (onlinePlayer.hasPermission("utilis.vanish")) {
+                	if (config.isOpSeeVanishEnabled()) {
+                		if (!onlinePlayer.equals(newPlayer)) {
+                		   	onlinePlayer.sendMessage(newPlayer.getDisplayName() + ChatColor.GRAY + " joined while being vanished.");}
+                	}
+                }
+            }
+        }
+        // Hide vanished players from the joining player
         for (VanishUserManager vanishUser : plugin.getUtilisGetters().getVanishedPlayers()) {
             if (vanishUser.getPlayer() != null) {
                 newPlayer.hidePlayer(vanishUser.getPlayer());
@@ -105,18 +117,29 @@ public class UtilisNotifier implements Listener {
         }
     }
     @EventHandler
-    public void handlePlayerKick(PlayerKickEvent event) {
-        if (config.isJoinleaveEnabled()) {
-        event.setLeaveMessage(null);}
-    }
-    @EventHandler
     public void handlePlayerQuit(PlayerQuitEvent event) {
         Player quittingPlayer = event.getPlayer();
         if (config.isJoinleaveEnabled()) {
         event.setQuitMessage(null);
-        if (!isPlayerVanished(quittingPlayer)) {
-            sendQuitMessage(quittingPlayer);}
+        if (config.isJoinleaveEnabled() && !isPlayerVanished(quittingPlayer)) {
+            sendQuitMessage(quittingPlayer);
         }
+        // Notify players with "utilis.vanish" permission if the quitting player is vanished
+        if (isPlayerVanished(quittingPlayer)) {
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                if (onlinePlayer.hasPermission("utilis.vanish")) {
+                	if (config.isOpSeeVanishEnabled()) {
+                		if (isPlayerVanished(quittingPlayer)) {
+                			onlinePlayer.sendMessage(quittingPlayer.getDisplayName() + ChatColor.GRAY + " left while being vanished.");}}
+                	}
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void handlePlayerKick(PlayerKickEvent event) {
+        if (config.isJoinleaveEnabled()) {
+        event.setLeaveMessage(null);}
     }
     private boolean isPlayerVanished(Player player) {
         if (plugin.getUtilisGetters().getVanishedPlayers() == null) {
